@@ -1,6 +1,14 @@
+"use client";
+
+import { useState } from "react";
 import DashboardStats from "@/components/DashboardStats";
+import WorkerList from "@/components/WorkerList";
 
 export default function DashboardPage() {
+  const [showWorkers, setShowWorkers] = useState(false);
+
+  if (showWorkers) return <WorkerList onBack={() => setShowWorkers(false)} />;
+
   return (
     <div>
       <h1 className="text-2xl font-semibold mb-6">欢迎回来，张三</h1>
@@ -9,7 +17,7 @@ export default function DashboardPage() {
         <span className="bg-white px-4 py-1.5 rounded-full text-sm text-[#86868b] border border-[rgba(0,0,0,0.06)]">我的任务</span>
         <span className="bg-white px-4 py-1.5 rounded-full text-sm text-[#86868b] border border-[rgba(0,0,0,0.06)]">发布任务</span>
       </div>
-      <DashboardStats />
+      <div onClick={() => setShowWorkers(true)}><DashboardStats /></div>
       <div className="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
         <h3 className="text-base font-semibold mb-4">最近任务</h3>
         {["UI 设计稿更新", "文案翻译", "活动摄影跟拍"].map((t) => (
