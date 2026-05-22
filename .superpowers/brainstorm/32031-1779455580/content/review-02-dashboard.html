@@ -1,0 +1,308 @@
+<h2>审核 #2 — Dashboard / 控制台</h2>
+<p class="subtitle">雇主端 · 概览面板 · 中文状态 · 人民币单位</p>
+
+<div class="mockup" style="margin: 1.5rem 0;">
+  <div class="mockup-body" style="padding: 0; background: #f5f5f7; overflow: hidden;">
+    <!-- Top Nav (bell added later globally) -->
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.5rem; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.06);">
+      <div style="display: flex; align-items: center; gap: 2rem;">
+        <span style="font-weight: 700; font-size: 1.1rem; letter-spacing: -0.5px; background: linear-gradient(135deg, #1a1a1a, #4a4a4a); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">GigMate</span>
+        <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
+          <span style="color: #86868b;">首页</span>
+          <span style="color: #86868b;">任务</span>
+          <span style="font-weight: 600; color: #1d1d1f;">控制台</span>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <span style="font-size: 0.8rem; color: #86868b;">雇主</span>
+        <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #e8e8ed, #d1d1d6);"></div>
+      </div>
+    </div>
+    <!-- Content -->
+    <div style="padding: 1.5rem 2rem;">
+      <!-- Welcome -->
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+        <div style="width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #1d1d1f, #3a3a3c); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1rem; font-weight: 600;">G</div>
+        <div>
+          <div style="font-weight: 600; font-size: 0.9rem; color: #1d1d1f;">欢迎回来，张三</div>
+          <div style="font-size: 0.75rem; color: #86868b;">雇主 · GigMate</div>
+        </div>
+      </div>
+      <!-- Tabs -->
+      <div style="display: flex; gap: 0.4rem; margin-bottom: 2rem;">
+        <span style="background: #1d1d1f; color: #fff; padding: 0.35rem 1.2rem; border-radius: 999px; font-size: 0.8rem; font-weight: 500;">概览</span>
+        <span style="background: #fff; padding: 0.35rem 1.2rem; border-radius: 999px; font-size: 0.8rem; color: #86868b; border: 1px solid rgba(0,0,0,0.06);">我的任务</span>
+        <span style="background: #fff; padding: 0.35rem 1.2rem; border-radius: 999px; font-size: 0.8rem; color: #86868b; border: 1px solid rgba(0,0,0,0.06);">发布任务</span>
+      </div>
+      <!-- Stats -->
+      <div style="display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+        <a href="#" style="text-decoration: none; display: block;">
+          <div style="background: linear-gradient(135deg, #1d1d1f 0%, #2d2d2f 100%); border-radius: 20px; padding: 1.5rem; color: #fff; cursor: pointer; transition: opacity 0.15s;">
+            <div style="font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-bottom: 0.5rem; letter-spacing: 0.3px; text-transform: uppercase;">进行中</div>
+            <div style="font-size: 2.5rem; font-weight: 700; letter-spacing: -1px; color: #fff;">3</div>
+            <div style="font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 0.25rem;">点击查看 →</div>
+          </div>
+        </a>
+        <div style="background: #fff; border-radius: 20px; padding: 1.5rem; box-shadow: 0 2px 20px rgba(0,0,0,0.04);">
+          <div style="font-size: 0.75rem; color: #86868b; margin-bottom: 0.5rem;">已完成</div>
+          <div style="font-size: 2.5rem; font-weight: 700; letter-spacing: -1px; color: #1d1d1f;">12</div>
+          <div style="font-size: 0.75rem; color: #30d158; margin-top: 0.25rem;">↑ 20% 较上月</div>
+        </div>
+        <div style="background: #fff; border-radius: 20px; padding: 1.5rem; box-shadow: 0 2px 20px rgba(0,0,0,0.04);">
+          <div style="font-size: 0.75rem; color: #86868b; margin-bottom: 0.5rem;">总申请</div>
+          <div style="font-size: 2.5rem; font-weight: 700; letter-spacing: -1px; color: #1d1d1f;">28</div>
+          <div style="font-size: 0.75rem; color: #86868b; margin-top: 0.25rem;">通过率 64%</div>
+        </div>
+      </div>
+      <!-- Task list (no price, status on right) -->
+      <div style="background: #fff; border-radius: 20px; padding: 1.25rem 1.5rem; box-shadow: 0 2px 20px rgba(0,0,0,0.04);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <span style="font-size: 0.9rem; font-weight: 600; color: #1d1d1f;">最近任务</span>
+          <a href="#" style="font-size: 0.8rem; color: #007aff; text-decoration: none;">查看全部 →</a>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 1px solid rgba(0,0,0,0.05);">
+          <span style="font-size: 0.85rem; color: #1d1d1f;">UI 设计稿更新</span>
+          <span style="font-size: 0.7rem; background: #007aff1a; color: #007aff; padding: 0.15rem 0.5rem; border-radius: 999px; font-weight: 500;">进行中</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 1px solid rgba(0,0,0,0.05);">
+          <span style="font-size: 0.85rem; color: #1d1d1f;">数据录入兼职</span>
+          <span style="font-size: 0.7rem; background: #30d1581a; color: #30d158; padding: 0.15rem 0.5rem; border-radius: 999px; font-weight: 500;">已完成</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0;">
+          <span style="font-size: 0.85rem; color: #1d1d1f;">前端页面开发</span>
+          <span style="font-size: 0.7rem; background: #f59e0b1a; color: #f59e0b; padding: 0.15rem 0.5rem; border-radius: 999px; font-weight: 500;">招募中</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top: 1.5rem;">
+  <h3>点击「进行中」后 — 内容切换为工作者列表</h3>
+  <div class="mockup">
+    <div class="mockup-body" style="padding: 0; background: #f5f5f7; overflow: hidden;">
+      <!-- Same nav -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.5rem; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.06);">
+        <div style="display: flex; align-items: center; gap: 2rem;">
+          <span style="font-weight: 700; font-size: 1.1rem; letter-spacing: -0.5px; background: linear-gradient(135deg, #1a1a1a, #4a4a4a); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">GigMate</span>
+          <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
+            <span style="color: #86868b;">首页</span>
+            <span style="color: #86868b;">任务</span>
+            <span style="font-weight: 600; color: #1d1d1f;">控制台</span>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <span style="font-size: 0.8rem; color: #86868b;">雇主</span>
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #e8e8ed, #d1d1d6);"></div>
+        </div>
+      </div>
+      <!-- Content: in-progress workers list -->
+      <div style="padding: 1.5rem 2rem;">
+        <div style="font-size: 0.85rem; color: #86868b; margin-bottom: 1rem; cursor: pointer;">← 返回概览</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+          <div>
+            <h4 style="margin: 0 0 0.25rem; font-size: 1rem; color: #1d1d1f;">进行中 · 工作者</h4>
+            <div style="font-size: 0.8rem; color: #86868b;">共 3 个进行中任务</div>
+          </div>
+        </div>
+        <!-- Worker cards (same style as application cards) -->
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <div style="background: #fff; border-radius: 20px; padding: 1.25rem 1.5rem; box-shadow: 0 2px 20px rgba(0,0,0,0.04);">
+            <div style="display: flex; gap: 1rem;">
+              <div style="width: 44px; height: 44px; border-radius: 14px; background: linear-gradient(135deg, #e8e8ed, #d1d1d6); flex-shrink: 0;"></div>
+              <div style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                  <div>
+                    <span style="font-size: 0.9rem; font-weight: 600; color: #1d1d1f;">李明</span>
+                    <span style="font-size: 0.75rem; color: #86868b; margin-left: 0.75rem;">UI 设计稿更新</span>
+                  </div>
+                  <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <span style="font-size: 0.7rem; background: #007aff1a; color: #007aff; padding: 0.15rem 0.5rem; border-radius: 999px; font-weight: 500;">进行中</span>
+                    <!-- Messages button with red dot -->
+                    <div style="position: relative; display: flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; color: #007aff; cursor: pointer; background: #007aff0d; padding: 0.2rem 0.6rem; border-radius: 6px;">
+                      <svg width="12" height="14" viewBox="0 0 12 14" fill="none" stroke="#007aff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 0.5C4 0.5 2.5 2 2.5 4V6.5C2.5 6.8 2.3 7.1 2.1 7.3L1.3 8.1C0.7 8.7 0.3 9.5 0.3 10.4C0.3 11.5 1.1 12.3 2.2 12.3H9.8C10.9 12.3 11.7 11.5 11.7 10.4C11.7 9.5 11.3 8.7 10.7 8.1L9.9 7.3C9.7 7.1 9.5 6.8 9.5 6.5V4C9.5 2 8 0.5 6 0.5Z"/>
+                        <path d="M7.5 12.3C7.5 12.8 7.1 13.2 6.6 13.2H5.4C4.9 13.2 4.5 12.8 4.5 12.3"/>
+                      </svg>
+                      消息
+                      <div style="width: 6px; height: 6px; background: #ff3b30; border-radius: 50%; position: absolute; top: 2px; right: 1px;"></div>
+                    </div>
+                  </div>
+                </div>
+                <p style="font-size: 0.8rem; color: #86868b; margin: 0 0 0.75rem; line-height: 1.5;">3 年设计经验，熟练使用 Figma，已完成第 1 阶段设计稿。</p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div style="display: flex; gap: 1rem;">
+                    <span style="font-size: 0.7rem; color: #86868b;">⭐ 4.8</span>
+                    <span style="font-size: 0.7rem; color: #86868b;">已完成 12 单</span>
+                  </div>
+                  <div style="display: flex; gap: 0.5rem;">
+                    <span style="background: #30d158; color: #fff; padding: 0.3rem 1rem; border-radius: 999px; font-size: 0.78rem; font-weight: 500; cursor: pointer;">完成任务</span>
+                    <span style="background: #ff3b30; color: #fff; padding: 0.3rem 1rem; border-radius: 999px; font-size: 0.78rem; font-weight: 500; cursor: pointer;">结束任务</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Full page modal demo: 完成任务 -->
+<div style="margin-top: 1.5rem;">
+  <h3>弹窗演示 — 完成任务</h3>
+  <p class="subtitle">浮层覆盖完整页面，不挤压布局</p>
+  <div class="mockup">
+    <div class="mockup-body" style="padding: 0; background: #f5f5f7; overflow: hidden; position: relative;">
+      <!-- Full page background (dimmed + blurred) -->
+      <div style="filter: blur(2px); min-height: 500px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.5rem; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.06);">
+          <div style="display: flex; align-items: center; gap: 2rem;">
+            <span style="font-weight: 700; font-size: 1.1rem; letter-spacing: -0.5px;">GigMate</span>
+            <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
+              <span style="color: #86868b;">首页</span><span style="color: #86868b;">任务</span><span style="font-weight: 600; color: #1d1d1f;">控制台</span>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-size: 0.8rem; color: #86868b;">雇主</span>
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: #d1d1d6;"></div>
+          </div>
+        </div>
+        <div style="padding: 1.5rem 2rem 4rem;">
+          <div style="font-size: 0.85rem; color: #86868b; margin-bottom: 1rem;">← 返回概览</div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <div>
+              <h4 style="margin: 0 0 0.25rem; font-size: 1rem; color: #1d1d1f;">进行中 · 工作者</h4>
+              <div style="font-size: 0.8rem; color: #86868b;">共 3 个进行中任务</div>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div style="background: #fff; border-radius: 20px; padding: 1.25rem 1.5rem; height: 100px;"></div>
+            <div style="background: #fff; border-radius: 20px; padding: 1.25rem 1.5rem; height: 100px;"></div>
+            <div style="background: #fff; border-radius: 20px; padding: 1.25rem 1.5rem; height: 100px;"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Dark overlay + modal on top -->
+      <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center;">
+        <div style="background: #fff; border-radius: 20px; padding: 1.5rem; width: 360px; box-shadow: 0 24px 80px rgba(0,0,0,0.2);">
+          <div style="font-size: 1rem; font-weight: 600; color: #1d1d1f; margin-bottom: 0.75rem;">确认操作？</div>
+          <div style="font-size: 0.85rem; color: #86868b; margin-bottom: 1.5rem; line-height: 1.5;">确认工作已完成并付款给对方？</div>
+          <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+            <span style="background: #ff3b30; color: #fff; padding: 0.4rem 1.2rem; border-radius: 10px; font-size: 0.85rem; font-weight: 500; cursor: pointer;">取消</span>
+            <span style="background: #30d158; color: #fff; padding: 0.4rem 1.2rem; border-radius: 10px; font-size: 0.85rem; font-weight: 500; cursor: pointer;">确认</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Full page modal demo: 结束任务 Step 1 -->
+<div style="margin-top: 1.5rem;">
+  <h3>弹窗演示 — 结束任务 · 第一步</h3>
+  <div class="mockup">
+    <div class="mockup-body" style="padding: 0; background: #f5f5f7; overflow: hidden; position: relative;">
+      <div style="filter: blur(2px); min-height: 500px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.5rem; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.06);">
+          <div style="display: flex; align-items: center; gap: 2rem;">
+            <span style="font-weight: 700; font-size: 1.1rem; letter-spacing: -0.5px;">GigMate</span>
+            <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
+              <span style="color: #86868b;">首页</span><span style="color: #86868b;">任务</span><span style="font-weight: 600; color: #1d1d1f;">控制台</span>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-size: 0.8rem; color: #86868b;">雇主</span>
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: #d1d1d6;"></div>
+          </div>
+        </div>
+        <div style="padding: 1.5rem 2rem 4rem;">
+          <div style="font-size: 0.85rem; color: #86868b; margin-bottom: 1rem;">← 返回概览</div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <div>
+              <h4 style="margin: 0 0 0.25rem; font-size: 1rem; color: #1d1d1f;">进行中 · 工作者</h4>
+              <div style="font-size: 0.8rem; color: #86868b;">共 3 个进行中任务</div>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div style="background: #fff; border-radius: 20px; padding: 1.25rem 1.5rem; height: 100px;"></div>
+            <div style="background: #fff; border-radius: 20px; padding: 1.25rem 1.5rem; height: 100px;"></div>
+            <div style="background: #fff; border-radius: 20px; padding: 1.25rem 1.5rem; height: 100px;"></div>
+          </div>
+        </div>
+      </div>
+      <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center;">
+        <div style="background: #fff; border-radius: 20px; padding: 1.5rem; width: 360px; box-shadow: 0 24px 80px rgba(0,0,0,0.2);">
+          <div style="font-size: 1rem; font-weight: 600; color: #1d1d1f; margin-bottom: 0.75rem;">确认操作？</div>
+          <div style="font-size: 0.85rem; color: #86868b; margin-bottom: 1.5rem; line-height: 1.5;">确定结束与李明的合作？</div>
+          <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+            <span style="background: #ff3b30; color: #fff; padding: 0.4rem 1.2rem; border-radius: 10px; font-size: 0.85rem; font-weight: 500; cursor: pointer;">取消</span>
+            <span style="background: #1d1d1f; color: #fff; padding: 0.4rem 1.2rem; border-radius: 10px; font-size: 0.85rem; font-weight: 500; cursor: pointer;">下一步</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Full page modal demo: 结束任务 Step 2 -->
+<div style="margin-top: 1.5rem;">
+  <h3>弹窗演示 — 结束任务 · 第二步</h3>
+  <div class="mockup">
+    <div class="mockup-body" style="padding: 0; background: #f5f5f7; overflow: hidden; position: relative;">
+      <div style="filter: blur(2px); min-height: 500px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.5rem; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.06);">
+          <div style="display: flex; align-items: center; gap: 2rem;">
+            <span style="font-weight: 700; font-size: 1.1rem; letter-spacing: -0.5px;">GigMate</span>
+            <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
+              <span style="color: #86868b;">首页</span><span style="color: #86868b;">任务</span><span style="font-weight: 600; color: #1d1d1f;">控制台</span>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-size: 0.8rem; color: #86868b;">雇主</span>
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: #d1d1d6;"></div>
+          </div>
+        </div>
+        <div style="padding: 1.5rem 2rem 4rem;">
+          <div style="font-size: 0.85rem; color: #86868b; margin-bottom: 1rem;">← 返回概览</div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <div>
+              <h4 style="margin: 0 0 0.25rem; font-size: 1rem; color: #1d1d1f;">进行中 · 工作者</h4>
+              <div style="font-size: 0.8rem; color: #86868b;">共 3 个进行中任务</div>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div style="background: #fff; border-radius: 20px; padding: 1.25rem 1.5rem; height: 100px;"></div>
+            <div style="background: #fff; border-radius: 20px; padding: 1.25rem 1.5rem; height: 100px;"></div>
+            <div style="background: #fff; border-radius: 20px; padding: 1.25rem 1.5rem; height: 100px;"></div>
+          </div>
+        </div>
+      </div>
+      <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center;">
+        <div style="background: #fff; border-radius: 20px; padding: 1.5rem; width: 360px; box-shadow: 0 24px 80px rgba(0,0,0,0.2);">
+          <div style="font-size: 1rem; font-weight: 600; color: #1d1d1f; margin-bottom: 0.75rem;">是否重新发布此任务？</div>
+          <div style="font-size: 0.85rem; color: #86868b; margin-bottom: 1.5rem; line-height: 1.5;">将「UI 设计稿更新」重新发布为招募中状态，原任务信息将自动填充。</div>
+          <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+            <span style="background: #ff3b30; color: #fff; padding: 0.4rem 1.2rem; border-radius: 10px; font-size: 0.85rem; font-weight: 500; cursor: pointer;">取消</span>
+            <span style="background: #007aff; color: #fff; padding: 0.4rem 1.2rem; border-radius: 10px; font-size: 0.85rem; font-weight: 500; cursor: pointer;">重新发布</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <p style="font-size: 0.85rem; color: var(--text-secondary);">
+    <strong>导航：</strong>首页 → 任务 → 控制台（三级）<br>
+    <strong>Tabs：</strong>概览 / 我的任务 / 发布任务<br>
+    <strong>统计卡片：</strong>进行中（可点击→切换内容为进行中工作者列表，样式同申请卡片）<br>
+    <strong>最近任务：</strong>名称 + 右侧状态标签（不显示金额）<br>
+    <strong>查看全部：</strong>跳转全部任务页，金额在任务页显示<br>
+    <strong>进行中工作者卡片：</strong>「完成任务」(绿色,完成付款) / 「结束任务」(红色,结束任务)<br>
+    <strong>确认窗口：</strong>独立浮层弹窗，不挤压布局。完成任务一步确认；结束任务分两步：① 确认操作？→ ② 是否重新发布？取消按钮为红色<br>
+    <strong>消息按钮：</strong>改为「消息」+ 未读红点（小铃铛图标）<br>
+    <strong>注意：</strong>右上角铃铛会在全局导航统一添加
+  </p>
+</div>

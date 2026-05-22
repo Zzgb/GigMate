@@ -1,4 +1,5 @@
 interface TaskCardProps {
+  id: string;
   title: string;
   category: string;
   location: string;
@@ -8,9 +9,9 @@ interface TaskCardProps {
   price: string;
 }
 
-export default function TaskCard({ title, category, location, time, description, tags, price }: TaskCardProps) {
+export default function TaskCard({ id, title, category, location, time, description, tags, price }: TaskCardProps) {
   return (
-    <div className="bg-white rounded-[20px] p-6 shadow-[0_2px_20px_rgba(0,0,0,0.04)] cursor-pointer">
+    <a href={`/tasks/${id}`} className="block bg-white rounded-[20px] p-6 shadow-[0_2px_20px_rgba(0,0,0,0.04)]">
       <div className="flex justify-between items-start mb-3">
         <div>
           <div className="text-base font-semibold mb-0.5">{title}</div>
@@ -28,6 +29,6 @@ export default function TaskCard({ title, category, location, time, description,
         <span className="text-lg font-bold">{price}</span>
         <span className="bg-black text-white px-4 py-1.5 rounded-full text-xs font-medium">立即申请</span>
       </div>
-    </div>
+    </a>
   );
 }

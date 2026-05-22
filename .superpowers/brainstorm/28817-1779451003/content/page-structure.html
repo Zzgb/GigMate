@@ -1,0 +1,48 @@
+<h2>GigMate 页面结构方案</h2>
+<p class="subtitle">基于 CLAUDE.md 架构设计，共 8 个页面</p>
+
+<div class="section">
+  <h3>🗺️ 路由结构</h3>
+  <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; font-family: monospace; line-height: 1.8;">
+    /                    ← 首页 Landing<br>
+    /auth/login          ← 登录<br>
+    /auth/register       ← 注册<br>
+    /dashboard/employer  ← 雇主控制台<br>
+    /dashboard/employer/tasks      ← 任务管理<br>
+    /dashboard/employer/tasks/new  ← 发布任务<br>
+    /dashboard/freelancer          ← 自由职业者控制台<br>
+    /dashboard/freelancer/tasks    ← 浏览任务<br>
+    /dashboard/freelancer/applications  ← 我的申请
+  </div>
+</div>
+
+<div class="section">
+  <h3>基于架构的页面设计</h3>
+  <div class="options">
+    <div class="option" data-choice="a" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>完整版</h3>
+        <p>以上 9 个页面全部实现，首页有完整营销内容</p>
+      </div>
+    </div>
+    <div class="option" data-choice="b" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>精简版（推荐）</h3>
+        <p>去掉单独的 Landing Page，登录后直接进 Dashboard。减少首页开发量，先跑通核心流程</p>
+      </div>
+    </div>
+    <div class="option" data-choice="c" onclick="toggleSelect(this)">
+      <div class="letter">C</div>
+      <div class="content">
+        <h3>MVP 极简版</h3>
+        <p>只保留：雇主→发布任务，自由职业者→浏览任务+申请。认证用简单弹窗式切换角色</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <p>打开 <a href="http://localhost:58813" target="_blank">http://localhost:58813</a> 看看，点选你倾向的方案，然后告诉我你的想法。</p>
+</div>

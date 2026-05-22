@@ -1,0 +1,206 @@
+<h2>消息系统 — 铃铛入口 + 申请私聊</h2>
+<p class="subtitle">雇主 & 自由职业者两端统一，申请详情页内嵌聊天</p>
+
+<div class="section" style="margin-bottom: 2rem;">
+  <h3>全局导航栏 — 消息入口</h3>
+  <p class="subtitle">所有页面右上角统一加铃铛图标，有未读消息红点提示</p>
+  <div class="mockup" style="margin-top: 0.5rem;">
+    <div class="mockup-body" style="padding: 0; background: #f5f5f7; overflow: hidden;">
+      <!-- Employer Nav -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.5rem; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.06);">
+        <div style="display: flex; align-items: center; gap: 2rem;">
+          <span style="font-weight: 700; font-size: 1.1rem; letter-spacing: -0.5px; background: linear-gradient(135deg, #1a1a1a, #4a4a4a); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">GigMate</span>
+          <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
+            <span style="color: #86868b;">首页</span>
+            <span style="font-weight: 600; color: #1d1d1f;">任务</span>
+            <span style="color: #86868b;">控制台</span>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <!-- Bell icon -->
+          <div style="position: relative; width: 36px; height: 36px; border-radius: 50%; background: #f0f0f0; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer;">
+            🔔
+            <!-- Red dot -->
+            <div style="position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; background: #ff3b30; border-radius: 50%; border: 2px solid #fff;"></div>
+          </div>
+          <span style="font-size: 0.8rem; color: #86868b;">雇主</span>
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #e8e8ed, #d1d1d6);"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-bottom: 2rem;">
+  <h3>消息面板（点击铃铛展开）</h3>
+  <div class="mockup" style="margin-top: 0.5rem;">
+    <div class="mockup-body" style="padding: 0; background: #f5f5f7; overflow: hidden;">
+      <div style="display: flex;">
+        <!-- Page background dimmed -->
+        <div style="flex: 1; min-height: 300px; background: rgba(0,0,0,0.2);"></div>
+        <!-- Slide-in panel -->
+        <div style="width: 360px; background: #fff; min-height: 300px; border-left: 1px solid rgba(0,0,0,0.06);">
+          <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid rgba(0,0,0,0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 1rem; font-weight: 600; color: #1d1d1f;">消息</span>
+              <div style="display: flex; gap: 0.5rem;">
+                <span style="font-size: 0.75rem; background: #f5f5f7; padding: 0.2rem 0.6rem; border-radius: 999px; color: #86868b;">全部消息</span>
+                <span style="font-size: 0.75rem; background: #f5f5f7; padding: 0.2rem 0.6rem; border-radius: 999px; color: #86868b;">未读</span>
+              </div>
+            </div>
+          </div>
+          <!-- Chat list -->
+          <div>
+            <div style="display: flex; gap: 0.75rem; padding: 1rem 1.5rem; border-bottom: 1px solid rgba(0,0,0,0.04); background: #f5f5f7; cursor: pointer;">
+              <div style="width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #e8e8ed, #d1d1d6); flex-shrink: 0;"></div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="font-size: 0.85rem; font-weight: 600; color: #1d1d1f;">李明</span>
+                  <span style="font-size: 0.7rem; color: #86868b;">2 分钟前</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-size: 0.8rem; color: #86868b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px;">好的，我明天可以开始工作</span>
+                  <div style="width: 18px; height: 18px; border-radius: 50%; background: #ff3b30; color: #fff; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">2</div>
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 0.75rem; padding: 1rem 1.5rem; border-bottom: 1px solid rgba(0,0,0,0.04); cursor: pointer;">
+              <div style="width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #e8e8ed, #d1d1d6); flex-shrink: 0;"></div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="font-size: 0.85rem; font-weight: 500; color: #1d1d1f;">王小红</span>
+                  <span style="font-size: 0.7rem; color: #86868b;">1 小时前</span>
+                </div>
+                <span style="font-size: 0.8rem; color: #86868b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 220px;">您好，我对这个项目很感兴趣</span>
+              </div>
+            </div>
+            <div style="display: flex; gap: 0.75rem; padding: 1rem 1.5rem; cursor: pointer;">
+              <div style="width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #e8e8ed, #d1d1d6); flex-shrink: 0;"></div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="font-size: 0.85rem; font-weight: 500; color: #1d1d1f;">赵六</span>
+                  <span style="font-size: 0.7rem; color: #86868b;">昨天</span>
+                </div>
+                <span style="font-size: 0.8rem; color: #86868b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 220px;">设计稿已更新，请查收</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-bottom: 2rem;">
+  <h3>申请管理 — 内嵌聊天窗口</h3>
+  <p class="subtitle">在申请详情中，雇主可直接与申请者私聊沟通</p>
+  <div class="mockup" style="margin-top: 0.5rem;">
+    <div class="mockup-body" style="padding: 0; background: #f5f5f7; overflow: hidden;">
+      <div style="padding: 1rem 2rem 0; font-size: 0.85rem; color: #86868b;">← 返回申请列表</div>
+      <div style="padding: 1rem 2rem 2rem;">
+        <!-- Applicant info header -->
+        <div style="background: #fff; border-radius: 20px; padding: 1.25rem 1.5rem; box-shadow: 0 2px 20px rgba(0,0,0,0.04); margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <div style="width: 44px; height: 44px; border-radius: 14px; background: linear-gradient(135deg, #e8e8ed, #d1d1d6);"></div>
+              <div>
+                <div style="font-size: 1rem; font-weight: 600; color: #1d1d1f;">李明</div>
+                <div style="font-size: 0.8rem; color: #86868b;">3 年设计经验 · ⭐ 4.8 · 已完成 12 单</div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <span style="background: #30d158; color: #fff; padding: 0.35rem 1.2rem; border-radius: 999px; font-size: 0.8rem; font-weight: 500;">通过</span>
+              <span style="background: #fff; padding: 0.35rem 1.2rem; border-radius: 999px; font-size: 0.8rem; color: #86868b; border: 1px solid rgba(0,0,0,0.1);">拒绝</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat window -->
+        <div style="background: #fff; border-radius: 20px; box-shadow: 0 2px 20px rgba(0,0,0,0.04); overflow: hidden;">
+          <!-- Chat header -->
+          <div style="padding: 0.75rem 1.5rem; border-bottom: 1px solid rgba(0,0,0,0.05);">
+            <span style="font-size: 0.85rem; font-weight: 500; color: #1d1d1f;">与李明的对话</span>
+            <span style="font-size: 0.7rem; color: #86868b; margin-left: 0.75rem;">关于 · UI 设计稿更新</span>
+          </div>
+          <!-- Messages -->
+          <div style="padding: 1.25rem 1.5rem; min-height: 220px;">
+            <!-- Freelancer msg -->
+            <div style="display: flex; gap: 0.75rem; margin-bottom: 1rem; align-items: flex-start;">
+              <div style="width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(135deg, #e8e8ed, #d1d1d6); flex-shrink: 0;"></div>
+              <div>
+                <div style="background: #f5f5f7; border-radius: 14px 14px 14px 4px; padding: 0.7rem 1rem; max-width: 300px;">
+                  <p style="margin: 0; font-size: 0.85rem; color: #1d1d1f; line-height: 1.5;">您好，我对这个 UI 设计项目很感兴趣。我有 3 年经验，附上作品集供参考。</p>
+                </div>
+                <div style="font-size: 0.65rem; color: #86868b; margin-top: 0.3rem;">10:32</div>
+              </div>
+            </div>
+            <!-- Employer reply -->
+            <div style="display: flex; gap: 0.75rem; margin-bottom: 1rem; flex-direction: row-reverse; align-items: flex-start;">
+              <div style="width: 32px; height: 32px; border-radius: 10px; background: #1d1d1f; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.85rem; flex-shrink: 0;">张</div>
+              <div>
+                <div style="background: #1d1d1f; border-radius: 14px 14px 4px 14px; padding: 0.7rem 1rem; max-width: 300px;">
+                  <p style="margin: 0; font-size: 0.85rem; color: #fff; line-height: 1.5;">你好！看了你的作品集，风格很符合我们的需求。方便聊聊具体的时间安排吗？</p>
+                </div>
+                <div style="font-size: 0.65rem; color: #86868b; margin-top: 0.3rem; text-align: right;">10:45</div>
+              </div>
+            </div>
+            <!-- Freelancer msg -->
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+              <div style="width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(135deg, #e8e8ed, #d1d1d6); flex-shrink: 0;"></div>
+              <div>
+                <div style="background: #f5f5f7; border-radius: 14px 14px 14px 4px; padding: 0.7rem 1rem; max-width: 300px;">
+                  <p style="margin: 0; font-size: 0.85rem; color: #1d1d1f; line-height: 1.5;">好的，我明天可以开始工作，预计 2 周内完成全部设计稿。</p>
+                </div>
+                <div style="font-size: 0.65rem; color: #86868b; margin-top: 0.3rem;">10:48</div>
+              </div>
+            </div>
+          </div>
+          <!-- Chat input -->
+          <div style="padding: 0.75rem 1.5rem; border-top: 1px solid rgba(0,0,0,0.05); display: flex; gap: 0.75rem; align-items: center;">
+            <div style="flex: 1; background: #f5f5f7; border-radius: 12px; padding: 0.6rem 1rem; font-size: 0.85rem; color: #86868b;">输入消息...</div>
+            <div style="background: #1d1d1f; color: #fff; padding: 0.5rem 1rem; border-radius: 10px; font-size: 0.8rem; font-weight: 500;">发送</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>自由职业者端 — 消息入口一致</h3>
+  <div class="mockup" style="margin-top: 0.5rem;">
+    <div class="mockup-body" style="padding: 0; background: #f5f5f7; overflow: hidden;">
+      <!-- Freelancer Nav -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.5rem; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.06);">
+        <div style="display: flex; align-items: center; gap: 2rem;">
+          <span style="font-weight: 700; font-size: 1.1rem; letter-spacing: -0.5px; background: linear-gradient(135deg, #1a1a1a, #4a4a4a); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">GigMate</span>
+          <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
+            <span style="color: #86868b;">首页</span>
+            <span style="color: #86868b;">任务</span>
+            <span style="font-weight: 600; color: #1d1d1f;">控制台</span>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <!-- Bell icon (no unread) -->
+          <div style="position: relative; width: 36px; height: 36px; border-radius: 50%; background: #f0f0f0; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer;">
+            🔔
+          </div>
+          <span style="font-size: 0.8rem; color: #86868b;">自由职业者</span>
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #e8e8ed, #d1d1d6);"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top: 1rem;">
+  <p><strong>消息系统设计总结：</strong></p>
+  <ul style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.8;">
+    <li>✅ 导航栏右上角统一加 🔔 铃铛图标（姓名左侧）</li>
+    <li>✅ 有未读消息时显示红色圆点 + 未读数红标</li>
+    <li>✅ 点击铃铛展开消息面板（右侧滑入）</li>
+    <li>✅ 申请管理页内嵌聊天窗口，可直接与对方沟通</li>
+    <li>✅ 雇主和自由职业者两端设计一致</li>
+  </ul>
+  <p>这个设计满意吗？还需要调什么？</p>
+</div>

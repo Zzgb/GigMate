@@ -1,3 +1,6 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import AvatarMenu from "./AvatarMenu";
 
 interface NavProps {
@@ -6,11 +9,18 @@ interface NavProps {
 }
 
 export default function Nav({ variant = "landing", currentRole = "employer" }: NavProps) {
+  const pathname = usePathname();
+
+  const linkClass = (path: string) => {
+    const isActive = path === "/" ? pathname === "/" : pathname.startsWith(path);
+    return isActive ? "font-semibold text-[#1d1d1f]" : "text-[#86868b] hover:text-[#1d1d1f]";
+  };
+
   const navLinks = variant === "dashboard" ? (
     <div className="flex gap-6 text-sm">
-      <a href="/" className="text-[#86868b] hover:text-[#1d1d1f]">首页</a>
-      <a href="/tasks" className="text-[#86868b] hover:text-[#1d1d1f]">任务</a>
-      <a href="/dashboard" className="font-semibold text-[#1d1d1f]">控制台</a>
+      <a href="/" className={linkClass("/")}>首页</a>
+      <a href="/tasks" className={linkClass("/tasks")}>任务</a>
+      <a href="/dashboard" className={linkClass("/dashboard")}>控制台</a>
     </div>
   ) : null;
 

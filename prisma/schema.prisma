@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      String   @default("FREELANCER") // EMPLOYER 或 FREELANCER
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tasks             Task[]        @relation("Employer")
+  applications      Application[]
+  reviewsReceived   Review[]      @relation("Reviewee")
+  reviewsGiven      Review[]      @relation("Reviewer")
+}
+
+model Task {
+  id          String    @id @default(cuid())
+  title       String
+  description String
+  budget      Float
+  deadline    DateTime?
+  status      String    @default("OPEN") // OPEN, IN_PROGRESS, COMPLETED
+  category    String?
+  skills      String[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  employerId  String
+  employer    User          @relation("Employer", fields: [employerId], references: [id])
+  applications Application[]
+}
+
+model Application {
+  id        String   @id @default(cuid())
+  message   String
+  status    String   @default("PENDING") // PENDING, ACCEPTED, REJECTED
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  taskId        String
+  task          Task   @relation(fields: [taskId], references: [id])
+  freelancerId  String
+  freelancer    User   @relation(fields: [freelancerId], references: [id])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+
+  taskId     String
+  reviewerId String
+  reviewer   User   @relation("Reviewer", fields: [reviewerId], references: [id])
+  revieweeId String
+  reviewee   User   @relation("Reviewee", fields: [revieweeId], references: [id])
+}
