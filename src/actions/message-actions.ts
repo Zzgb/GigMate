@@ -102,12 +102,34 @@ export async function markAsRead(conversationId: string) {
   });
 }
 
+export async function createConversationByName(otherName: string) {
+  const session = await auth();
+  if (!session?.user?.id) return null;
+  const userId = session.user.id;
+
+  const other = await prisma.user.findFirst({ where: { name: otherName } });
+  if (!other || other.id === userId) return null;
+
+  const existing = await prisma.conversation.findFirst({
+    where: {
+      OR: [
+        { user1Id: userId, user2Id: other.id },
+        { user1Id: other.id, user2Id: userId },
+      ],
+    },
+  });
+  if (existing) return existing;
+
+  return prisma.conversation.create({
+    data: { user1Id: userId, user2Id: other.id },
+  });
+}
+
 export async function findOrCreateConversation(otherUserId: string, taskId?: string) {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
   const userId = session.user.id;
 
-  // Find existing conversation
   const existing = await prisma.conversation.findFirst({
     where: {
       OR: [
@@ -120,7 +142,6 @@ export async function findOrCreateConversation(otherUserId: string, taskId?: str
 
   if (existing) return existing;
 
-  // Create new
   return prisma.conversation.create({
     data: {
       user1Id: userId,

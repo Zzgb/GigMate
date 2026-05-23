@@ -14,7 +14,7 @@ interface NavProps {
 export default function Nav({ variant = "landing" }: NavProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { isLoggedIn, role } = useAuth();
+  const { isLoggedIn, name } = useAuth();
   const [unread, setUnread] = useState(false);
   const pollRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -65,7 +65,7 @@ export default function Nav({ variant = "landing" }: NavProps) {
                 <span className="absolute top-1 right-1 w-[7px] h-[7px] bg-[#ff3b30] rounded-full" />
               )}
             </a>
-            <span className="text-xs text-[#86868b]">{role === "employer" ? "雇主" : "自由职业者"}</span>
+            <span className="text-xs text-[#86868b]">{name}</span>
             <AvatarMenu />
           </>
         ) : null}

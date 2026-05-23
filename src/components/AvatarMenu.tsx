@@ -3,16 +3,18 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
+import { useTheme } from "@/lib/theme-context";
 
 export default function AvatarMenu() {
-  const { role, isLoggedIn, roles, switchRole, logout, mounted } = useAuth();
+  const { role, isLoggedIn, name, roles, switchRole, logout, mounted } = useAuth();
+  const { theme, setTheme } = useTheme();
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
   if (!mounted || !isLoggedIn) return null;
 
   const hasBoth = roles.includes("EMPLOYER") && roles.includes("FREELANCER");
-  const switchLabel = role === "employer" ? "切换为自由职业者" : "切换为雇主";
+  const roleLabel = role === "employer" ? "雇主端" : "自由职业者端";
 
   const handleSwitch = async () => {
     if (!hasBoth) return;
@@ -27,6 +29,8 @@ export default function AvatarMenu() {
     router.push("/");
   };
 
+  const themeLabels: Record<string, string> = { light: "浅色", dark: "深色", system: "跟随系统" };
+
   return (
     <div className="relative">
       <button
@@ -38,20 +42,47 @@ export default function AvatarMenu() {
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute top-full right-0 mt-2 bg-white rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.12)] min-w-[200px] py-1.5 z-50">
+          <div className="absolute top-full right-0 mt-2 bg-white dark:bg-[#2c2c2e] rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.12)] min-w-[220px] py-1.5 z-50">
+            {/* 账号信息 */}
+            <div className="px-4 py-2 border-b border-[rgba(0,0,0,0.05)] dark:border-[rgba(255,255,255,0.08)]">
+              <div className="text-sm font-medium text-[#1d1d1f] dark:text-white">{name}</div>
+              <div className="text-xs text-[#86868b] dark:text-[#98989d]">{roleLabel}</div>
+            </div>
+
+            {/* 主题切换 */}
+            <div className="px-4 py-2 border-b border-[rgba(0,0,0,0.05)] dark:border-[rgba(255,255,255,0.08)]">
+              <div className="text-xs text-[#86868b] dark:text-[#98989d] mb-1.5">外观</div>
+              <div className="flex gap-1">
+                {(["light", "dark", "system"] as const).map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setTheme(t)}
+                    className={`flex-1 text-[11px] py-1 rounded-lg cursor-pointer transition-colors ${
+                      theme === t
+                        ? "bg-[#007aff] text-white"
+                        : "bg-[#f5f5f7] dark:bg-[#3a3a3c] text-[#86868b] dark:text-[#98989d] hover:bg-[#e8e8ed]"
+                    }`}
+                  >
+                    {themeLabels[t]}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* 角色切换 */}
             {hasBoth && (
               <button
                 onClick={handleSwitch}
                 type="button"
-                className="w-full text-left px-4 py-2 text-sm hover:bg-[#f5f5f7] cursor-pointer"
+                className="w-full text-left px-4 py-2 text-sm text-[#1d1d1f] dark:text-white hover:bg-[#f5f5f7] dark:hover:bg-[#3a3a3c] cursor-pointer"
               >
-                {switchLabel}
+                {role === "employer" ? "切换为自由职业者" : "切换为雇主"}
               </button>
             )}
             <button
               onClick={handleLogout}
               type="button"
-              className="w-full text-left px-4 py-2 text-sm hover:bg-[#f5f5f7] text-[#ff3b30] cursor-pointer"
+              className="w-full text-left px-4 py-2 text-sm hover:bg-[#f5f5f7] dark:hover:bg-[#3a3a3c] text-[#ff3b30] cursor-pointer"
             >
               退出账号
             </button>

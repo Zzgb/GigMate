@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { applyForTask } from "@/actions/application-actions";
+import { useAuth } from "@/lib/auth-context";
 
 interface TaskDetailSidebarProps {
   taskId?: string;
@@ -18,6 +19,8 @@ export default function TaskDetailSidebar({
   employerName = "张三",
 }: TaskDetailSidebarProps) {
   const router = useRouter();
+  const { role } = useAuth();
+  const isEmployer = role === "employer";
   const [applying, setApplying] = useState(false);
   const [applied, setApplied] = useState(false);
 
@@ -72,6 +75,8 @@ export default function TaskDetailSidebar({
             联系雇主
           </button>
         </div>
+      ) : isEmployer ? (
+        <div className="w-full bg-[#f5f5f7] text-[#86868b] text-center py-3 rounded-xl text-sm">雇主无法申请任务</div>
       ) : applied ? (
         <div className="text-center">
           <div className="w-full bg-[#30d158] text-white text-center py-3 rounded-xl text-sm font-semibold">已申请</div>

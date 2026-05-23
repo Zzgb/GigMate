@@ -6,7 +6,7 @@ import { useAuth } from "@/lib/auth-context";
 import Nav from "@/components/Nav";
 import ConversationList from "@/components/ConversationList";
 import ChatWindow from "@/components/ChatWindow";
-import { getConversations, getMessages, sendMessage, markAsRead } from "@/actions/message-actions";
+import { getConversations, getMessages, sendMessage, markAsRead, createConversationByName } from "@/actions/message-actions";
 
 function formatTime(date: Date | string): string {
   const d = new Date(date);
@@ -80,11 +80,34 @@ function MessagesContent() {
         targetIdx = items.findIndex((c) => c.otherName === targetName);
       }
 
-      setConversations(items.map((c, i) => ({ ...c, active: i === (targetIdx >= 0 ? targetIdx : 0) })));
-      const active = items[targetIdx >= 0 ? targetIdx : 0];
-      if (active) {
-        setActiveId(active.id);
-        loadMessages(active.id);
+      if (targetName && targetIdx < 0) {
+        // No matching conversation found, create one
+        createConversationByName(targetName).then(() => {
+          getConversations().then((newData) => {
+            const newItems = newData.map((c: any) => ({
+              id: c.id,
+              otherName: (c.user1Id === userId ? c.user2 : c.user1)?.name || "未知",
+              otherUserId: (c.user1Id === userId ? c.user2 : c.user1)?.id || "",
+              task: c.task?.title || "无关联任务",
+              taskId: c.task?.id || null,
+              time: c.messages?.[0] ? formatTime(c.messages[0].createdAt) : "",
+              preview: c.messages?.[0]?.content?.slice(0, 30) || "",
+              unread: 0,
+              active: false,
+            }));
+            const idx = newItems.findIndex((c: any) => c.otherName === targetName);
+            setConversations(newItems.map((c: any, i: number) => ({ ...c, active: i === (idx >= 0 ? idx : 0) })));
+            const act = newItems[idx >= 0 ? idx : 0];
+            if (act) { setActiveId(act.id); loadMessages(act.id); }
+          });
+        });
+      } else {
+        setConversations(items.map((c, i) => ({ ...c, active: i === (targetIdx >= 0 ? targetIdx : 0) })));
+        const active = items[targetIdx >= 0 ? targetIdx : 0];
+        if (active) {
+          setActiveId(active.id);
+          loadMessages(active.id);
+        }
       }
       setLoading(false);
     });
