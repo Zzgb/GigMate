@@ -15,7 +15,7 @@ import { updateProfile } from "@/actions/task-actions";
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { isLoggedIn, mounted, name } = useAuth();
+  const { isLoggedIn, mounted, name, avatarUrl } = useAuth();
   const [nickname, setNickname] = useState(name || "");
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState("");
@@ -62,9 +62,13 @@ export default function ProfilePage() {
         <div className="bg-[var(--g-card)] rounded-2xl p-6 shadow-[0_2px_20px_var(--g-shadow)]">
           {/* 头像 */}
           <div className="flex items-center gap-4 mb-6 pb-6 border-b border-[var(--g-border)]">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6] flex items-center justify-center text-white text-xl font-bold">
-              {name?.[0] || "?"}
-            </div>
+            {avatarUrl ? (
+              <img src={avatarUrl} className="w-16 h-16 rounded-full object-cover" alt="" />
+            ) : (
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6] flex items-center justify-center text-white text-xl font-bold">
+                {name?.[0] || "?"}
+              </div>
+            )}
             <div>
               <button onClick={() => fileRef.current?.click()} className="text-sm text-[#007aff] cursor-pointer hover:underline">
                 更换头像
