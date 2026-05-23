@@ -15,6 +15,7 @@ interface Conversation {
  unread: number;
  active: boolean;
  taskColor: string;
+ avatarUrl?: string | null;
 }
 
 interface ConversationListProps {
