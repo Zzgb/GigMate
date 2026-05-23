@@ -199,6 +199,7 @@ function MessagesContent() {
       name={activeConvo.otherName}
       task={activeConvo.task}
       taskId={activeConvo.taskId || undefined}
+      avatarUrl={activeConvo.otherAvatarUrl || undefined}
       messages={messages}
       onSend={handleSend}
      />

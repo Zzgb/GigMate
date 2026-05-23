@@ -104,6 +104,7 @@ function TaskDetailContent() {
       status={task.status}
       price={`¥${task.budget}`}
       employerName={task.employer?.name || ""}
+      employerAvatarUrl={task.employer?.avatarUrl}
      />
     </div>
    </main>
