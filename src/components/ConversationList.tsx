@@ -36,7 +36,7 @@ export default function ConversationList({ conversations, onSelect }: Conversati
      className={`px-5 py-3 border-b border-[var(--g-border)] text-left cursor-pointer w-full ${c.active ? "bg-[var(--g-input)]" : ""}`}
     >
      <div className="flex items-center gap-2 mb-0.5">
-      <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6] flex-shrink-0" />
+      {c.avatarUrl ? <img src={c.avatarUrl} className="w-7 h-7 rounded-lg object-cover flex-shrink-0" alt="" /> : <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6] flex-shrink-0" />}
       <span className="text-sm font-semibold flex-1">{c.name}</span>
       <span className="text-[10px] text-[var(--g-text2)] dark:text-[#98989d]">{c.time}</span>
      </div>

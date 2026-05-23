@@ -54,7 +54,7 @@ interface ChatMessage {
 
 function MessagesContent() {
  const searchParams = useSearchParams();
- const { isLoggedIn, mounted, name: myName, userId } = useAuth();
+ const { isLoggedIn, mounted, name: myName, userId, avatarUrl: myAvatarUrl } = useAuth();
  const [conversations, setConversations] = useState<ConvoItem[]>([]);
  const [activeId, setActiveId] = useState<string | null>(null);
  const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -200,6 +200,7 @@ function MessagesContent() {
       task={activeConvo.task}
       taskId={activeConvo.taskId || undefined}
       avatarUrl={activeConvo.otherAvatarUrl || undefined}
+      myAvatarUrl={myAvatarUrl}
       messages={messages}
       onSend={handleSend}
      />

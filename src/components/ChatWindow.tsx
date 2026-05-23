@@ -20,11 +20,12 @@ interface ChatWindowProps {
   task: string;
   taskId?: string;
   avatarUrl?: string | null;
+  myAvatarUrl?: string | null;
   messages: Message[];
   onSend?: (text: string) => Promise<void>;
 }
 
-export default function ChatWindow({ name, task, taskId, avatarUrl, messages, onSend }: ChatWindowProps) {
+export default function ChatWindow({ name, task, taskId, avatarUrl, myAvatarUrl, messages, onSend }: ChatWindowProps) {
  const [input, setInput] = useState("");
  const bottomRef = useRef<HTMLDivElement>(null);
  const sending = useRef(false);
@@ -64,9 +65,13 @@ export default function ChatWindow({ name, task, taskId, avatarUrl, messages, on
    <div className="flex-1 px-6 py-4 overflow-y-auto">
     {messages.map((m, i) => (
      <div key={i} className={`flex gap-3 mb-3 items-start ${m.from === "me" ? "flex-row-reverse" : ""}`}>
-      <div className={`w-7 h-7 rounded-lg flex-shrink-0 flex items-center justify-center text-white text-[10px] ${m.from === "other" ? "bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6]" : "bg-[#1d1d1f]"}`}>
-       {m.from === "me" ? "" : ""}
-      </div>
+      {m.from === "other" ? (
+        avatarUrl ? <img src={avatarUrl} className="w-7 h-7 rounded-lg object-cover flex-shrink-0" alt="" />
+        : <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6] flex-shrink-0" />
+      ) : (
+        myAvatarUrl ? <img src={myAvatarUrl} className="w-7 h-7 rounded-lg object-cover flex-shrink-0" alt="" />
+        : <div className="w-7 h-7 rounded-lg bg-[#1d1d1f] flex-shrink-0" />
+      )}
       <div>
        <div className={`rounded-2xl px-4 py-2.5 max-w-[400px] ${m.from === "other" ? "bg-[var(--g-input)] dark:bg-[#3a3a3c] rounded-bl-md" : "bg-[#1d1d1f] rounded-br-md text-white"}`}>
         <p className="text-xs leading-relaxed">{m.text}</p>
