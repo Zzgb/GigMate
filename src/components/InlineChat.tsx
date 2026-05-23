@@ -38,7 +38,7 @@ export default function InlineChat({
     findOrCreateConversation(otherUserId, taskId).then((c) => {
       setConversationId(c.id);
       loadMessages(c.id);
-    });
+    }).catch(() => {});
     return () => {
       if (pollRef.current) clearInterval(pollRef.current);
     };

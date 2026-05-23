@@ -20,9 +20,9 @@ export default function Nav({ variant = "landing" }: NavProps) {
 
   useEffect(() => {
     if (!isLoggedIn) return;
-    hasUnreadMessages().then(setUnread);
+    hasUnreadMessages().then(setUnread).catch(() => {});
     pollRef.current = setInterval(() => {
-      hasUnreadMessages().then(setUnread);
+      hasUnreadMessages().then(setUnread).catch(() => {});
     }, 10000);
     return () => { if (pollRef.current) clearInterval(pollRef.current); };
   }, [isLoggedIn]);
