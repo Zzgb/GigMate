@@ -13,7 +13,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useTheme } from "@/lib/theme-context";
 
 export default function AvatarMenu() {
- const { role, isLoggedIn, name, roles, switchRole, logout, mounted } = useAuth();
+ const { role, isLoggedIn, name, avatarUrl, roles, switchRole, logout, mounted } = useAuth();
  const { theme, setTheme } = useTheme();
  const router = useRouter();
  const [open, setOpen] = useState(false);
@@ -43,9 +43,15 @@ export default function AvatarMenu() {
    <button
     onClick={() => setOpen((p) => !p)}
     type="button"
-    className="w-8 h-8 rounded-full bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6] border-2 border-transparent hover:border-[#007aff] transition-colors cursor-pointer"
+    className="w-8 h-8 rounded-full border-2 border-transparent hover:border-[#007aff] transition-colors cursor-pointer overflow-hidden"
     aria-label="用户菜单"
-   />
+   >
+    {avatarUrl ? (
+     <img src={avatarUrl} className="w-full h-full object-cover" alt="" />
+    ) : (
+     <div className="w-full h-full bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6]" />
+    )}
+   </button>
    {open && (
     <>
      <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
