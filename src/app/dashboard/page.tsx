@@ -448,7 +448,12 @@ function FreelancerActiveTasks({
             >
               <div className="flex justify-between items-center">
                 <div>
-                  <span className="font-semibold text-sm">{t.title}</span>
+                  <button
+                    onClick={() => router.push(`/tasks/${t.id}?from=dashboard`)}
+                    className="font-semibold text-sm hover:text-[#007aff] cursor-pointer text-left"
+                  >
+                    {t.title}
+                  </button>
                   <div className="text-xs text-[#86868b] mt-1">
                     {t.employer?.name}
                   </div>
@@ -486,6 +491,7 @@ function FreelancerCompletedTasks({
   tasks: any[];
   onBack: () => void;
 }) {
+  const router = useRouter();
   return (
     <div>
       <button
@@ -510,7 +516,12 @@ function FreelancerCompletedTasks({
             >
               <div className="flex justify-between items-center">
                 <div>
-                  <span className="font-semibold text-sm">{t.title}</span>
+                  <button
+                    onClick={() => router.push(`/tasks/${t.id}?from=dashboard`)}
+                    className="font-semibold text-sm hover:text-[#007aff] cursor-pointer text-left"
+                  >
+                    {t.title}
+                  </button>
                   <div className="text-xs text-[#86868b] mt-1">
                     {t.employer?.name}
                   </div>
@@ -742,7 +753,12 @@ export default function DashboardPage() {
                 className="flex justify-between items-center py-3 border-b border-[rgba(0,0,0,0.04)] last:border-0"
               >
                 <div>
-                  <span className="text-sm font-medium">{t.title}</span>
+                  <button
+                    onClick={() => router.push(`/tasks/${t.id}?from=dashboard`)}
+                    className="text-sm font-medium hover:text-[#007aff] cursor-pointer text-left"
+                  >
+                    {t.title}
+                  </button>
                   <div className="text-xs text-[#86868b]">
                     {t.employer?.name}
                   </div>

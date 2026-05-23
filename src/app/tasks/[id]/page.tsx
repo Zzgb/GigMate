@@ -1,15 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Nav from "@/components/Nav";
 import TaskDetailSidebar from "@/components/TaskDetailSidebar";
 import { useAuth } from "@/lib/auth-context";
 import { getTaskById } from "@/actions/task-actions";
 
-export default function TaskDetailPage() {
+function TaskDetailContent() {
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
+  const from = searchParams.get("from");
   const { isLoggedIn, mounted } = useAuth();
   const [task, setTask] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -32,15 +34,33 @@ export default function TaskDetailPage() {
   if (!mounted || !isLoggedIn || loading) return null;
   if (!task) return null;
 
-  const requirements = task.description
-    ? task.description.split("。").filter((s: string) => s.trim().length > 10).map((s: string) => s.trim() + "。")
-    : [];
+  const backUrl =
+    from === "dashboard" ? "/dashboard"
+    : from === "messages" ? "/messages"
+    : "/tasks";
+  const backLabel =
+    from === "dashboard" ? "返回控制台"
+    : from === "messages" ? "返回消息"
+    : "返回任务列表";
+
+  const statusBadge =
+    task.status === "IN_PROGRESS"
+      ? "bg-[#007aff1a] text-[#007aff]"
+      : task.status === "COMPLETED"
+      ? "bg-[#30d1581a] text-[#30d158]"
+      : "bg-[#30d1581a] text-[#30d158]";
+  const statusLabel =
+    task.status === "IN_PROGRESS"
+      ? "进行中"
+      : task.status === "COMPLETED"
+      ? "已完成"
+      : "招募中";
 
   return (
     <div className="flex flex-col flex-1">
       <Nav variant="dashboard" />
       <main className="flex-1 p-8 max-w-5xl mx-auto w-full">
-        <a href="/tasks" className="text-sm text-[#86868b] hover:text-[#1d1d1f]">← 返回任务列表</a>
+        <a href={backUrl} className="text-sm text-[#86868b] hover:text-[#1d1d1f]">← {backLabel}</a>
         <div className="grid grid-cols-[2fr_1fr] gap-6 mt-4">
           <div>
             <div className="flex justify-between items-start mb-6">
@@ -54,24 +74,14 @@ export default function TaskDetailPage() {
                   <span>{new Date(task.createdAt).toLocaleDateString("zh-CN")} 发布</span>
                 </div>
               </div>
-              <span className="text-xs bg-[#30d1581a] text-[#30d158] px-2.5 py-1 rounded-full font-medium">
-                {task.status === "OPEN" ? "招募中" : task.status === "IN_PROGRESS" ? "进行中" : "已完成"}
+              <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${statusBadge}`}>
+                {statusLabel}
               </span>
             </div>
             <div className="bg-white rounded-[20px] p-6 shadow-[0_2px_20px_rgba(0,0,0,0.04)] mb-4">
               <h4 className="text-sm font-semibold mb-3">任务详情</h4>
               <p className="text-xs text-[#86868b] leading-relaxed">{task.description}</p>
             </div>
-            {requirements.length > 0 && (
-              <div className="bg-white rounded-[20px] p-6 shadow-[0_2px_20px_rgba(0,0,0,0.04)] mb-4">
-                <h4 className="text-sm font-semibold mb-3">任务要求</h4>
-                <ul className="text-xs text-[#86868b] leading-relaxed list-disc pl-4 space-y-1">
-                  {requirements.map((req: string, i: number) => (
-                    <li key={i}>{req}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
             <div className="flex gap-1.5 flex-wrap mb-4">
               {(task.skills || []).map((s: string) => (
                 <span key={s} className="text-xs bg-white px-2.5 py-1.5 rounded-lg text-[#86868b] border border-[rgba(0,0,0,0.06)]">{s}</span>
@@ -80,11 +90,25 @@ export default function TaskDetailPage() {
           </div>
           <TaskDetailSidebar
             taskId={task.id}
+            status={task.status}
             price={`¥${task.budget}`}
             employerName={task.employer?.name || ""}
           />
         </div>
       </main>
     </div>
+  );
+}
+
+export default function TaskDetailPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex flex-col flex-1">
+        <Nav variant="dashboard" />
+        <div className="flex-1 flex items-center justify-center text-sm text-[#86868b]">加载中...</div>
+      </div>
+    }>
+      <TaskDetailContent />
+    </Suspense>
   );
 }

@@ -6,12 +6,14 @@ import { applyForTask } from "@/actions/application-actions";
 
 interface TaskDetailSidebarProps {
   taskId?: string;
+  status?: string;
   price?: string;
   employerName?: string;
 }
 
 export default function TaskDetailSidebar({
   taskId,
+  status = "OPEN",
   price = "¥200-500",
   employerName = "张三",
 }: TaskDetailSidebarProps) {
@@ -56,7 +58,19 @@ export default function TaskDetailSidebar({
           <div className="text-xs text-[#86868b]">雇主</div>
         </div>
       </div>
-      {applied ? (
+      {status === "COMPLETED" ? (
+        <div className="w-full bg-[#30d158] text-white text-center py-3 rounded-xl text-sm font-semibold">已完成</div>
+      ) : status === "IN_PROGRESS" ? (
+        <div className="text-center">
+          <div className="w-full bg-[#007aff] text-white text-center py-3 rounded-xl text-sm font-semibold">进行中</div>
+          <button
+            onClick={() => router.push("/messages")}
+            className="mt-2 w-full bg-black text-white text-center py-3 rounded-xl text-sm font-semibold cursor-pointer"
+          >
+            联系雇主
+          </button>
+        </div>
+      ) : applied ? (
         <div className="text-center">
           <div className="w-full bg-[#30d158] text-white text-center py-3 rounded-xl text-sm font-semibold">已申请</div>
           <button

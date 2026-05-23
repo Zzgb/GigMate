@@ -104,7 +104,7 @@ export default function InlineChat({
           <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6]" />
           <span className="text-xs font-semibold">{otherUserName}</span>
           {taskId ? (
-            <a href={`/tasks/${taskId}`} className="text-[10px] text-[#007aff] hover:underline">关于 · {taskTitle}</a>
+            <a href={`/tasks/${taskId}?from=messages`} className="text-[10px] text-[#007aff] hover:underline">关于 · {taskTitle}</a>
           ) : (
             <span className="text-[10px] text-[#007aff]">关于 · {taskTitle}</span>
           )}

@@ -46,7 +46,7 @@ export default function ChatWindow({ name, task, taskId, messages, onSend }: Cha
           <div className="flex-1 min-w-0">
             <div className="text-sm font-semibold">{name}</div>
             {taskId ? (
-              <a href={`/tasks/${taskId}`} className="text-[10px] text-[#007aff] truncate hover:underline">关于 · {task}</a>
+              <a href={`/tasks/${taskId}?from=messages`} className="text-[10px] text-[#007aff] truncate hover:underline">关于 · {task}</a>
             ) : (
               <div className="text-[10px] text-[#007aff] truncate">关于 · {task}</div>
             )}
