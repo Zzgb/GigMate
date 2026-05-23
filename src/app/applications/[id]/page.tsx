@@ -1,32 +1,103 @@
-import Nav from "@/components/Nav";
-import ApplicantCard from "@/components/ApplicantCard";
+"use client";
 
-const applicants = [
-  { name: "李明", experience: "3 年设计经验", message: "我有 3 年 UI 设计经验，熟练使用 Figma，参与过多个产品的设计系统搭建，附上作品集链接供参考。", tags: ["Figma", "Sketch", "设计系统"], rating: 4.8, completed: 12, responseRate: "95%", status: "pending" as const },
-  { name: "王小红", experience: "5 年设计经验", message: "资深 UI/UX 设计师，曾为多家互联网公司提供设计服务，擅长从 0 到 1 搭建设计系统。", tags: ["Figma", "UI/UX", "用户研究"], rating: 5.0, completed: 28, responseRate: "98%", status: "approved" as const },
-];
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import Nav from "@/components/Nav";
+import { useAuth } from "@/lib/auth-context";
+import { getApplicationsForTask, acceptApplication, rejectApplication } from "@/actions/application-actions";
+import { getTaskById } from "@/actions/task-actions";
 
 export default function ApplicationsPage() {
+  const router = useRouter();
+  const params = useParams();
+  const { isLoggedIn, mounted } = useAuth();
+  const [applications, setApplications] = useState<any[]>([]);
+  const [task, setTask] = useState<any>(null);
+  const [filter, setFilter] = useState<"全部" | "待审核" | "已通过">("全部");
+
+  useEffect(() => {
+    if (mounted && !isLoggedIn) { router.replace("/login"); return; }
+    if (!mounted) return;
+
+    getTaskById(params.id as string).then(setTask);
+    getApplicationsForTask(params.id as string).then(setApplications);
+  }, [mounted, isLoggedIn, params.id, router]);
+
+  if (!mounted || !isLoggedIn) return null;
+
+  const filtered = filter === "全部"
+    ? applications
+    : applications.filter((a) =>
+        filter === "待审核" ? a.status === "PENDING" : a.status === "ACCEPTED"
+      );
+
+  const handleAccept = async (appId: string) => {
+    await acceptApplication(appId);
+    const updated = await getApplicationsForTask(params.id as string);
+    setApplications(updated);
+  };
+
+  const handleReject = async (appId: string) => {
+    await rejectApplication(appId);
+    const updated = await getApplicationsForTask(params.id as string);
+    setApplications(updated);
+  };
+
   return (
     <div className="flex flex-col flex-1">
-      <Nav variant="dashboard" currentRole="employer" />
+      <Nav variant="dashboard" />
       <main className="flex-1 p-8 max-w-5xl mx-auto w-full">
         <a href="/dashboard/my-tasks" className="text-sm text-[#86868b] hover:text-[#1d1d1f]">← 返回我的任务</a>
         <div className="flex justify-between items-center mb-6 mt-4">
           <div>
-            <h4 className="text-base font-semibold mb-0.5">UI 设计稿更新 · 申请列表</h4>
-            <div className="text-xs text-[#86868b]">共 8 人申请 | 招募中</div>
+            <h4 className="text-base font-semibold mb-0.5">{task?.title || "任务"} · 申请列表</h4>
+            <div className="text-xs text-[#86868b]">共 {filtered.length} 人申请 | {task?.status === "OPEN" ? "招募中" : task?.status === "IN_PROGRESS" ? "进行中" : "已完成"}</div>
           </div>
           <div className="flex gap-1.5">
-            <span className="bg-black text-white px-3.5 py-1 rounded-full text-xs">全部</span>
-            <span className="bg-white px-3.5 py-1 rounded-full text-xs text-[#86868b] border border-[rgba(0,0,0,0.06)]">待审核</span>
-            <span className="bg-white px-3.5 py-1 rounded-full text-xs text-[#86868b] border border-[rgba(0,0,0,0.06)]">已通过</span>
+            {(["全部", "待审核", "已通过"] as const).map((f) => (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                className={`px-3.5 py-1 rounded-full text-xs cursor-pointer ${filter === f ? "bg-black text-white" : "bg-white text-[#86868b] border border-[rgba(0,0,0,0.06)]"}`}
+              >
+                {f}
+              </button>
+            ))}
           </div>
         </div>
         <div className="flex flex-col gap-3">
-          {applicants.map((a) => (
-            <ApplicantCard key={a.name} {...a} />
+          {filtered.map((a: any) => (
+            <div key={a.id} className="bg-white rounded-2xl p-5 border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
+              <div className="flex items-center gap-4">
+                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6] flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="font-semibold text-sm">{a.freelancer?.name}</span>
+                    <span className="text-xs text-[#86868b]">申请中</span>
+                  </div>
+                  <p className="text-xs text-[#86868b] line-clamp-2">{a.message}</p>
+                </div>
+                <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${
+                  a.status === "PENDING"
+                    ? "bg-[#f59e0b1a] text-[#f59e0b]"
+                    : a.status === "ACCEPTED"
+                    ? "bg-[#30d1581a] text-[#30d158]"
+                    : "bg-[#ff3b301a] text-[#ff3b30]"
+                }`}>
+                  {a.status === "PENDING" ? "待审核" : a.status === "ACCEPTED" ? "已通过" : "已拒绝"}
+                </span>
+                {a.status === "PENDING" && (
+                  <div className="flex gap-2">
+                    <button onClick={() => handleAccept(a.id)} className="bg-[#007aff] text-white px-3.5 py-1.5 rounded-full text-xs font-medium cursor-pointer">通过</button>
+                    <button onClick={() => handleReject(a.id)} className="bg-[#ff3b30] text-white px-3.5 py-1.5 rounded-full text-xs font-medium cursor-pointer">拒绝</button>
+                  </div>
+                )}
+              </div>
+            </div>
           ))}
+          {filtered.length === 0 && (
+            <div className="text-center py-10 text-sm text-[#86868b]">没有匹配的申请</div>
+          )}
         </div>
       </main>
     </div>

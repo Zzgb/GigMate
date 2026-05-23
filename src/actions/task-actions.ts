@@ -68,9 +68,12 @@ export async function createTask(data: {
   });
 }
 
-export async function getEmployerTasks(employerId: string) {
+export async function getEmployerTasks() {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("Unauthorized");
+
   return prisma.task.findMany({
-    where: { employerId },
+    where: { employerId: session.user.id },
     include: { _count: { select: { applications: true } } },
     orderBy: { createdAt: "desc" },
   });
