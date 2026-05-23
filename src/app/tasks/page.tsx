@@ -36,45 +36,40 @@ export default function TasksPage() {
  const [tasks, setTasks] = useState<any[]>([]);
  const [viewMode, setViewMode] = useState<"double" | "single">("double");
  const [activeFilters, setActiveFilters] = useState<Record<string, string>>({});
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const doFetch = (p = 1) => {
+    return getTasks({
+      search: searchQuery || undefined,
+      category: activeFilters.category !== "全部类型" ? activeFilters.category : undefined,
+      sort: activeFilters.sort === "最新发布" ? undefined
+        : activeFilters.sort === "价格从高到低" ? "budget_desc"
+        : activeFilters.sort === "价格从低到高" ? "budget_asc"
+        : undefined,
+      page: p,
+      pageSize: 10,
+    });
+  };
 
  useEffect(() => {
   if (mounted && !isLoggedIn) router.replace("/login");
  }, [mounted, isLoggedIn, router]);
 
- useEffect(() => {
-  getTasks().then(setTasks);
- }, []);
+ useEffect(() => { doFetch(1).then((r: any) => { setTasks(r.tasks); setTotalPages(r.pages); setPage(r.page); }); }, []);
 
- const handleSearch = async () => {
-  const result = await getTasks({
-   search: searchQuery || undefined,
-   category: activeFilters.category !== "全部类型" ? activeFilters.category : undefined,
-   sort: activeFilters.sort === "最新发布" ? undefined
-    : activeFilters.sort === "价格从高到低" ? "budget_desc"
-    : activeFilters.sort === "价格从低到高" ? "budget_asc"
-    : undefined,
-  });
-  setTasks(result);
- };
+ const handleSearch = () => doFetch(1).then((r: any) => { setTasks(r.tasks); setTotalPages(r.pages); setPage(r.page); });
 
  const handleFilterChange = (key: string, value: string) => {
   const newFilters = { ...activeFilters, [key]: value };
   setActiveFilters(newFilters);
-  // 即时查询（搜索框除外）
-  getTasks({
-   search: searchQuery || undefined,
-   category: newFilters.category !== "全部类型" ? newFilters.category : undefined,
-   sort: newFilters.sort === "最新发布" ? undefined
-    : newFilters.sort === "价格从高到低" ? "budget_desc"
-    : newFilters.sort === "价格从低到高" ? "budget_asc"
-    : undefined,
-  }).then(setTasks);
+  doFetch(1).then((r: any) => { setTasks(r.tasks); setTotalPages(r.pages); setPage(1); });
  };
 
  const handleReset = () => {
   setActiveFilters({});
   setSearchQuery("");
-  getTasks().then(setTasks);
+  doFetch(1).then((r: any) => { setTasks(r.tasks); setTotalPages(r.pages); setPage(r.page); });
  };
 
  if (!mounted || !isLoggedIn) return null;
@@ -138,6 +133,19 @@ export default function TasksPage() {
       <div className="col-span-full text-center py-10 text-sm text-[var(--g-text2)] dark:text-[#98989d]">没有找到匹配的任务</div>
      )}
     </div>
+
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center gap-2 mt-6">
+            <button onClick={() => doFetch(page - 1).then((r: any) => { setTasks(r.tasks); setTotalPages(r.pages); setPage(r.page); })} disabled={page <= 1}
+              className="px-3 py-1.5 rounded-lg text-xs cursor-pointer bg-[var(--g-card)] text-[var(--g-text)] disabled:opacity-30 hover:bg-[var(--g-hover)]">上一页</button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <button key={p} onClick={() => doFetch(p).then((r: any) => { setTasks(r.tasks); setTotalPages(r.pages); setPage(r.page); })} 
+                className={`w-8 h-8 rounded-lg text-xs cursor-pointer ${p === page ? "bg-black text-white" : "bg-[var(--g-card)] text-[var(--g-text)] hover:bg-[var(--g-hover)]"}`}>{p}</button>
+            ))}
+            <button onClick={() => doFetch(page + 1).then((r: any) => { setTasks(r.tasks); setTotalPages(r.pages); setPage(r.page); })} disabled={page >= totalPages}
+              className="px-3 py-1.5 rounded-lg text-xs cursor-pointer bg-[var(--g-card)] text-[var(--g-text)] disabled:opacity-30 hover:bg-[var(--g-hover)]">下一页</button>
+          </div>
+        )}
    </main>
   </div>
  );

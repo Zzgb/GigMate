@@ -1,6 +1,6 @@
 /**
  * task-actions.ts
- * 任务 Server Actions - getTasks（筛选排序）、getTaskById、createTask、getEmployerTasks
+ * 任务 Server Actions - getTasks（分页+筛选排序）、getTaskById、createTask、getEmployerTasks、updateProfile
  * 修改日期: 2026-05-23
  * 修改人: Claude Code + DeepSeek V4 Pro
  */
@@ -14,7 +14,11 @@ export async function getTasks(filters?: {
   search?: string;
   category?: string;
   sort?: string;
+  page?: number;
+  pageSize?: number;
 }) {
+  const page = filters?.page || 1;
+  const pageSize = filters?.pageSize || 10;
   const where: Record<string, any> = { status: "OPEN" };
 
   if (filters?.search) {
@@ -31,11 +35,18 @@ export async function getTasks(filters?: {
   if (filters?.sort === "budget_asc") orderBy = { budget: "asc" };
   if (filters?.sort === "budget_desc") orderBy = { budget: "desc" };
 
-  return prisma.task.findMany({
-    where,
-    orderBy,
-    include: { employer: { select: { id: true, name: true } } },
-  });
+  const [tasks, total] = await Promise.all([
+    prisma.task.findMany({
+      where,
+      orderBy,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      include: { employer: { select: { id: true, name: true } } },
+    }),
+    prisma.task.count({ where }),
+  ]);
+
+  return { tasks, total, pages: Math.ceil(total / pageSize), page };
 }
 
 export async function getTaskById(id: string) {
@@ -46,6 +57,7 @@ export async function getTaskById(id: string) {
       applications: {
         include: { freelancer: { select: { id: true, name: true } } },
       },
+      _count: { select: { applications: true } },
     },
   });
 }
@@ -83,5 +95,17 @@ export async function getEmployerTasks() {
     where: { employerId: session.user.id },
     include: { _count: { select: { applications: true } } },
     orderBy: { createdAt: "desc" },
+  });
+}
+
+export async function updateProfile(data: { name?: string; avatarUrl?: string }) {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("Unauthorized");
+
+  return prisma.user.update({
+    where: { id: session.user.id },
+    data: {
+      ...(data.name ? { name: data.name } : {}),
+    },
   });
 }

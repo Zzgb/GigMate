@@ -13,17 +13,21 @@ import { applyForTask } from "@/actions/application-actions";
 import { useAuth } from "@/lib/auth-context";
 
 interface TaskDetailSidebarProps {
- taskId?: string;
- status?: string;
- price?: string;
- employerName?: string;
+  taskId?: string;
+  status?: string;
+  price?: string;
+  employerName?: string;
+  deadline?: string;
+  applicantCount?: number;
 }
 
 export default function TaskDetailSidebar({
- taskId,
- status = "OPEN",
- price = "¥200-500",
- employerName = "张三",
+  taskId,
+  status = "OPEN",
+  price = "¥200-500",
+  employerName = "张三",
+  deadline,
+  applicantCount,
 }: TaskDetailSidebarProps) {
  const router = useRouter();
  const { role } = useAuth();
@@ -50,10 +54,9 @@ export default function TaskDetailSidebar({
    </div>
    <div className="grid grid-cols-2 gap-3 mb-5">
     {[
-     { label: "预计时长", value: "2 周" },
      { label: "工作方式", value: "远程/线上" },
-     { label: "申请人数", value: "8 人" },
-     { label: "截止日期", value: "2026-06-05" },
+     { label: "申请人数", value: `${applicantCount || 0} 人` },
+     { label: "截止日期", value: deadline || "未设置" },
     ].map((i) => (
      <div key={i.label}>
       <div className="text-xs text-[var(--g-text2)] dark:text-[#98989d]">{i.label}</div>

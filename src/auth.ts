@@ -7,11 +7,21 @@
 
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
+import GitHub from "next-auth/providers/github";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID || "",
+      clientSecret: process.env.AUTH_GOOGLE_SECRET || "",
+    }),
+    GitHub({
+      clientId: process.env.AUTH_GITHUB_ID || "",
+      clientSecret: process.env.AUTH_GITHUB_SECRET || "",
+    }),
     Credentials({
       credentials: {
         email: { label: "邮箱" },
@@ -44,11 +54,38 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user, trigger, session }) {
+    async signIn({ user, account }) {
+      // Auto-create user for OAuth providers
+      if (account?.provider !== "credentials" && user.email) {
+        const existing = await prisma.user.findUnique({ where: { email: user.email } });
+        if (!existing) {
+          await prisma.user.create({
+            data: {
+              email: user.email,
+              name: user.name || user.email.split("@")[0],
+              roles: ["FREELANCER"],
+            },
+          });
+        }
+      }
+      return true;
+    },
+    async jwt({ token, user, trigger, session, account }) {
+      // Enrich JWT with DB user data for OAuth logins
       if (user) {
-        token.id = user.id;
-        token.role = (user as any).role;
-        token.roles = (user as any).roles;
+        if (account?.provider !== "credentials" && user.email) {
+          const dbUser = await prisma.user.findUnique({ where: { email: user.email } });
+          if (dbUser) {
+            token.id = dbUser.id;
+            token.role = dbUser.roles.includes("EMPLOYER") ? "employer" : "freelancer";
+            token.roles = dbUser.roles;
+            token.picture = user.image;
+          }
+        } else {
+          token.id = user.id;
+          token.role = (user as any).role || "freelancer";
+          token.roles = (user as any).roles || ["FREELANCER"];
+        }
       }
       if (trigger === "update" && session?.role) {
         token.role = session.role;
