@@ -222,7 +222,7 @@ function EmployerCompletedView({
       taskId: reviewing.taskId,
       revieweeId: reviewing.revieweeId,
       rating: reviewRating,
-      comment: reviewText || undefined,
+      comment: reviewText.trim() || null,
     });
     setReviewing(null);
     setReviewText("");

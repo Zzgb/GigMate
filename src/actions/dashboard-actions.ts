@@ -102,7 +102,7 @@ export async function createReview(data: {
   taskId: string;
   revieweeId: string;
   rating: number;
-  comment?: string;
+  comment?: string | null;
 }) {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
