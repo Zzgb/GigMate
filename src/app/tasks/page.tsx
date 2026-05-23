@@ -51,7 +51,17 @@ export default function TasksPage() {
   };
 
   const handleFilterChange = (key: string, value: string) => {
-    setActiveFilters((prev) => ({ ...prev, [key]: value }));
+    const newFilters = { ...activeFilters, [key]: value };
+    setActiveFilters(newFilters);
+    // 即时查询（搜索框除外）
+    getTasks({
+      search: searchQuery || undefined,
+      category: newFilters.category !== "全部类型" ? newFilters.category : undefined,
+      sort: newFilters.sort === "最新发布" ? undefined
+        : newFilters.sort === "价格从高到低" ? "budget_desc"
+        : newFilters.sort === "价格从低到高" ? "budget_asc"
+        : undefined,
+    }).then(setTasks);
   };
 
   const handleReset = () => {

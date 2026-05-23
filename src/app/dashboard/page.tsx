@@ -249,6 +249,7 @@ function EmployerCompletedView({
         <div className="flex flex-col gap-3">
           {tasks.map((t: any) => {
             const worker = t.applications?.[0]?.freelancer;
+            const review = t.reviews?.[0];
             return (
               <div
                 key={t.id}
@@ -258,21 +259,29 @@ function EmployerCompletedView({
                   <div>
                     <span className="font-semibold text-sm">{t.title}</span>
                     {worker && (
-                      <>
-                        <div className="text-xs text-[#86868b] mt-1">
-                          完成者: {worker.name}
-                        </div>
-                      </>
+                      <div className="text-xs text-[#86868b] mt-1">
+                        完成者: {worker.name}
+                      </div>
                     )}
                     <div className="text-xs text-[#86868b] mt-0.5">
                       {formatPrice(t.budget)}
                     </div>
+                    {review && (
+                      <div className="mt-2 pt-2 border-t border-[rgba(0,0,0,0.04)]">
+                        <div className="text-xs text-[#f59e0b]">
+                          {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
+                        </div>
+                        {review.comment && (
+                          <div className="text-[10px] text-[#86868b] mt-0.5">{review.comment}</div>
+                        )}
+                      </div>
+                    )}
                   </div>
                   <div className="text-right">
                     <span className="text-xs text-[#30d158] font-medium">
                       已完成
                     </span>
-                    {worker && (
+                    {worker && !review && (
                       <button
                         onClick={() =>
                           setReviewing({
@@ -284,6 +293,9 @@ function EmployerCompletedView({
                       >
                         评价
                       </button>
+                    )}
+                    {review && (
+                      <div className="text-xs text-[#30d158] mt-1">已评价</div>
                     )}
                   </div>
                 </div>

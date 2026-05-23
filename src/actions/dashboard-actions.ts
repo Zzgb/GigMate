@@ -60,6 +60,7 @@ export async function getDashboardData() {
         where: { status: "ACCEPTED" },
         include: { freelancer: { select: { id: true, name: true } } },
       },
+      reviews: { select: { id: true, rating: true, comment: true, reviewerId: true, revieweeId: true } },
     },
   });
   const openTasks = await prisma.task.findMany({

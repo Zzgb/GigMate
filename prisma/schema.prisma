@@ -41,6 +41,7 @@ model Task {
   employerId  String
   employer    User          @relation("Employer", fields: [employerId], references: [id])
   applications Application[]
+  reviews     Review[]
 }
 
 model Application {
@@ -63,6 +64,7 @@ model Review {
   createdAt DateTime @default(now())
 
   taskId     String
+  task       Task   @relation(fields: [taskId], references: [id])
   reviewerId String
   reviewer   User   @relation("Reviewer", fields: [reviewerId], references: [id])
   revieweeId String

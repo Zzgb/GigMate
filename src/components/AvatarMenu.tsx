@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 
@@ -8,25 +8,12 @@ export default function AvatarMenu() {
   const { role, isLoggedIn, switchRole, logout, mounted } = useAuth();
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClick(e: Event) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener("click", handleClick);
-    return () => document.removeEventListener("click", handleClick);
-  }, []);
 
   if (!mounted || !isLoggedIn) return null;
 
-  const switchLabel = role === "employer" ? "切换为自由职业者" : "切换为雇主";
-
   const handleSwitch = async () => {
-    await switchRole();
     setOpen(false);
+    await switchRole();
     router.push("/dashboard");
   };
 
@@ -37,7 +24,7 @@ export default function AvatarMenu() {
   };
 
   return (
-    <div ref={ref} className="relative">
+    <div className="relative">
       <button
         onClick={() => setOpen((p) => !p)}
         type="button"
@@ -45,23 +32,26 @@ export default function AvatarMenu() {
         aria-label="用户菜单"
       />
       {open && (
-        <div className="absolute top-full right-0 mt-2 bg-white rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.12)] min-w-[200px] py-1.5 z-50">
-          <button
-            onClick={handleSwitch}
-            type="button"
-            className="w-full text-left px-3 py-2 text-sm rounded-xl hover:bg-[#f5f5f7] mx-1.5 cursor-pointer"
-          >
-            {switchLabel}
-          </button>
-          <div className="h-px bg-[rgba(0,0,0,0.05)] mx-3 my-1" />
-          <button
-            onClick={handleLogout}
-            type="button"
-            className="w-full text-left px-3 py-2 text-sm rounded-xl hover:bg-[#f5f5f7] text-[#ff3b30] mx-1.5 cursor-pointer"
-          >
-            退出账号
-          </button>
-        </div>
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+          <div className="absolute top-full right-0 mt-2 bg-white rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.12)] min-w-[200px] py-1.5 z-50">
+            <button
+              onClick={handleSwitch}
+              type="button"
+              className="w-full text-left px-4 py-2 text-sm hover:bg-[#f5f5f7] cursor-pointer"
+            >
+              {role === "employer" ? "切换为自由职业者" : "切换为雇主"}
+            </button>
+            <div className="h-px bg-[rgba(0,0,0,0.05)] mx-3 my-1" />
+            <button
+              onClick={handleLogout}
+              type="button"
+              className="w-full text-left px-4 py-2 text-sm hover:bg-[#f5f5f7] text-[#ff3b30] cursor-pointer"
+            >
+              退出账号
+            </button>
+          </div>
+        </>
       )}
     </div>
   );

@@ -1,14 +1,34 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { applyForTask } from "@/actions/application-actions";
 
 interface TaskDetailSidebarProps {
+  taskId?: string;
   price?: string;
   employerName?: string;
 }
 
-export default function TaskDetailSidebar({ price = "¥200-500", employerName = "张三" }: TaskDetailSidebarProps) {
+export default function TaskDetailSidebar({
+  taskId,
+  price = "¥200-500",
+  employerName = "张三",
+}: TaskDetailSidebarProps) {
   const router = useRouter();
+  const [applying, setApplying] = useState(false);
+  const [applied, setApplied] = useState(false);
+
+  const handleApply = async () => {
+    if (!taskId || applying) return;
+    setApplying(true);
+    try {
+      await applyForTask(taskId, "我对这个任务很感兴趣，希望可以合作！");
+      setApplied(true);
+    } catch {
+      setApplying(false);
+    }
+  };
 
   return (
     <div className="bg-white rounded-[20px] p-6 shadow-[0_2px_20px_rgba(0,0,0,0.04)]">
@@ -17,7 +37,12 @@ export default function TaskDetailSidebar({ price = "¥200-500", employerName = 
         <div className="text-3xl font-bold">{price}</div>
       </div>
       <div className="grid grid-cols-2 gap-3 mb-5">
-        {[{ label: "预计时长", value: "2 周" }, { label: "工作方式", value: "远程/线上" }, { label: "申请人数", value: "8 人" }, { label: "截止日期", value: "2026-06-05" }].map((i) => (
+        {[
+          { label: "预计时长", value: "2 周" },
+          { label: "工作方式", value: "远程/线上" },
+          { label: "申请人数", value: "8 人" },
+          { label: "截止日期", value: "2026-06-05" },
+        ].map((i) => (
           <div key={i.label}>
             <div className="text-xs text-[#86868b]">{i.label}</div>
             <div className="text-sm font-medium">{i.value}</div>
@@ -28,17 +53,31 @@ export default function TaskDetailSidebar({ price = "¥200-500", employerName = 
         <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6]" />
         <div>
           <div className="text-sm font-medium">{employerName}</div>
-          <div className="text-xs text-[#86868b]">雇主 · 15 个任务发布</div>
-          <div className="text-[10px] text-[#a1a1a6]">最近登录：3 小时前</div>
+          <div className="text-xs text-[#86868b]">雇主</div>
         </div>
       </div>
-      <button
-        onClick={() => router.push("/messages")}
-        className="w-full bg-black text-white text-center py-3 rounded-xl text-sm font-semibold cursor-pointer"
-      >
-        立即申请
-      </button>
-      <div className="text-center mt-2 text-[10px] text-[#86868b]">申请后等待雇主审核</div>
+      {applied ? (
+        <div className="text-center">
+          <div className="w-full bg-[#30d158] text-white text-center py-3 rounded-xl text-sm font-semibold">已申请</div>
+          <button
+            onClick={() => router.push("/messages")}
+            className="mt-2 w-full bg-black text-white text-center py-3 rounded-xl text-sm font-semibold cursor-pointer"
+          >
+            联系雇主
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={handleApply}
+          disabled={applying}
+          className="w-full bg-black text-white text-center py-3 rounded-xl text-sm font-semibold cursor-pointer disabled:opacity-50"
+        >
+          {applying ? "申请中..." : "立即申请"}
+        </button>
+      )}
+      <div className="text-center mt-2 text-[10px] text-[#86868b]">
+        {applied ? "申请已提交，等待雇主审核" : "申请后等待雇主审核"}
+      </div>
     </div>
   );
 }

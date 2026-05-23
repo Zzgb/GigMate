@@ -79,6 +79,7 @@ export default function TaskDetailPage() {
             </div>
           </div>
           <TaskDetailSidebar
+            taskId={task.id}
             price={`¥${task.budget}`}
             employerName={task.employer?.name || ""}
           />
