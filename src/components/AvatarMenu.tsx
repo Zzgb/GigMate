@@ -42,7 +42,8 @@ export default function AvatarMenu() {
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute top-full right-0 mt-2 bg-white dark:bg-[#2c2c2e] rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.12)] min-w-[220px] py-1.5 z-50">
+          <div className="absolute top-full right-0 mt-2 bg-white dark:bg-[#2c2c2e] rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.12)] min-w-[220px] py-1.5 z-50"
+            onMouseLeave={() => setOpen(false)}>
             {/* 账号信息 */}
             <div className="px-4 py-2 border-b border-[rgba(0,0,0,0.05)] dark:border-[rgba(255,255,255,0.08)] dark:border-[rgba(255,255,255,0.08)]">
               <div className="text-sm font-medium text-[#1d1d1f] dark:text-white dark:text-white">{name}</div>
