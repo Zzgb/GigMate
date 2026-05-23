@@ -189,8 +189,9 @@ function MessagesContent() {
       time: c.time,
       preview: c.preview,
       unread: c.unread,
-      taskColor: c.task !== "无关联任务" ? "text-[#007aff]" : "text-[var(--g-text2)] dark:text-[#98989d]",
+      taskColor: c.task !== "无关联任务" ? "text-[#007aff]" : "text-[var(--g-text2)]",
       active: c.active,
+      avatarUrl: c.otherAvatarUrl,
      }))}
      onSelect={handleSelect}
     />
