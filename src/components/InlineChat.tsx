@@ -137,7 +137,29 @@ export default function InlineChat({
         <div
          className={`rounded-xl px-3 py-1.5 max-w-[320px] ${m.from === "other" ? "bg-[var(--g-card)] rounded-bl-sm" : "bg-[#1d1d1f] text-white rounded-br-sm"}`}
         >
-         <p className="text-[11px] leading-relaxed">{m.text}</p>
+         {m.text.startsWith("[文件] ") ? (() => {
+               const lines = m.text.split("\n");
+               const name = lines[0].replace("[文件] ", "");
+               const url = lines[1] || "";
+               const isImage = /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(name);
+               return (
+                 <div>
+                   {isImage ? (
+                     <a href={url} target="_blank" rel="noopener noreferrer">
+                       <img src={url} alt={name} className="max-w-[160px] max-h-[120px] rounded-lg object-cover mb-1" />
+                     </a>
+                   ) : (
+                     <span className="text-[10px]">📎 {name}</span>
+                   )}
+                   <a href={url} target="_blank" rel="noopener noreferrer"
+                     className={`block text-[9px] underline mt-0.5 ${m.from === "me" ? "text-white/70" : "text-[#007aff]"}`}>
+                     {isImage ? "查看原图" : "下载文件"}
+                   </a>
+                 </div>
+               );
+             })() : (
+             <p className="text-[11px] leading-relaxed">{m.text}</p>
+             )}
         </div>
         <div
          className={`text-[9px] text-[var(--g-text2)] mt-0.5 ${m.from === "me" ? "text-right" : ""}`}

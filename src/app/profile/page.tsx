@@ -30,23 +30,24 @@ export default function ProfilePage() {
   const handleSave = async () => {
     if (!nickname.trim()) return;
     setSaving(true);
+    setMsg("保存中...");
     await updateProfile({ name: nickname.trim() });
-    setSaving(false);
-    setMsg("保存成功，即将刷新...");
-    setTimeout(() => window.location.reload(), 800);
+    setMsg("已保存");
+    setTimeout(() => window.location.reload(), 600);
   };
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setMsg("上传中...");
     const formData = new FormData();
     formData.append("file", file);
     const res = await fetch("/api/upload", { method: "POST", body: formData });
     const data = await res.json();
     if (data.url) {
       await updateProfile({ avatarUrl: data.url });
-      setMsg("头像上传成功，即将刷新...");
-      setTimeout(() => window.location.reload(), 800);
+      setMsg("已保存");
+      setTimeout(() => window.location.reload(), 600);
     }
   };
 

@@ -73,8 +73,33 @@ export default function ChatWindow({ name, task, taskId, avatarUrl, myAvatarUrl,
         : <div className="w-7 h-7 rounded-lg bg-[#1d1d1f] flex-shrink-0" />
       )}
       <div>
-       <div className={`rounded-2xl px-4 py-2.5 max-w-[400px] ${m.from === "other" ? "bg-[var(--g-input)] dark:bg-[#3a3a3c] rounded-bl-md" : "bg-[#1d1d1f] rounded-br-md text-white"}`}>
-        <p className="text-xs leading-relaxed">{m.text}</p>
+       <div className={`rounded-2xl px-4 py-2.5 max-w-[400px] ${m.from === "other" ? "bg-[var(--g-input)] rounded-bl-md" : "bg-[#1d1d1f] rounded-br-md text-white"}`}>
+        {m.text.startsWith("[文件] ") ? (() => {
+          const lines = m.text.split("\n");
+          const name = lines[0].replace("[文件] ", "");
+          const url = lines[1] || "";
+          const isImage = /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(name);
+          return (
+            <div>
+              {isImage ? (
+                <a href={url} target="_blank" rel="noopener noreferrer">
+                  <img src={url} alt={name} className="max-w-[200px] max-h-[150px] rounded-lg object-cover mb-1" />
+                </a>
+              ) : (
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-lg">📎</span>
+                  <span className="text-[10px] truncate max-w-[160px]">{name}</span>
+                </div>
+              )}
+              <a href={url} target="_blank" rel="noopener noreferrer"
+                className={`text-[10px] underline ${m.from === "me" ? "text-white/70" : "text-[#007aff]"}`}>
+                {isImage ? "查看原图" : "下载文件"}
+              </a>
+            </div>
+          );
+        })() : (
+          <p className="text-xs leading-relaxed">{m.text}</p>
+        )}
        </div>
        <div className={`text-[10px] text-[var(--g-text2)] mt-1 ${m.from === "me" ? "text-right" : ""}`}>{m.time}</div>
       </div>
