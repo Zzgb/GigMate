@@ -103,7 +103,11 @@ export default function InlineChat({
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6]" />
           <span className="text-xs font-semibold">{otherUserName}</span>
-          <span className="text-[10px] text-[#007aff]">关于 · {taskTitle}</span>
+          {taskId ? (
+            <a href={`/tasks/${taskId}`} className="text-[10px] text-[#007aff] hover:underline">关于 · {taskTitle}</a>
+          ) : (
+            <span className="text-[10px] text-[#007aff]">关于 · {taskTitle}</span>
+          )}
           <button onClick={onClose} className="ml-auto text-xs text-[#86868b] hover:text-[#1d1d1f] cursor-pointer">
             ✕
           </button>

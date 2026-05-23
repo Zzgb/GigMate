@@ -11,11 +11,12 @@ interface Message {
 interface ChatWindowProps {
   name: string;
   task: string;
+  taskId?: string;
   messages: Message[];
   onSend?: (text: string) => Promise<void>;
 }
 
-export default function ChatWindow({ name, task, messages, onSend }: ChatWindowProps) {
+export default function ChatWindow({ name, task, taskId, messages, onSend }: ChatWindowProps) {
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const sending = useRef(false);
@@ -44,7 +45,11 @@ export default function ChatWindow({ name, task, messages, onSend }: ChatWindowP
           <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6]" />
           <div className="flex-1 min-w-0">
             <div className="text-sm font-semibold">{name}</div>
-            <div className="text-[10px] text-[#007aff] truncate">关于 · {task}</div>
+            {taskId ? (
+              <a href={`/tasks/${taskId}`} className="text-[10px] text-[#007aff] truncate hover:underline">关于 · {task}</a>
+            ) : (
+              <div className="text-[10px] text-[#007aff] truncate">关于 · {task}</div>
+            )}
           </div>
         </div>
       </div>

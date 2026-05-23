@@ -30,6 +30,7 @@ interface ConvoItem {
   id: string;
   otherName: string;
   task: string;
+  taskId: string | null;
   time: string;
   preview: string;
   unread: number;
@@ -65,6 +66,7 @@ function MessagesContent() {
           otherName: other?.name || "未知",
           otherUserId: other?.id || "",
           task: c.task?.title || "无关联任务",
+          taskId: c.task?.id || null,
           time: lastMsg ? formatTime(lastMsg.createdAt) : "",
           preview: lastMsg?.content?.slice(0, 30) || "",
           unread: 0,
@@ -162,6 +164,7 @@ function MessagesContent() {
           <ChatWindow
             name={activeConvo.otherName}
             task={activeConvo.task}
+            taskId={activeConvo.taskId || undefined}
             messages={messages}
             onSend={handleSend}
           />
