@@ -1,6 +1,6 @@
 /**
  * auth.ts
- * Auth.js v5 配置文件 - Credentials Provider（Prisma 查库验证）、JWT 回调（用户信息+角色切换）、Session 回调
+ * Auth.js v5 配置文件 - Credentials + Google/GitHub Provider、JWT 回调（角色切换 + DB 同步 name/avatarUrl）、Session 回调（DB 优先读取）
  * 修改日期: 2026-05-23
  * 修改人: Claude Code + DeepSeek V4 Pro
  */
@@ -99,8 +99,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         // 刷新 session 时重新读取数据库中的用户信息
         const dbUser = await prisma.user.findUnique({ where: { id: token.id as string } });
         if (dbUser) {
-          token.name = dbUser.name;
-          token.avatarUrl = dbUser.avatarUrl;
+          token.name = dbUser.name || token.name;
+          token.avatarUrl = dbUser.avatarUrl || token.avatarUrl;
           if (session?.role) token.role = session.role;
         }
       }
@@ -117,7 +117,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           where: { id: token.id as string },
           select: { name: true, avatarUrl: true },
         });
-        session.user.name = token.name || dbUser?.name;
+        session.user.name = dbUser?.name || token.name;
         (session.user as any).avatarUrl = token.avatarUrl || dbUser?.avatarUrl || null;
       }
       return session;

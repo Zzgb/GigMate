@@ -1,6 +1,6 @@
 /**
  * ConversationList.tsx
- * 对话列表组件 - 消息页左侧显示所有对话（名称/关联任务/时间/预览/未读）
+ * 对话列表组件 - 消息页左侧显示所有对话（名称/关联任务/时间/预览/未读）+ 独立竖向滚动
  * 修改日期: 2026-05-23
  * 修改人: Claude Code + DeepSeek V4 Pro
  */
@@ -25,10 +25,11 @@ interface ConversationListProps {
 
 export default function ConversationList({ conversations, onSelect }: ConversationListProps) {
  return (
-  <div className="w-[280px] min-w-[200px] bg-[var(--g-card)] border-r border-[var(--g-border3)] flex flex-col">
+  <div className="w-[280px] min-w-[200px] min-h-0 bg-[var(--g-card)] border-r border-[var(--g-border3)] flex flex-col">
    <div className="px-5 py-4 border-b border-[var(--g-border2)]">
     <span className="text-base font-semibold">对话记录</span>
    </div>
+   <div className="flex-1 overflow-y-auto">
    {conversations.map((c, i) => (
     <button
      key={c.name + c.task}
@@ -50,6 +51,7 @@ export default function ConversationList({ conversations, onSelect }: Conversati
      </div>
     </button>
    ))}
+   </div>
   </div>
  );
 }

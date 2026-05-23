@@ -1,6 +1,6 @@
 /**
  * ChatWindow.tsx
- * 聊天窗口组件 - 消息显示区域 + 输入框 + 发送按钮 + 自动滚动到底部 + 发送锁防止重复
+ * 聊天窗口组件 - 消息显示区域 + 输入框 + 发送按钮 + 消息数量变化时自动滚底 + 发送锁防止重复 + 文件消息预览
  * 修改日期: 2026-05-23
  * 修改人: Claude Code + DeepSeek V4 Pro
  */
@@ -29,9 +29,13 @@ export default function ChatWindow({ name, task, taskId, avatarUrl, myAvatarUrl,
  const [input, setInput] = useState("");
  const bottomRef = useRef<HTMLDivElement>(null);
  const sending = useRef(false);
+ const prevLenRef = useRef(0);
 
  useEffect(() => {
-  bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  if (messages.length > 0 && messages.length !== prevLenRef.current) {
+   bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }
+  prevLenRef.current = messages.length;
  }, [messages]);
 
  const handleSend = async () => {
@@ -48,7 +52,7 @@ export default function ChatWindow({ name, task, taskId, avatarUrl, myAvatarUrl,
  };
 
  return (
-  <div className="flex-1 flex flex-col bg-[var(--g-card)] min-w-0">
+  <div className="flex-1 flex flex-col bg-[var(--g-card)] min-w-0 min-h-0">
    <div className="px-6 py-3 border-b border-[var(--g-border2)]">
     <div className="flex items-center gap-3">
      {avatarUrl ? <img src={avatarUrl} className="w-8 h-8 rounded-xl object-cover" alt="" /> : <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6]" />}
@@ -86,8 +90,7 @@ export default function ChatWindow({ name, task, taskId, avatarUrl, myAvatarUrl,
                   <img src={url} alt={name} className="max-w-[200px] max-h-[150px] rounded-lg object-cover mb-1" />
                 </a>
               ) : (
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-lg">📎</span>
+                <div className="mb-1">
                   <span className="text-[10px] truncate max-w-[160px]">{name}</span>
                 </div>
               )}

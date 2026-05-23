@@ -1,6 +1,6 @@
 /**
  * page.tsx
- * 消息页 - 对话列表 + 聊天窗口 + 3 秒轮询实时更新 + ?with= 参数自动定位对话
+ * 消息页 - 对话列表 + 聊天窗口 + 3 秒轮询 + ?with= 自动定位对话 + h-screen 高度限制 + 客户端消息缓存
  * 修改日期: 2026-05-23
  * 修改人: Claude Code + DeepSeek V4 Pro
  */
@@ -54,12 +54,13 @@ interface ChatMessage {
 
 function MessagesContent() {
  const searchParams = useSearchParams();
- const { isLoggedIn, mounted, name: myName, userId, avatarUrl: myAvatarUrl } = useAuth();
+ const { isLoggedIn, mounted, userId, avatarUrl: myAvatarUrl } = useAuth();
  const [conversations, setConversations] = useState<ConvoItem[]>([]);
  const [activeId, setActiveId] = useState<string | null>(null);
  const [messages, setMessages] = useState<ChatMessage[]>([]);
  const [loading, setLoading] = useState(true);
  const pollRef = useRef<NodeJS.Timeout | null>(null);
+ const cacheRef = useRef<Record<string, ChatMessage[]>>({});
 
  // Initial load of conversations
  useEffect(() => {
@@ -126,13 +127,19 @@ function MessagesContent() {
 
  const loadMessages = useCallback(async (convoId: string) => {
   markAsRead(convoId);
+  // 先从缓存取，瞬间显示
+  if (cacheRef.current[convoId]) {
+   setMessages(cacheRef.current[convoId]);
+  }
   const data = await getMessages(convoId);
-  setMessages(data.map((m: any) => ({
-   from: m.senderId === userId ? "me" : "other",
+  const msgs: ChatMessage[] = data.map((m: any) => ({
+   from: (m.senderId === userId ? "me" : "other") as "me" | "other",
    text: m.content,
    time: formatChatTime(m.createdAt),
-  })));
- }, [myName]);
+  }));
+  cacheRef.current[convoId] = msgs;
+  setMessages(msgs);
+ }, [userId]);
 
  const handleSelect = useCallback((idx: number) => {
   const convo = conversations[idx];
@@ -145,11 +152,11 @@ function MessagesContent() {
  const handleSend = useCallback(async (text: string) => {
   if (!activeId || !text.trim()) return;
   const msg = await sendMessage(activeId, text.trim());
-  setMessages((prev) => [...prev, {
-   from: "me",
-   text: msg.content,
-   time: formatChatTime(msg.createdAt),
-  }]);
+  setMessages((prev) => {
+   const updated = [...prev, { from: "me" as const, text: msg.content, time: formatChatTime(msg.createdAt) }];
+   cacheRef.current[activeId!] = updated;
+   return updated;
+  });
   // Refresh conversation list to update preview/time
   getConversations().then((data) => {
    setConversations((prev) => prev.map((c) => {
@@ -179,9 +186,9 @@ function MessagesContent() {
  const activeConvo = conversations.find((c) => c.active);
 
  return (
-  <div className="flex flex-col flex-1">
+  <div className="flex flex-col h-screen">
    <Nav variant="dashboard" />
-   <div className="flex flex-1 min-h-0">
+   <div className="flex flex-1 min-h-0 overflow-hidden">
     <ConversationList
      conversations={conversations.map((c) => ({
       name: c.otherName,
@@ -218,7 +225,7 @@ function MessagesContent() {
 export default function MessagesPage() {
  return (
   <Suspense fallback={
-   <div className="flex flex-col flex-1">
+   <div className="flex flex-col h-screen">
     <Nav variant="dashboard" />
     <div className="flex-1 flex items-center justify-center text-sm text-[var(--g-text2)] dark:text-[#98989d]">加载中...</div>
    </div>

@@ -1,6 +1,6 @@
 /**
  * InlineChat.tsx
- * 内联聊天组件 - 控制台进行中任务铃铛展开的聊天窗口，实时收发消息 + 3 秒轮询 + 发送锁
+ * 内联聊天组件 - 控制台进行中任务铃铛展开的聊天窗口，实时收发消息 + 3 秒轮询 + 发送锁 + 消息数量变化时滚底
  * 修改日期: 2026-05-23
  * 修改人: Claude Code + DeepSeek V4 Pro
  */
@@ -38,6 +38,7 @@ export default function InlineChat({
  const pollRef = useRef<NodeJS.Timeout | null>(null);
  const sending = useRef(false);
  const initRef = useRef(false);
+ const prevLenRef = useRef(0);
 
  useEffect(() => {
   if (!open || !otherUserId || initRef.current) return;
@@ -53,7 +54,7 @@ export default function InlineChat({
  }, [open, otherUserId, taskId]);
 
  useEffect(() => {
-  if (!open) initRef.current = false;
+  if (!open) { initRef.current = false; prevLenRef.current = 0; }
  }, [open]);
 
  const loadMessages = async (convoId: string) => {
@@ -81,7 +82,10 @@ export default function InlineChat({
  }, [conversationId]);
 
  useEffect(() => {
-  bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  if (messages.length > 0 && messages.length !== prevLenRef.current) {
+   bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }
+  prevLenRef.current = messages.length;
  }, [messages]);
 
  const handleSend = async () => {
@@ -149,7 +153,7 @@ export default function InlineChat({
                        <img src={url} alt={name} className="max-w-[160px] max-h-[120px] rounded-lg object-cover mb-1" />
                      </a>
                    ) : (
-                     <span className="text-[10px]">📎 {name}</span>
+                     <span className="text-[10px]">{name}</span>
                    )}
                    <a href={url} target="_blank" rel="noopener noreferrer"
                      className={`block text-[9px] underline mt-0.5 ${m.from === "me" ? "text-white/70" : "text-[#007aff]"}`}>
