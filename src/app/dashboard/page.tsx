@@ -13,6 +13,7 @@ import {
   rejectApplication as rejectApp,
 } from "@/actions/application-actions";
 import ConfirmModal from "@/components/ConfirmModal";
+import InlineChat from "@/components/InlineChat";
 
 function formatPrice(budget: number): string {
   return `¥${budget}`;
@@ -54,7 +55,6 @@ function EmployerActiveView({
 }) {
   const router = useRouter();
   const [chatOpen, setChatOpen] = useState<string | null>(null);
-  const [chatInput, setChatInput] = useState("");
   const [endStep1, setEndStep1] = useState(false);
   const [endStep2, setEndStep2] = useState(false);
 
@@ -146,45 +146,14 @@ function EmployerActiveView({
                 </div>
 
                 {/* 内联聊天 */}
-                {chatOpen === t.id && (
-                  <div className="border-t border-[rgba(0,0,0,0.05)] bg-[#f5f5f7]">
-                    <div className="px-5 py-2.5 bg-white border-b border-[rgba(0,0,0,0.04)]">
-                      <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6]" />
-                        <span className="text-xs font-semibold">
-                          {worker?.name || "未知"}
-                        </span>
-                        <span className="text-[10px] text-[#007aff]">
-                          关于 · {t.title}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="px-5 py-3 max-h-[240px] overflow-y-auto">
-                      <div className="text-[11px] text-[#86868b] text-center py-4">
-                        暂无消息
-                      </div>
-                    </div>
-                    <div className="px-5 py-2.5 border-t border-[rgba(0,0,0,0.04)] flex gap-2 items-center bg-white">
-                      <input
-                        type="text"
-                        value={chatInput}
-                        onChange={(e) => setChatInput(e.target.value)}
-                        onKeyDown={(e) =>
-                          e.key === "Enter" && setChatInput("")
-                        }
-                        placeholder="输入消息..."
-                        className="flex-1 bg-[#f5f5f7] rounded-lg px-3 py-1.5 text-[11px] outline-none"
-                      />
-                      <button
-                        onClick={() => setChatInput("")}
-                        className="bg-black text-white px-3 py-1.5 rounded-lg text-[11px] font-medium cursor-pointer"
-                        type="button"
-                      >
-                        发送
-                      </button>
-                    </div>
-                  </div>
-                )}
+                <InlineChat
+                  otherUserId={worker?.id || ""}
+                  otherUserName={worker?.name || ""}
+                  taskTitle={t.title}
+                  taskId={t.id}
+                  open={chatOpen === t.id}
+                  onClose={() => setChatOpen(null)}
+                />
               </div>
             );
           })}

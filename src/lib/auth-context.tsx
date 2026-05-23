@@ -9,6 +9,7 @@ interface AuthContextType {
   isLoggedIn: boolean;
   role: UserRole;
   name: string;
+  userId: string;
   roles: string[];
   mounted: boolean;
   login: (role: UserRole, email?: string, password?: string) => Promise<void>;
@@ -29,6 +30,7 @@ function AuthInner({ children }: { children: ReactNode }) {
   const isLoggedIn = status === "authenticated";
   const role = ((session?.user as any)?.role || "employer") as UserRole;
   const name = session?.user?.name || "用户";
+  const userId = session?.user?.id || "";
   const roles = ((session?.user as any)?.roles || ["FREELANCER"]) as string[];
 
   const login = useCallback(
@@ -53,7 +55,7 @@ function AuthInner({ children }: { children: ReactNode }) {
   }, [role, update]);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, role, name, roles, mounted, login, logout, switchRole }}>
+    <AuthContext.Provider value={{ isLoggedIn, role, name, userId, roles, mounted, login, logout, switchRole }}>
       {children}
     </AuthContext.Provider>
   );

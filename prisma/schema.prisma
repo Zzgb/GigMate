@@ -24,6 +24,9 @@ model User {
   applications      Application[]
   reviewsReceived   Review[]      @relation("Reviewee")
   reviewsGiven      Review[]      @relation("Reviewer")
+  conversationsAs1  Conversation[] @relation("User1")
+  conversationsAs2  Conversation[] @relation("User2")
+  messages          Message[]
 }
 
 model Task {
@@ -42,6 +45,7 @@ model Task {
   employer    User          @relation("Employer", fields: [employerId], references: [id])
   applications Application[]
   reviews     Review[]
+  conversations Conversation[]
 }
 
 model Application {
@@ -69,4 +73,29 @@ model Review {
   reviewer   User   @relation("Reviewer", fields: [reviewerId], references: [id])
   revieweeId String
   reviewee   User   @relation("Reviewee", fields: [revieweeId], references: [id])
+}
+
+model Conversation {
+  id        String    @id @default(cuid())
+  taskId    String?
+  task      Task?     @relation(fields: [taskId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  user1Id  String
+  user1    User      @relation("User1", fields: [user1Id], references: [id])
+  user2Id  String
+  user2    User      @relation("User2", fields: [user2Id], references: [id])
+  messages Message[]
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+
+  senderId       String
+  sender         User         @relation(fields: [senderId], references: [id])
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
 }

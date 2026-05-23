@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface Message {
   from: "other" | "me";
@@ -12,17 +12,22 @@ interface ChatWindowProps {
   name: string;
   task: string;
   messages: Message[];
+  onSend?: (text: string) => Promise<void>;
 }
 
-export default function ChatWindow({ name, task, messages }: ChatWindowProps) {
+export default function ChatWindow({ name, task, messages, onSend }: ChatWindowProps) {
   const [input, setInput] = useState("");
-  const [localMessages, setLocalMessages] = useState<Message[]>(messages);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
-  const handleSend = () => {
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const handleSend = async () => {
     if (!input.trim()) return;
-    const now = new Date();
-    const time = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
-    setLocalMessages((prev) => [...prev, { from: "me", text: input, time }]);
+    if (onSend) {
+      await onSend(input);
+    }
     setInput("");
   };
 
@@ -38,10 +43,10 @@ export default function ChatWindow({ name, task, messages }: ChatWindowProps) {
         </div>
       </div>
       <div className="flex-1 px-6 py-4 overflow-y-auto">
-        {localMessages.map((m, i) => (
+        {messages.map((m, i) => (
           <div key={i} className={`flex gap-3 mb-3 items-start ${m.from === "me" ? "flex-row-reverse" : ""}`}>
-            <div className={`w-7 h-7 rounded-lg flex-shrink-0 ${m.from === "other" ? "bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6]" : "bg-[#1d1d1f] flex items-center justify-center text-white text-[10px]"}`}>
-              {m.from === "me" ? "张" : ""}
+            <div className={`w-7 h-7 rounded-lg flex-shrink-0 flex items-center justify-center text-white text-[10px] ${m.from === "other" ? "bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6]" : "bg-[#1d1d1f]"}`}>
+              {m.from === "me" ? "" : ""}
             </div>
             <div>
               <div className={`rounded-2xl px-4 py-2.5 max-w-[400px] ${m.from === "other" ? "bg-[#f5f5f7] rounded-bl-md" : "bg-[#1d1d1f] rounded-br-md text-white"}`}>
@@ -51,11 +56,12 @@ export default function ChatWindow({ name, task, messages }: ChatWindowProps) {
             </div>
           </div>
         ))}
-        {localMessages.length === 0 && (
+        {messages.length === 0 && (
           <div className="flex items-center justify-center h-full text-xs text-[#86868b]">
             还没有消息，发送第一条消息开始对话
           </div>
         )}
+        <div ref={bottomRef} />
       </div>
       <div className="px-6 py-3 border-t border-[rgba(0,0,0,0.05)] flex gap-3 items-center">
         <input
