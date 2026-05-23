@@ -7,7 +7,6 @@
 
 "use client";
 
-import { cn } from "@/lib/utils";
 
 interface ConfirmModalProps {
  open: boolean;
