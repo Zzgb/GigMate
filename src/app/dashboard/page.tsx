@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import {
   getDashboardData,
-  completeTask,
+  completeTask, cancelTask,
   createReview,
 } from "@/actions/dashboard-actions";
 import {
@@ -161,8 +161,8 @@ function EmployerActiveView({
         </div>
       )}
 
-      <ConfirmModal open={endStep1} title="确认操作？" description="确定要结束该任务？任务会被标记为已完成。"
-        confirmLabel="确定" onConfirm={() => { setEndStep1(false); setEndStep2(true); }} onCancel={() => setEndStep1(false)} />
+      <ConfirmModal open={endStep1} title="确认操作？" description="确定要结束该任务？任务会被标记为已取消。"
+        confirmLabel="确定" onConfirm={async () => { if (endingTaskId) await cancelTask(endingTaskId); setEndStep1(false); setEndStep2(true); }} onCancel={() => setEndStep1(false)} />
       <ConfirmModal open={endStep2} title="是否重新发布此任务？" description="可将当前任务信息自动填入发布页面，方便快速重新发布。"
         confirmLabel="重新发布" confirmColor="blue" secondStep
         onConfirm={() => { setEndStep2(false); router.push(`/tasks/new?republish=${endingTaskId}`); }} onCancel={() => setEndStep2(false)} />
@@ -913,12 +913,12 @@ export default function DashboardPage() {
                 className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${
                   t.status === "IN_PROGRESS"
                     ? "bg-[#007aff1a] text-[#007aff]"
-                    : t.status === "COMPLETED"
+                    : t.status === "COMPLETED" || t.status === "CANCELLED"
                     ? "bg-[#30d1581a] text-[#30d158]"
                     : "bg-[#f59e0b1a] text-[#f59e0b]"
                 }`}
               >
-                {t.status === "IN_PROGRESS" ? "进行中" : t.status === "COMPLETED" ? "已完成" : "招募中"}
+                {t.status === "IN_PROGRESS" ? "进行中" : t.status === "COMPLETED" || t.status === "CANCELLED" ? "已完成" : "招募中"}
               </span>
             </div>
           ))}

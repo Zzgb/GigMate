@@ -8,7 +8,8 @@ import { getEmployerTasks } from "@/actions/task-actions";
 const statusConfig: Record<string, { label: string; colors: string }> = {
   OPEN: { label: "招募中", colors: "text-[#30d158] bg-[#30d1581a]" },
   IN_PROGRESS: { label: "进行中", colors: "text-[#007aff] bg-[#007aff1a]" },
-  COMPLETED: { label: "已完成", colors: "text-[#86868b] bg-[#f5f5f7]" },
+  COMPLETED: { label: "已完成", colors: "text-[#30d1581a] text-[#30d158]" },
+  CANCELLED: { label: "已取消", colors: "text-[#86868b] bg-[#f5f5f7]" },
 };
 
 export default function MyTasksPage() {

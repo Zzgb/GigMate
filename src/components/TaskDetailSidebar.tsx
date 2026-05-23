@@ -58,7 +58,9 @@ export default function TaskDetailSidebar({
           <div className="text-xs text-[#86868b]">雇主</div>
         </div>
       </div>
-      {status === "COMPLETED" ? (
+      {status === "CANCELLED" ? (
+        <div className="w-full bg-[#86868b] text-white text-center py-3 rounded-xl text-sm font-semibold">已取消</div>
+      ) : status === "COMPLETED" ? (
         <div className="w-full bg-[#30d158] text-white text-center py-3 rounded-xl text-sm font-semibold">已完成</div>
       ) : status === "IN_PROGRESS" ? (
         <div className="text-center">

@@ -101,6 +101,15 @@ export async function completeTask(taskId: string) {
   });
 }
 
+export async function cancelTask(taskId: string) {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("Unauthorized");
+  return prisma.task.update({
+    where: { id: taskId },
+    data: { status: "CANCELLED" },
+  });
+}
+
 export async function createReview(data: {
   taskId: string;
   revieweeId: string;

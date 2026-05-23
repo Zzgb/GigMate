@@ -48,12 +48,16 @@ function TaskDetailContent() {
       ? "bg-[#007aff1a] text-[#007aff]"
       : task.status === "COMPLETED"
       ? "bg-[#30d1581a] text-[#30d158]"
+      : task.status === "CANCELLED"
+      ? "bg-[#86868b1a] text-[#86868b]"
       : "bg-[#30d1581a] text-[#30d158]";
   const statusLabel =
     task.status === "IN_PROGRESS"
       ? "进行中"
       : task.status === "COMPLETED"
       ? "已完成"
+      : task.status === "CANCELLED"
+      ? "已取消"
       : "招募中";
 
   return (
