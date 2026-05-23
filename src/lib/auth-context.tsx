@@ -22,8 +22,8 @@ function AuthInner({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    if (status !== "loading") setMounted(true);
+  }, [status]);
 
   const isLoggedIn = status === "authenticated";
   const role = ((session?.user as any)?.role || "employer") as UserRole;

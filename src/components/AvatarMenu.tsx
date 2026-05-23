@@ -37,9 +37,9 @@ export default function AvatarMenu() {
   };
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative" style={{ zIndex: 100 }}>
       <button
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={(e) => { e.stopPropagation(); setOpen((p) => !p); }}
         type="button"
         className="w-8 h-8 rounded-full bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6] border-2 border-transparent hover:border-[#007aff] transition-colors cursor-pointer"
         aria-label="用户菜单"

@@ -52,6 +52,7 @@ function EmployerActiveView({
   onBack: () => void;
   refresh: () => void;
 }) {
+  const router = useRouter();
   const [chatOpen, setChatOpen] = useState<string | null>(null);
   const [chatInput, setChatInput] = useState("");
   const [endStep1, setEndStep1] = useState(false);
@@ -194,7 +195,7 @@ function EmployerActiveView({
         confirmLabel="确定" onConfirm={() => { setEndStep1(false); setEndStep2(true); }} onCancel={() => setEndStep1(false)} />
       <ConfirmModal open={endStep2} title="是否重新发布此任务？" description="可将当前任务信息自动填入发布页面，方便快速重新发布。"
         confirmLabel="重新发布" confirmColor="blue" secondStep
-        onConfirm={() => { setEndStep2(false); }} onCancel={() => setEndStep2(false)} />
+        onConfirm={() => { setEndStep2(false); router.push("/tasks/new"); }} onCancel={() => setEndStep2(false)} />
     </div>
   );
 }
