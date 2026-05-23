@@ -41,7 +41,7 @@ export default function Nav({ variant = "landing" }: NavProps) {
 
   return (
     <nav className="flex justify-between items-center px-6 py-3 bg-white/80 dark:bg-[#2c2c2e]/80 backdrop-blur-xl border-b border-[rgba(0,0,0,0.06)] dark:border-[rgba(255,255,255,0.08)] relative z-30">
-      <div className="flex items-center gap-8">
+      <div className="flex items-center gap-12">
         <a href="/" className="font-bold text-lg tracking-tight bg-gradient-to-r from-[#1a1a1a] to-[#4a4a4a] bg-clip-text text-transparent">
           GigMate
         </a>
