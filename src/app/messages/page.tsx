@@ -43,6 +43,7 @@ interface ConvoItem {
  unread: number;
  active: boolean;
  otherUserId: string;
+  otherAvatarUrl: string | null;
 }
 
 interface ChatMessage {
@@ -72,6 +73,7 @@ function MessagesContent() {
      id: c.id,
      otherName: other?.name || "未知",
      otherUserId: other?.id || "",
+          otherAvatarUrl: other?.avatarUrl || null,
      task: c.task?.title || "无关联任务",
      taskId: c.task?.id || null,
      time: lastMsg ? formatTime(lastMsg.createdAt) : "",
@@ -95,6 +97,7 @@ function MessagesContent() {
        id: c.id,
        otherName: (c.user1Id === userId ? c.user2 : c.user1)?.name || "未知",
        otherUserId: (c.user1Id === userId ? c.user2 : c.user1)?.id || "",
+              otherAvatarUrl: (c.user1Id === userId ? c.user2 : c.user1)?.avatarUrl || null,
        task: c.task?.title || "无关联任务",
        taskId: c.task?.id || null,
        time: c.messages?.[0] ? formatTime(c.messages[0].createdAt) : "",

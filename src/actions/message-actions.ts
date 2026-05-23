@@ -22,8 +22,8 @@ export async function getConversations() {
     },
     include: {
       task: { select: { id: true, title: true } },
-      user1: { select: { id: true, name: true } },
-      user2: { select: { id: true, name: true } },
+      user1: { select: { id: true, name: true, avatarUrl: true } },
+      user2: { select: { id: true, name: true, avatarUrl: true } },
       messages: { orderBy: { createdAt: "desc" }, take: 1 },
     },
     orderBy: { updatedAt: "desc" },
@@ -36,7 +36,7 @@ export async function getMessages(conversationId: string) {
 
   return prisma.message.findMany({
     where: { conversationId },
-    include: { sender: { select: { id: true, name: true } } },
+    include: { sender: { select: { id: true, name: true, avatarUrl: true } } },
     orderBy: { createdAt: "asc" },
   });
 }
@@ -57,7 +57,7 @@ export async function sendMessage(conversationId: string, content: string) {
       senderId: session.user.id,
       conversationId,
     },
-    include: { sender: { select: { id: true, name: true } } },
+    include: { sender: { select: { id: true, name: true, avatarUrl: true } } },
   });
 }
 

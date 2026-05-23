@@ -16,14 +16,15 @@ interface Message {
 }
 
 interface ChatWindowProps {
- name: string;
- task: string;
- taskId?: string;
- messages: Message[];
- onSend?: (text: string) => Promise<void>;
+  name: string;
+  task: string;
+  taskId?: string;
+  avatarUrl?: string | null;
+  messages: Message[];
+  onSend?: (text: string) => Promise<void>;
 }
 
-export default function ChatWindow({ name, task, taskId, messages, onSend }: ChatWindowProps) {
+export default function ChatWindow({ name, task, taskId, avatarUrl, messages, onSend }: ChatWindowProps) {
  const [input, setInput] = useState("");
  const bottomRef = useRef<HTMLDivElement>(null);
  const sending = useRef(false);
@@ -49,7 +50,7 @@ export default function ChatWindow({ name, task, taskId, messages, onSend }: Cha
   <div className="flex-1 flex flex-col bg-[var(--g-card)] min-w-0">
    <div className="px-6 py-3 border-b border-[var(--g-border2)]">
     <div className="flex items-center gap-3">
-     <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6]" />
+     {avatarUrl ? <img src={avatarUrl} className="w-8 h-8 rounded-xl object-cover" alt="" /> : <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6]" />}
      <div className="flex-1 min-w-0">
       <div className="text-sm font-semibold">{name}</div>
       {taskId ? (

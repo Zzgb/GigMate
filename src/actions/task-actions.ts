@@ -41,7 +41,7 @@ export async function getTasks(filters?: {
       orderBy,
       skip: (page - 1) * pageSize,
       take: pageSize,
-      include: { employer: { select: { id: true, name: true } } },
+      include: { employer: { select: { id: true, name: true, avatarUrl: true } } },
     }),
     prisma.task.count({ where }),
   ]);
@@ -53,7 +53,7 @@ export async function getTaskById(id: string) {
   return prisma.task.findUnique({
     where: { id },
     include: {
-      employer: { select: { id: true, name: true } },
+      employer: { select: { id: true, name: true, avatarUrl: true } },
       applications: {
         include: { freelancer: { select: { id: true, name: true } } },
       },

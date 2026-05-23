@@ -19,6 +19,7 @@ interface TaskDetailSidebarProps {
   employerName?: string;
   deadline?: string;
   applicantCount?: number;
+  employerAvatarUrl?: string | null;
 }
 
 export default function TaskDetailSidebar({
@@ -28,6 +29,7 @@ export default function TaskDetailSidebar({
   employerName = "张三",
   deadline,
   applicantCount,
+  employerAvatarUrl,
 }: TaskDetailSidebarProps) {
  const router = useRouter();
  const { role } = useAuth();
@@ -65,7 +67,7 @@ export default function TaskDetailSidebar({
     ))}
    </div>
    <div className="flex items-center gap-3 py-3 border-t border-[var(--g-border2)] mb-5">
-    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6]" />
+    {employerAvatarUrl ? <img src={employerAvatarUrl} className="w-9 h-9 rounded-xl object-cover" alt="" /> : <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6]" />}
     <div>
      <div className="text-sm font-medium">{employerName}</div>
      <div className="text-xs text-[var(--g-text2)] dark:text-[#98989d]">雇主</div>
