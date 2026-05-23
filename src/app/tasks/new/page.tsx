@@ -76,7 +76,7 @@ function PostTaskForm() {
         <h4 className="text-lg font-semibold mb-6">
           {republishId ? "重新发布任务" : "发布新任务"}
         </h4>
-        <div className="grid grid-cols-[5fr_4fr] gap-6">
+        <div className="grid grid-cols-[7fr_3fr] gap-6">
           {/* 左侧 — 主要内容 */}
           <div className="flex flex-col gap-4">
             <div className="bg-white rounded-[20px] p-5 shadow-[0_2px_20px_rgba(0,0,0,0.04)]">
