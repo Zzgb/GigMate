@@ -12,6 +12,7 @@ import {
   acceptApplication as acceptApp,
   rejectApplication as rejectApp,
 } from "@/actions/application-actions";
+import ConfirmModal from "@/components/ConfirmModal";
 
 function formatPrice(budget: number): string {
   return `¥${budget}`;
@@ -45,12 +46,16 @@ function StarsInput({
 function EmployerActiveView({
   tasks,
   onBack,
+  refresh,
 }: {
   tasks: any[];
   onBack: () => void;
+  refresh: () => void;
 }) {
   const [chatOpen, setChatOpen] = useState<string | null>(null);
   const [chatInput, setChatInput] = useState("");
+  const [endStep1, setEndStep1] = useState(false);
+  const [endStep2, setEndStep2] = useState(false);
 
   return (
     <div>
@@ -124,11 +129,17 @@ function EmployerActiveView({
                     <button
                       onClick={async () => {
                         await completeTask(t.id);
-                        onBack();
+                        refresh();
                       }}
                       className="bg-[#30d158] text-white px-3.5 py-1.5 rounded-full text-xs font-medium cursor-pointer"
                     >
                       完成任务
+                    </button>
+                    <button
+                      onClick={() => setEndStep1(true)}
+                      className="bg-[#ff3b30] text-white px-3.5 py-1.5 rounded-full text-xs font-medium cursor-pointer"
+                    >
+                      结束任务
                     </button>
                   </div>
                 </div>
@@ -178,6 +189,12 @@ function EmployerActiveView({
           })}
         </div>
       )}
+
+      <ConfirmModal open={endStep1} title="确认操作？" description="确定要结束该任务？任务会被标记为已完成。"
+        confirmLabel="确定" onConfirm={() => { setEndStep1(false); setEndStep2(true); }} onCancel={() => setEndStep1(false)} />
+      <ConfirmModal open={endStep2} title="是否重新发布此任务？" description="可将当前任务信息自动填入发布页面，方便快速重新发布。"
+        confirmLabel="重新发布" confirmColor="blue" secondStep
+        onConfirm={() => { setEndStep2(false); }} onCancel={() => setEndStep2(false)} />
     </div>
   );
 }
@@ -646,6 +663,7 @@ export default function DashboardPage() {
         <EmployerActiveView
           tasks={data.activeTasks}
           onBack={() => setView("overview")}
+          refresh={() => setRefreshKey((k) => k + 1)}
         />
       </div>
     );
