@@ -18,6 +18,7 @@ interface AuthContextType {
  name: string;
  userId: string;
  roles: string[];
+  avatarUrl: string | null;
  mounted: boolean;
  login: (role: UserRole, email?: string, password?: string) => Promise<void>;
  logout: () => void;
@@ -39,7 +40,8 @@ function AuthInner({ children }: { children: ReactNode }) {
  const role = ((session?.user as any)?.role || "employer") as UserRole;
  const name = session?.user?.name || "用户";
  const userId = session?.user?.id || "";
- const roles = ((session?.user as any)?.roles || ["FREELANCER"]) as string[];
+ const avatarUrl = ((session?.user as any)?.avatarUrl || null) as string | null;
+  const roles = ((session?.user as any)?.roles || ["FREELANCER"]) as string[];
 
  const login = useCallback(
   async (loginRole: UserRole, email = "employer@test.com", password = "password123") => {
@@ -67,7 +69,7 @@ function AuthInner({ children }: { children: ReactNode }) {
  }, [role, update]);
 
  return (
-  <AuthContext.Provider value={{ isLoggedIn, role, name, userId, roles, mounted, login, logout, switchRole, refreshSession }}>
+  <AuthContext.Provider value={{ isLoggedIn, role, name, userId, roles, avatarUrl, mounted, login, logout, switchRole, refreshSession }}>
    {children}
   </AuthContext.Provider>
  );

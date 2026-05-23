@@ -20,7 +20,7 @@ interface NavProps {
 
 export default function Nav({ variant = "landing" }: NavProps) {
  const pathname = usePathname();
- const { isLoggedIn, name } = useAuth();
+ const { isLoggedIn, name, avatarUrl } = useAuth();
  const [unread, setUnread] = useState(false);
  const pollRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -69,7 +69,8 @@ export default function Nav({ variant = "landing" }: NavProps) {
         <span className="absolute top-1 right-1 w-[7px] h-[7px] bg-[#ff3b30] rounded-full" />
        )}
       </a>
-      <span className="text-xs text-[var(--g-text2)]">{name}</span>
+      {avatarUrl ? <img src={avatarUrl} className="w-8 h-8 rounded-full object-cover border-2 border-transparent hover:border-[#007aff] transition-colors" alt="" /> : <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6]" />}
+            <span className="text-xs text-[var(--g-text2)]">{name}</span>
       <AvatarMenu />
      </>
     )}

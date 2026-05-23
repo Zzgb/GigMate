@@ -15,7 +15,7 @@ import { updateProfile } from "@/actions/task-actions";
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { isLoggedIn, mounted, name } = useAuth();
+  const { isLoggedIn, mounted, name, refreshSession } = useAuth();
   const [nickname, setNickname] = useState(name || "");
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState("");
@@ -32,8 +32,8 @@ export default function ProfilePage() {
     setSaving(true);
     await updateProfile({ name: nickname.trim() });
     setSaving(false);
-    setMsg("保存成功，刷新中...");
-    setTimeout(() => window.location.reload(), 500);
+    setMsg("保存成功");
+    await refreshSession();
   };
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,8 +45,8 @@ export default function ProfilePage() {
     const data = await res.json();
     if (data.url) {
       await updateProfile({ avatarUrl: data.url });
-      setMsg("头像上传成功，刷新中...");
-      setTimeout(() => window.location.reload(), 500);
+      setMsg("头像上传成功");
+      await refreshSession();
     }
   };
 
