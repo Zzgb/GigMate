@@ -5,35 +5,35 @@ import { AuthProvider } from "@/lib/auth-context";
 import { ThemeProvider } from "@/lib/theme-context";
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+ variable: "--font-geist-sans",
+ subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+ variable: "--font-geist-mono",
+ subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "GigMate - 兼职就该这么简单",
-  description: "雇主发布任务，自由职业者接单，安全快捷，双向评价",
+ title: "GigMate - 兼职就该这么简单",
+ description: "雇主发布任务，自由职业者接单，安全快捷，双向评价",
 };
 
 export default function RootLayout({
-  children,
+ children,
 }: Readonly<{
-  children: React.ReactNode;
+ children: React.ReactNode;
 }>) {
-  return (
-    <html
-      lang="zh-CN"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col bg-[#f5f5f7] dark:bg-[#1c1c1e]">
-        <ThemeProvider>
-          <AuthProvider>{children}</AuthProvider>
-        </ThemeProvider>
-      </body>
-    </html>
-  );
+ return (
+  <html
+   lang="zh-CN"
+   className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+  >
+   <body className="min-h-full flex flex-col bg-[var(--g-bg)]">
+    <ThemeProvider>
+     <AuthProvider>{children}</AuthProvider>
+    </ThemeProvider>
+   </body>
+  </html>
+ );
 }

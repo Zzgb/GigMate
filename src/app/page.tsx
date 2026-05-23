@@ -4,12 +4,12 @@ import FeatureCards from "@/components/FeatureCards";
 import FooterSection from "@/components/FooterSection";
 
 export default function Home() {
-  return (
-    <div className="flex flex-col flex-1">
-      <Nav variant="landing" />
-      <LandingHero />
-      <FeatureCards />
-      <FooterSection />
-    </div>
-  );
+ return (
+  <div className="flex flex-col flex-1">
+   <Nav variant="landing" />
+   <LandingHero />
+   <FeatureCards />
+   <FooterSection />
+  </div>
+ );
 }
