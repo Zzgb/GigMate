@@ -22,6 +22,7 @@ interface AuthContextType {
  login: (role: UserRole, email?: string, password?: string) => Promise<void>;
  logout: () => void;
  switchRole: () => Promise<void>;
+  refreshSession: (data?: Record<string, any>) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -56,13 +57,17 @@ function AuthInner({ children }: { children: ReactNode }) {
   signOut({ redirect: false });
  }, []);
 
- const switchRole = useCallback(async () => {
+ const refreshSession = useCallback(async (data?: Record<string, any>) => {
+    await update(data || {});
+  }, [update]);
+
+  const switchRole = useCallback(async () => {
   const newRole = role === "employer" ? "freelancer" : "employer";
   await update({ role: newRole });
  }, [role, update]);
 
  return (
-  <AuthContext.Provider value={{ isLoggedIn, role, name, userId, roles, mounted, login, logout, switchRole }}>
+  <AuthContext.Provider value={{ isLoggedIn, role, name, userId, roles, mounted, login, logout, switchRole, refreshSession }}>
    {children}
   </AuthContext.Provider>
  );

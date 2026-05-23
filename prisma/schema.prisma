@@ -23,6 +23,7 @@ model User {
   email        String   @unique
   name         String?
   passwordHash String?
+  avatarUrl    String?
   roles        String[] @default(["FREELANCER"])
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt

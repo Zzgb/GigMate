@@ -150,7 +150,20 @@ export default function InlineChat({
     )}
     <div ref={bottomRef} />
    </div>
-   <div className="px-5 py-2.5 border-t border-[var(--g-border)] flex gap-2 items-center bg-white">
+   <div className="px-5 py-2.5 border-t border-[var(--g-border)] flex gap-2 items-center bg-[var(--g-card)]">
+    <label className="w-7 h-7 flex items-center justify-center cursor-pointer text-[var(--g-text2)] hover:text-[#007aff] rounded-lg">
+     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+     <input type="file" className="hidden" onChange={async (e) => {
+       const f = e.target.files?.[0]; if (!f) return;
+       const fd = new FormData(); fd.append("file", f);
+       const res = await fetch("/api/upload", { method: "POST", body: fd });
+       const d = await res.json();
+       if (d.url && conversationId) {
+         const msg = await sendMessage(conversationId, `[文件] ${f.name}\n${d.url}`);
+         setMessages((prev: any) => [...prev, { from: "me", text: msg.content, time: new Date(msg.createdAt).toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" }) }]);
+       }
+     }} />
+    </label>
     <input
      type="text"
      value={input}

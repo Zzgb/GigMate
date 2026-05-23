@@ -102,10 +102,13 @@ export async function updateProfile(data: { name?: string; avatarUrl?: string })
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
 
-  return prisma.user.update({
+  const updated = await prisma.user.update({
     where: { id: session.user.id },
     data: {
       ...(data.name ? { name: data.name } : {}),
+      ...(data.avatarUrl !== undefined ? { avatarUrl: data.avatarUrl } : {}),
     },
   });
+
+  return { name: updated.name, avatarUrl: updated.avatarUrl };
 }

@@ -81,14 +81,24 @@ export default function ChatWindow({ name, task, taskId, messages, onSend }: Cha
     )}
     <div ref={bottomRef} />
    </div>
-   <div className="px-6 py-3 border-t border-[var(--g-border2)] flex gap-3 items-center">
+   <div className="px-6 py-3 border-t border-[var(--g-border2)] flex gap-2 items-center">
+    <label className="w-8 h-8 flex items-center justify-center cursor-pointer text-[var(--g-text2)] hover:text-[#007aff] rounded-lg hover:bg-[var(--g-hover)]">
+     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+     <input type="file" className="hidden" onChange={async (e) => {
+       const f = e.target.files?.[0]; if (!f || !onSend) return;
+       const fd = new FormData(); fd.append("file", f);
+       const res = await fetch("/api/upload", { method: "POST", body: fd });
+       const d = await res.json();
+       if (d.url) onSend(`[文件] ${f.name}\n${d.url}`);
+     }} />
+    </label>
     <input
      type="text"
      value={input}
      onChange={(e) => setInput(e.target.value)}
      onKeyDown={(e) => e.key === "Enter" && handleSend()}
      placeholder="输入消息..."
-     className="flex-1 bg-[var(--g-input)] dark:bg-[#3a3a3c] rounded-xl px-4 py-2 text-xs outline-none"
+     className="flex-1 bg-[var(--g-input)] rounded-xl px-4 py-2 text-xs outline-none"
     />
     <button
      onClick={handleSend}
