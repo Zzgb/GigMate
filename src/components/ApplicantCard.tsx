@@ -1,3 +1,5 @@
+"use client";
+
 interface ApplicantCardProps {
   name: string;
   experience: string;
@@ -41,8 +43,8 @@ export default function ApplicantCard({ name, experience, message, tags, rating,
             </div>
             {status === "pending" ? (
               <div className="flex gap-2">
-                <button className="bg-[#30d158] text-white px-3.5 py-1.5 rounded-full text-xs font-medium">通过</button>
-                <button className="bg-white px-3.5 py-1.5 rounded-full text-xs text-[#86868b] border border-[rgba(0,0,0,0.1)]">拒绝</button>
+                <button onClick={() => {}} className="bg-[#30d158] text-white px-3.5 py-1.5 rounded-full text-xs font-medium cursor-pointer">通过</button>
+                <button onClick={() => {}} className="bg-white px-3.5 py-1.5 rounded-full text-xs text-[#86868b] border border-[rgba(0,0,0,0.1)] cursor-pointer">拒绝</button>
               </div>
             ) : (
               <span className="text-xs text-[#30d158]">已通过 · 等待对方确认</span>
