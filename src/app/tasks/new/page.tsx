@@ -76,7 +76,7 @@ function PostTaskForm() {
         <h4 className="text-lg font-semibold mb-6">
           {republishId ? "重新发布任务" : "发布新任务"}
         </h4>
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-[5fr_4fr] gap-6">
           {/* 左侧 — 主要内容 */}
           <div className="flex flex-col gap-4">
             <div className="bg-white rounded-[20px] p-5 shadow-[0_2px_20px_rgba(0,0,0,0.04)]">
@@ -121,15 +121,15 @@ function PostTaskForm() {
                   value={form.budgetMin}
                   onChange={(e) => update("budgetMin", e.target.value)}
                   placeholder="最低"
-                  className="flex-1 bg-[#f5f5f7] rounded-xl px-3 py-2.5 text-sm outline-none"
+                  className="flex-1 min-w-0 bg-[#f5f5f7] rounded-xl px-2 py-2.5 text-sm outline-none"
                 />
-                <span className="text-[#86868b] text-sm">—</span>
+                <span className="text-[#86868b] text-sm flex-shrink-0">—</span>
                 <input
                   type="text"
                   value={form.budgetMax}
                   onChange={(e) => update("budgetMax", e.target.value)}
                   placeholder="最高"
-                  className="flex-1 bg-[#f5f5f7] rounded-xl px-3 py-2.5 text-sm outline-none"
+                  className="flex-1 min-w-0 bg-[#f5f5f7] rounded-xl px-2 py-2.5 text-sm outline-none"
                 />
               </div>
             </div>
