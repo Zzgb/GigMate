@@ -29,9 +29,12 @@ export default function InlineChat({
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const pollRef = useRef<NodeJS.Timeout | null>(null);
+  const sending = useRef(false);
+  const initRef = useRef(false);
 
   useEffect(() => {
-    if (!open || !otherUserId) return;
+    if (!open || !otherUserId || initRef.current) return;
+    initRef.current = true;
     findOrCreateConversation(otherUserId, taskId).then((c) => {
       setConversationId(c.id);
       loadMessages(c.id);
@@ -41,6 +44,10 @@ export default function InlineChat({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, otherUserId, taskId]);
+
+  useEffect(() => {
+    if (!open) initRef.current = false;
+  }, [open]);
 
   const loadMessages = async (convoId: string) => {
     const data = await getMessages(convoId);
@@ -70,17 +77,22 @@ export default function InlineChat({
   }, [messages]);
 
   const handleSend = async () => {
-    if (!input.trim() || !conversationId) return;
-    const msg = await sendMessage(conversationId, input.trim());
-    setMessages((prev) => [
-      ...prev,
-      {
-        from: "me",
-        text: msg.content,
-        time: `${new Date(msg.createdAt).getHours().toString().padStart(2, "0")}:${new Date(msg.createdAt).getMinutes().toString().padStart(2, "0")}`,
-      },
-    ]);
-    setInput("");
+    if (!input.trim() || !conversationId || sending.current) return;
+    sending.current = true;
+    try {
+      const msg = await sendMessage(conversationId, input.trim());
+      setMessages((prev) => [
+        ...prev,
+        {
+          from: "me",
+          text: msg.content,
+          time: `${new Date(msg.createdAt).getHours().toString().padStart(2, "0")}:${new Date(msg.createdAt).getMinutes().toString().padStart(2, "0")}`,
+        },
+      ]);
+      setInput("");
+    } finally {
+      sending.current = false;
+    }
   };
 
   if (!open) return null;

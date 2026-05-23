@@ -18,17 +18,23 @@ interface ChatWindowProps {
 export default function ChatWindow({ name, task, messages, onSend }: ChatWindowProps) {
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
+  const sending = useRef(false);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const handleSend = async () => {
-    if (!input.trim()) return;
-    if (onSend) {
-      await onSend(input);
+    if (!input.trim() || sending.current) return;
+    sending.current = true;
+    try {
+      if (onSend) {
+        await onSend(input);
+      }
+      setInput("");
+    } finally {
+      sending.current = false;
     }
-    setInput("");
   };
 
   return (
