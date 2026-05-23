@@ -66,23 +66,23 @@ export default function WorkerList({ onBack }: { onBack: () => void }) {
 
   return (
     <div>
-      <button onClick={onBack} className="text-sm text-[#86868b] mb-4 hover:text-[#1d1d1f] cursor-pointer">← 返回概览</button>
+      <button onClick={onBack} className="text-sm text-[#86868b] dark:text-[#98989d] mb-4 hover:text-[#1d1d1f] dark:text-white cursor-pointer">← 返回概览</button>
       <h2 className="text-lg font-semibold mb-4">进行中的任务</h2>
       <div className="flex flex-col gap-3">
         {workers.map((w) => (
-          <div key={w.name} className="bg-white rounded-2xl border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] overflow-hidden">
+          <div key={w.name} className="bg-white dark:bg-[#2c2c2e] rounded-2xl border border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] overflow-hidden">
             {/* 主行 */}
             <div className="p-5 flex items-center gap-4">
               <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6] flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
                   <span className="font-semibold text-sm">{w.name}</span>
-                  <span className="text-xs text-[#86868b]">{w.task}</span>
+                  <span className="text-xs text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">{w.task}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs bg-[#007aff1a] text-[#007aff] px-2 py-0.5 rounded-full font-medium">{w.status}</span>
-                  <span className="text-xs text-[#86868b]">通过: {w.startedAt}</span>
-                  <span className="text-xs text-[#86868b]">截止: {w.deadline}</span>
+                  <span className="text-xs text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">通过: {w.startedAt}</span>
+                  <span className="text-xs text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">截止: {w.deadline}</span>
                 </div>
               </div>
               <button
@@ -110,14 +110,14 @@ export default function WorkerList({ onBack }: { onBack: () => void }) {
 
             {/* 内联聊天窗口 */}
             {chatOpen === w.name && (
-              <div className="border-t border-[rgba(0,0,0,0.05)] bg-[#f5f5f7]">
+              <div className="border-t border-[rgba(0,0,0,0.05)] dark:border-[rgba(255,255,255,0.08)] bg-[#f5f5f7]">
                 {/* 聊天头部 - 任务信息 */}
-                <div className="px-5 py-2.5 bg-white border-b border-[rgba(0,0,0,0.04)]">
+                <div className="px-5 py-2.5 bg-white border-b border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)]">
                   <div className="flex items-center gap-2">
                     <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6]" />
                     <span className="text-xs font-semibold">{w.name}</span>
                     <span className="text-[10px] text-[#007aff]">关于 · {w.task}</span>
-                    <span className="text-[10px] text-[#86868b] ml-auto">通过: {w.startedAt} · 截止: {w.deadline}</span>
+                    <span className="text-[10px] text-[#86868b] dark:text-[#98989d] ml-auto">通过: {w.startedAt} · 截止: {w.deadline}</span>
                   </div>
                 </div>
                 {/* 消息列表 */}
@@ -131,20 +131,20 @@ export default function WorkerList({ onBack }: { onBack: () => void }) {
                         <div className={`rounded-xl px-3 py-1.5 max-w-[320px] ${m.from === "other" ? "bg-white rounded-bl-sm" : "bg-[#1d1d1f] text-white rounded-br-sm"}`}>
                           <p className="text-[11px] leading-relaxed">{m.text}</p>
                         </div>
-                        <div className={`text-[9px] text-[#86868b] mt-0.5 ${m.from === "me" ? "text-right" : ""}`}>{m.time}</div>
+                        <div className={`text-[9px] text-[#86868b] dark:text-[#98989d] mt-0.5 ${m.from === "me" ? "text-right" : ""}`}>{m.time}</div>
                       </div>
                     </div>
                   ))}
                 </div>
                 {/* 输入框 */}
-                <div className="px-5 py-2.5 border-t border-[rgba(0,0,0,0.04)] flex gap-2 items-center bg-white">
+                <div className="px-5 py-2.5 border-t border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] flex gap-2 items-center bg-white">
                   <input
                     type="text"
                     value={chatInput}
                     onChange={(e) => setChatInput(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleChatSend()}
                     placeholder="输入消息..."
-                    className="flex-1 bg-[#f5f5f7] rounded-lg px-3 py-1.5 text-[11px] outline-none"
+                    className="flex-1 bg-[#f5f5f7] dark:bg-[#3a3a3c] rounded-lg px-3 py-1.5 text-[11px] outline-none"
                   />
                   <button
                     onClick={handleChatSend}

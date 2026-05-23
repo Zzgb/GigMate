@@ -36,9 +36,9 @@ export default function TaskDetailSidebar({
   };
 
   return (
-    <div className="bg-white rounded-[20px] p-6 shadow-[0_2px_20px_rgba(0,0,0,0.04)]">
-      <div className="text-center pb-4 border-b border-[rgba(0,0,0,0.05)] mb-4">
-        <div className="text-xs text-[#86868b] mb-1">预算</div>
+    <div className="bg-white dark:bg-[#2c2c2e] rounded-[20px] p-6 shadow-[0_2px_20px_rgba(0,0,0,0.04)]">
+      <div className="text-center pb-4 border-b border-[rgba(0,0,0,0.05)] dark:border-[rgba(255,255,255,0.08)] mb-4">
+        <div className="text-xs text-[#86868b] dark:text-[#98989d] mb-1">预算</div>
         <div className="text-3xl font-bold">{price}</div>
       </div>
       <div className="grid grid-cols-2 gap-3 mb-5">
@@ -49,16 +49,16 @@ export default function TaskDetailSidebar({
           { label: "截止日期", value: "2026-06-05" },
         ].map((i) => (
           <div key={i.label}>
-            <div className="text-xs text-[#86868b]">{i.label}</div>
+            <div className="text-xs text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">{i.label}</div>
             <div className="text-sm font-medium">{i.value}</div>
           </div>
         ))}
       </div>
-      <div className="flex items-center gap-3 py-3 border-t border-[rgba(0,0,0,0.05)] mb-5">
+      <div className="flex items-center gap-3 py-3 border-t border-[rgba(0,0,0,0.05)] dark:border-[rgba(255,255,255,0.08)] mb-5">
         <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6]" />
         <div>
           <div className="text-sm font-medium">{employerName}</div>
-          <div className="text-xs text-[#86868b]">雇主</div>
+          <div className="text-xs text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">雇主</div>
         </div>
       </div>
       {status === "CANCELLED" ? (
@@ -76,7 +76,7 @@ export default function TaskDetailSidebar({
           </button>
         </div>
       ) : isEmployer ? (
-        <div className="w-full bg-[#f5f5f7] text-[#86868b] text-center py-3 rounded-xl text-sm">雇主无法申请任务</div>
+        <div className="w-full bg-[#f5f5f7] text-[#86868b] dark:text-[#98989d] text-center py-3 rounded-xl text-sm">雇主无法申请任务</div>
       ) : applied ? (
         <div className="text-center">
           <div className="w-full bg-[#30d158] text-white text-center py-3 rounded-xl text-sm font-semibold">已申请</div>
@@ -96,7 +96,7 @@ export default function TaskDetailSidebar({
           {applying ? "申请中..." : "立即申请"}
         </button>
       )}
-      <div className="text-center mt-2 text-[10px] text-[#86868b]">
+      <div className="text-center mt-2 text-[10px] text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">
         {applied ? "申请已提交，等待雇主审核" : "申请后等待雇主审核"}
       </div>
     </div>

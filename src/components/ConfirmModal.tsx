@@ -23,9 +23,9 @@ export default function ConfirmModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/35 backdrop-blur-sm">
-      <div className="bg-white rounded-[20px] w-[360px] p-6 shadow-xl">
+      <div className="bg-white dark:bg-[#2c2c2e] rounded-[20px] w-[360px] p-6 shadow-xl">
         <h3 className="text-lg font-semibold mb-2">{title}</h3>
-        <p className="text-sm text-[#86868b] mb-6 leading-relaxed">{description}</p>
+        <p className="text-sm text-[#86868b] dark:text-[#98989d] mb-6 leading-relaxed">{description}</p>
         <div className="flex gap-3 justify-end">
           <button onClick={onCancel} className="px-4 py-2 text-sm font-medium text-[#ff3b30] bg-transparent rounded-xl hover:bg-[#f5f5f7] transition-colors">
             取消

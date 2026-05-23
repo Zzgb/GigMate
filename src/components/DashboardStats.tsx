@@ -17,10 +17,10 @@ export default function DashboardStats({ onStatClick }: DashboardStatsProps) {
         <button
           key={s.label}
           onClick={() => onStatClick?.(s.label)}
-          className="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] text-left w-full"
+          className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] text-left w-full"
         >
           <div className="text-3xl font-bold mb-1" style={{ color: s.color }}>{s.value}</div>
-          <div className="text-sm text-[#86868b]">{s.label}</div>
+          <div className="text-sm text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">{s.label}</div>
         </button>
       ))}
     </div>

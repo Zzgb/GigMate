@@ -99,8 +99,8 @@ export default function InlineChat({
   if (!open) return null;
 
   return (
-    <div className="border-t border-[rgba(0,0,0,0.05)] bg-[#f5f5f7]">
-      <div className="px-5 py-2.5 bg-white border-b border-[rgba(0,0,0,0.04)]">
+    <div className="border-t border-[rgba(0,0,0,0.05)] dark:border-[rgba(255,255,255,0.08)] bg-[#f5f5f7]">
+      <div className="px-5 py-2.5 bg-white border-b border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)]">
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6]" />
           <span className="text-xs font-semibold">{otherUserName}</span>
@@ -109,14 +109,14 @@ export default function InlineChat({
           ) : (
             <span className="text-[10px] text-[#007aff]">关于 · {taskTitle}</span>
           )}
-          <button onClick={onClose} className="ml-auto text-xs text-[#86868b] hover:text-[#1d1d1f] cursor-pointer">
+          <button onClick={onClose} className="ml-auto text-xs text-[#86868b] dark:text-[#98989d] hover:text-[#1d1d1f] dark:text-white cursor-pointer">
             ✕
           </button>
         </div>
       </div>
       <div className="px-5 py-3 max-h-[240px] overflow-y-auto">
         {messages.length === 0 ? (
-          <div className="text-[11px] text-[#86868b] text-center py-4">暂无消息</div>
+          <div className="text-[11px] text-[#86868b] dark:text-[#98989d] text-center py-4">暂无消息</div>
         ) : (
           messages.map((m, i) => (
             <div
@@ -133,7 +133,7 @@ export default function InlineChat({
                   <p className="text-[11px] leading-relaxed">{m.text}</p>
                 </div>
                 <div
-                  className={`text-[9px] text-[#86868b] mt-0.5 ${m.from === "me" ? "text-right" : ""}`}
+                  className={`text-[9px] text-[#86868b] dark:text-[#98989d] mt-0.5 ${m.from === "me" ? "text-right" : ""}`}
                 >
                   {m.time}
                 </div>
@@ -143,14 +143,14 @@ export default function InlineChat({
         )}
         <div ref={bottomRef} />
       </div>
-      <div className="px-5 py-2.5 border-t border-[rgba(0,0,0,0.04)] flex gap-2 items-center bg-white">
+      <div className="px-5 py-2.5 border-t border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] flex gap-2 items-center bg-white">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
           placeholder="输入消息..."
-          className="flex-1 bg-[#f5f5f7] rounded-lg px-3 py-1.5 text-[11px] outline-none"
+          className="flex-1 bg-[#f5f5f7] dark:bg-[#3a3a3c] rounded-lg px-3 py-1.5 text-[11px] outline-none"
         />
         <button
           onClick={handleSend}

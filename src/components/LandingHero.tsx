@@ -36,7 +36,7 @@ export default function LandingHero() {
       <div className="flex gap-3 justify-center">
         <button
           onClick={handleEmployer}
-          className="bg-white text-[#1d1d1f] px-6 py-2.5 rounded-xl text-sm font-semibold cursor-pointer"
+          className="bg-white text-[#1d1d1f] dark:text-white px-6 py-2.5 rounded-xl text-sm font-semibold cursor-pointer"
           type="button"
         >
           我要雇佣

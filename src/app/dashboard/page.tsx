@@ -63,7 +63,7 @@ function EmployerActiveView({
     <div>
       <button
         onClick={onBack}
-        className="text-sm text-[#86868b] mb-4 hover:text-[#1d1d1f] cursor-pointer"
+        className="text-sm text-[#86868b] dark:text-[#98989d] mb-4 hover:text-[#1d1d1f] dark:text-white cursor-pointer"
       >
         ← 返回概览
       </button>
@@ -71,7 +71,7 @@ function EmployerActiveView({
         进行中的任务（{tasks.length}）
       </h2>
       {tasks.length === 0 ? (
-        <div className="bg-white rounded-2xl p-8 text-center text-sm text-[#86868b]">
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-8 text-center text-sm text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">
           暂无进行中的任务
         </div>
       ) : (
@@ -81,7 +81,7 @@ function EmployerActiveView({
             return (
               <div
                 key={t.id}
-                className="bg-white rounded-2xl border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] overflow-hidden"
+                className="bg-white dark:bg-[#2c2c2e] rounded-2xl border border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] overflow-hidden"
               >
                 <div className="p-5 flex items-center gap-4">
                   <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6] flex-shrink-0" />
@@ -89,7 +89,7 @@ function EmployerActiveView({
                     <div className="flex items-center gap-2 mb-0.5">
                       <span className="font-semibold text-sm">{t.title}</span>
                       {worker && (
-                        <span className="text-xs text-[#86868b]">
+                        <span className="text-xs text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">
                           {worker.name}
                         </span>
                       )}
@@ -98,7 +98,7 @@ function EmployerActiveView({
                       <span className="text-xs bg-[#007aff1a] text-[#007aff] px-2 py-0.5 rounded-full font-medium">
                         进行中
                       </span>
-                      <span className="text-xs text-[#86868b]">
+                      <span className="text-xs text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">
                         预算: {formatPrice(t.budget)}
                       </span>
                     </div>
@@ -204,7 +204,7 @@ function EmployerCompletedView({
     <div>
       <button
         onClick={onBack}
-        className="text-sm text-[#86868b] mb-4 hover:text-[#1d1d1f] cursor-pointer"
+        className="text-sm text-[#86868b] dark:text-[#98989d] mb-4 hover:text-[#1d1d1f] dark:text-white cursor-pointer"
       >
         ← 返回概览
       </button>
@@ -212,7 +212,7 @@ function EmployerCompletedView({
         已完成的任务（{tasks.length}）
       </h2>
       {tasks.length === 0 ? (
-        <div className="bg-white rounded-2xl p-8 text-center text-sm text-[#86868b]">
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-8 text-center text-sm text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">
           暂无已完成的任务
         </div>
       ) : (
@@ -223,26 +223,26 @@ function EmployerCompletedView({
             return (
               <div
                 key={t.id}
-                className="bg-white rounded-2xl p-5 border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
+                className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-5 border border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
               >
                 <div className="flex justify-between items-center">
                   <div>
                     <span className="font-semibold text-sm">{t.title}</span>
                     {worker && (
-                      <div className="text-xs text-[#86868b] mt-1">
+                      <div className="text-xs text-[#86868b] dark:text-[#98989d] mt-1">
                         完成者: {worker.name}
                       </div>
                     )}
-                    <div className="text-xs text-[#86868b] mt-0.5">
+                    <div className="text-xs text-[#86868b] dark:text-[#98989d] mt-0.5">
                       {formatPrice(t.budget)}
                     </div>
                     {review && (
-                      <div className="mt-2 pt-2 border-t border-[rgba(0,0,0,0.04)]">
+                      <div className="mt-2 pt-2 border-t border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)]">
                         <div className="text-xs text-[#f59e0b]">
                           {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
                         </div>
                         {review.comment && (
-                          <div className="text-[10px] text-[#86868b] mt-0.5">{review.comment}</div>
+                          <div className="text-[10px] text-[#86868b] dark:text-[#98989d] mt-0.5">{review.comment}</div>
                         )}
                       </div>
                     )}
@@ -281,11 +281,11 @@ function EmployerCompletedView({
           onClick={() => setReviewing(null)}
         >
           <div
-            className="bg-white rounded-[20px] p-6 w-[360px] shadow-[0_8px_40px_rgba(0,0,0,0.12)]"
+            className="bg-white dark:bg-[#2c2c2e] rounded-[20px] p-6 w-[360px] shadow-[0_8px_40px_rgba(0,0,0,0.12)]"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-base font-semibold mb-4">评价完成者</h3>
-            <div className="text-xs text-[#86868b] mb-3 text-center">
+            <div className="text-xs text-[#86868b] dark:text-[#98989d] mb-3 text-center">
               为完成者{ " " }
               {tasks
                 .find((t: any) => t.id === reviewing.taskId)
@@ -301,12 +301,12 @@ function EmployerCompletedView({
               value={reviewText}
               onChange={(e) => setReviewText(e.target.value)}
               placeholder="请填写评价内容..."
-              className="w-full bg-[#f5f5f7] rounded-xl px-4 py-2.5 text-sm outline-none mb-4"
+              className="w-full bg-[#f5f5f7] dark:bg-[#3a3a3c] rounded-xl px-4 py-2.5 text-sm outline-none mb-4"
             />
             <div className="flex gap-2">
               <button
                 onClick={() => setReviewing(null)}
-                className="flex-1 bg-[#f5f5f7] text-[#1d1d1f] py-2.5 rounded-xl text-sm font-medium cursor-pointer"
+                className="flex-1 bg-[#f5f5f7] text-[#1d1d1f] dark:text-white py-2.5 rounded-xl text-sm font-medium cursor-pointer"
               >
                 取消
               </button>
@@ -353,7 +353,7 @@ function EmployerApplicationsListView({
     <div>
       <button
         onClick={onBack}
-        className="text-sm text-[#86868b] mb-4 hover:text-[#1d1d1f] cursor-pointer"
+        className="text-sm text-[#86868b] dark:text-[#98989d] mb-4 hover:text-[#1d1d1f] dark:text-white cursor-pointer"
       >
         ← 返回概览
       </button>
@@ -361,7 +361,7 @@ function EmployerApplicationsListView({
         待处理的申请（{apps.length}）
       </h2>
       {apps.length === 0 ? (
-        <div className="bg-white rounded-2xl p-8 text-center text-sm text-[#86868b]">
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-8 text-center text-sm text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">
           暂无待处理的申请
         </div>
       ) : (
@@ -369,7 +369,7 @@ function EmployerApplicationsListView({
           {apps.map((a: any) => (
             <div
               key={a.id}
-              className="bg-white rounded-2xl p-5 border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
+              className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-5 border border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
             >
               <div className="flex items-center gap-4">
                 <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6] flex-shrink-0" />
@@ -378,11 +378,11 @@ function EmployerApplicationsListView({
                     <span className="font-semibold text-sm">
                       {a.freelancer?.name}
                     </span>
-                    <span className="text-xs text-[#86868b]">
+                    <span className="text-xs text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">
                       {a.task?.title}
                     </span>
                   </div>
-                  <p className="text-xs text-[#86868b] line-clamp-1">
+                  <p className="text-xs text-[#86868b] dark:text-[#98989d] line-clamp-1">
                     {a.message}
                   </p>
                 </div>
@@ -429,7 +429,7 @@ function FreelancerActiveTasks({
     <div>
       <button
         onClick={onBack}
-        className="text-sm text-[#86868b] mb-4 hover:text-[#1d1d1f] cursor-pointer"
+        className="text-sm text-[#86868b] dark:text-[#98989d] mb-4 hover:text-[#1d1d1f] dark:text-white cursor-pointer"
       >
         ← 返回概览
       </button>
@@ -437,7 +437,7 @@ function FreelancerActiveTasks({
         正在进行的任务（{tasks.length}）
       </h2>
       {tasks.length === 0 ? (
-        <div className="bg-white rounded-2xl p-8 text-center text-sm text-[#86868b]">
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-8 text-center text-sm text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">
           暂无进行中的任务
         </div>
       ) : (
@@ -445,7 +445,7 @@ function FreelancerActiveTasks({
           {tasks.map((t: any) => (
             <div
               key={t.id}
-              className="bg-white rounded-2xl p-5 border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
+              className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-5 border border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
             >
               <div className="flex justify-between items-center">
                 <div>
@@ -455,7 +455,7 @@ function FreelancerActiveTasks({
                   >
                     {t.title}
                   </button>
-                  <div className="text-xs text-[#86868b] mt-1">
+                  <div className="text-xs text-[#86868b] dark:text-[#98989d] mt-1">
                     {t.employer?.name}
                   </div>
                 </div>
@@ -498,7 +498,7 @@ function FreelancerCompletedTasks({
     <div>
       <button
         onClick={onBack}
-        className="text-sm text-[#86868b] mb-4 hover:text-[#1d1d1f] cursor-pointer"
+        className="text-sm text-[#86868b] dark:text-[#98989d] mb-4 hover:text-[#1d1d1f] dark:text-white cursor-pointer"
       >
         ← 返回概览
       </button>
@@ -506,7 +506,7 @@ function FreelancerCompletedTasks({
         已完成的任务（{tasks.length}）
       </h2>
       {tasks.length === 0 ? (
-        <div className="bg-white rounded-2xl p-8 text-center text-sm text-[#86868b]">
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-8 text-center text-sm text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">
           暂无已完成的任务
         </div>
       ) : (
@@ -514,7 +514,7 @@ function FreelancerCompletedTasks({
           {tasks.map((t: any) => (
             <div
               key={t.id}
-              className="bg-white rounded-2xl p-5 border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
+              className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-5 border border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
             >
               <div className="flex justify-between items-center">
                 <div>
@@ -524,7 +524,7 @@ function FreelancerCompletedTasks({
                   >
                     {t.title}
                   </button>
-                  <div className="text-xs text-[#86868b] mt-1">
+                  <div className="text-xs text-[#86868b] dark:text-[#98989d] mt-1">
                     {t.employer?.name}
                   </div>
                 </div>
@@ -540,7 +540,7 @@ function FreelancerCompletedTasks({
                           {"★".repeat(myReview.rating)}{"☆".repeat(5 - myReview.rating)}
                         </span>
                       ) : (
-                        <span className="text-xs text-[#86868b]">待评价</span>
+                        <span className="text-xs text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">待评价</span>
                       );
                     })()}
                   </div>
@@ -565,7 +565,7 @@ function FreelancerPendingApps({
     <div>
       <button
         onClick={onBack}
-        className="text-sm text-[#86868b] mb-4 hover:text-[#1d1d1f] cursor-pointer"
+        className="text-sm text-[#86868b] dark:text-[#98989d] mb-4 hover:text-[#1d1d1f] dark:text-white cursor-pointer"
       >
         ← 返回概览
       </button>
@@ -573,7 +573,7 @@ function FreelancerPendingApps({
         待处理的申请（{apps.length}）
       </h2>
       {apps.length === 0 ? (
-        <div className="bg-white rounded-2xl p-8 text-center text-sm text-[#86868b]">
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-8 text-center text-sm text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">
           暂无待处理的申请
         </div>
       ) : (
@@ -581,14 +581,14 @@ function FreelancerPendingApps({
           {apps.map((a: any, i: number) => (
             <div
               key={i}
-              className="bg-white rounded-2xl p-5 border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
+              className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-5 border border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
             >
               <div className="flex justify-between items-center">
                 <div>
                   <span className="font-semibold text-sm">
                     {a.task?.title}
                   </span>
-                  <div className="text-xs text-[#86868b] mt-1">申请中</div>
+                  <div className="text-xs text-[#86868b] dark:text-[#98989d] mt-1">申请中</div>
                 </div>
                 <div className="flex items-center gap-3">
                   {a.task?.budget && (
@@ -711,7 +711,7 @@ export default function DashboardPage() {
           </span>
           <button
             onClick={() => router.push("/tasks")}
-            className="bg-white px-4 py-1.5 rounded-full text-sm text-[#86868b] border border-[rgba(0,0,0,0.06)] cursor-pointer"
+            className="bg-white px-4 py-1.5 rounded-full text-sm text-[#86868b] dark:text-[#98989d] border border-[rgba(0,0,0,0.06)] dark:border-[rgba(255,255,255,0.08)] cursor-pointer"
           >
             浏览任务
           </button>
@@ -720,7 +720,7 @@ export default function DashboardPage() {
         <div className="grid grid-cols-3 gap-4 mb-8">
           <button
             onClick={() => setView("active")}
-            className="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] text-left w-full cursor-pointer"
+            className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] text-left w-full cursor-pointer"
           >
             <div
               className="text-3xl font-bold mb-1"
@@ -728,11 +728,11 @@ export default function DashboardPage() {
             >
               {data.stats.active}
             </div>
-            <div className="text-sm text-[#86868b]">进行中</div>
+            <div className="text-sm text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">进行中</div>
           </button>
           <button
             onClick={() => setView("completed")}
-            className="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] text-left w-full cursor-pointer"
+            className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] text-left w-full cursor-pointer"
           >
             <div
               className="text-3xl font-bold mb-1"
@@ -740,11 +740,11 @@ export default function DashboardPage() {
             >
               {data.stats.completed}
             </div>
-            <div className="text-sm text-[#86868b]">已完成</div>
+            <div className="text-sm text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">已完成</div>
           </button>
           <button
             onClick={() => setView("pending")}
-            className="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] text-left w-full cursor-pointer"
+            className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] text-left w-full cursor-pointer"
           >
             <div
               className="text-3xl font-bold mb-1"
@@ -752,19 +752,19 @@ export default function DashboardPage() {
             >
               {data.stats.pending}
             </div>
-            <div className="text-sm text-[#86868b]">待处理申请</div>
+            <div className="text-sm text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">待处理申请</div>
           </button>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] mb-4">
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] mb-4">
           <h3 className="text-base font-semibold mb-4">正在进行的任务</h3>
           {data.activeTasks.length === 0 ? (
-            <p className="text-sm text-[#86868b]">暂无进行中的任务</p>
+            <p className="text-sm text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">暂无进行中的任务</p>
           ) : (
             data.activeTasks.map((t: any) => (
               <div
                 key={t.id}
-                className="flex justify-between items-center py-3 border-b border-[rgba(0,0,0,0.04)] last:border-0"
+                className="flex justify-between items-center py-3 border-b border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] last:border-0"
               >
                 <div>
                   <button
@@ -773,7 +773,7 @@ export default function DashboardPage() {
                   >
                     {t.title}
                   </button>
-                  <div className="text-xs text-[#86868b]">
+                  <div className="text-xs text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">
                     {t.employer?.name}
                   </div>
                 </div>
@@ -799,15 +799,15 @@ export default function DashboardPage() {
           )}
         </div>
 
-        <div className="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
           <h3 className="text-base font-semibold mb-4">我的申请</h3>
           {data.pendingApps.length === 0 ? (
-            <p className="text-sm text-[#86868b]">暂无申请记录</p>
+            <p className="text-sm text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">暂无申请记录</p>
           ) : (
             data.pendingApps.map((a: any, i: number) => (
               <div
                 key={i}
-                className="flex justify-between items-center py-3 border-b border-[rgba(0,0,0,0.04)] last:border-0"
+                className="flex justify-between items-center py-3 border-b border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] last:border-0"
               >
                 <div>
                   <span className="text-sm font-medium">
@@ -848,13 +848,13 @@ export default function DashboardPage() {
         </span>
         <button
           onClick={() => router.push("/dashboard/my-tasks")}
-          className="bg-white px-4 py-1.5 rounded-full text-sm text-[#86868b] border border-[rgba(0,0,0,0.06)] cursor-pointer"
+          className="bg-white px-4 py-1.5 rounded-full text-sm text-[#86868b] dark:text-[#98989d] border border-[rgba(0,0,0,0.06)] dark:border-[rgba(255,255,255,0.08)] cursor-pointer"
         >
           我的任务
         </button>
         <button
           onClick={() => router.push("/tasks/new")}
-          className="bg-white px-4 py-1.5 rounded-full text-sm text-[#86868b] border border-[rgba(0,0,0,0.06)] cursor-pointer"
+          className="bg-white px-4 py-1.5 rounded-full text-sm text-[#86868b] dark:text-[#98989d] border border-[rgba(0,0,0,0.06)] dark:border-[rgba(255,255,255,0.08)] cursor-pointer"
         >
           发布任务
         </button>
@@ -863,7 +863,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-3 gap-4 mb-8">
         <button
           onClick={() => setView("workers")}
-          className="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] text-left w-full cursor-pointer"
+          className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] text-left w-full cursor-pointer"
         >
           <div
             className="text-3xl font-bold mb-1"
@@ -871,11 +871,11 @@ export default function DashboardPage() {
           >
             {data.stats.active}
           </div>
-          <div className="text-sm text-[#86868b]">进行中</div>
+          <div className="text-sm text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">进行中</div>
         </button>
         <button
           onClick={() => setView("completed")}
-          className="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] text-left w-full cursor-pointer"
+          className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] text-left w-full cursor-pointer"
         >
           <div
             className="text-3xl font-bold mb-1"
@@ -883,11 +883,11 @@ export default function DashboardPage() {
           >
             {data.stats.completed}
           </div>
-          <div className="text-sm text-[#86868b]">已完成</div>
+          <div className="text-sm text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">已完成</div>
         </button>
         <button
           onClick={() => setView("applications")}
-          className="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] text-left w-full cursor-pointer"
+          className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] text-left w-full cursor-pointer"
         >
           <div
             className="text-3xl font-bold mb-1"
@@ -895,18 +895,18 @@ export default function DashboardPage() {
           >
             {data.stats.applications}
           </div>
-          <div className="text-sm text-[#86868b]">总申请</div>
+          <div className="text-sm text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">总申请</div>
         </button>
       </div>
 
-      <div className="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
+      <div className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
         <h3 className="text-base font-semibold mb-4">最近任务</h3>
         {[...(data.openTasks || []), ...data.activeTasks, ...data.completedTasks]
           .slice(0, 8)
           .map((t: any) => (
             <div
               key={t.id}
-              className="flex justify-between items-center py-3 border-b border-[rgba(0,0,0,0.04)] last:border-0"
+              className="flex justify-between items-center py-3 border-b border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] last:border-0"
             >
               <span className="text-sm">{t.title}</span>
               <span
@@ -923,7 +923,7 @@ export default function DashboardPage() {
             </div>
           ))}
         {(data.openTasks || []).length + data.activeTasks.length + data.completedTasks.length === 0 && (
-          <p className="text-sm text-[#86868b] text-center py-4">
+          <p className="text-sm text-[#86868b] dark:text-[#98989d] text-center py-4">
             暂无任务
           </p>
         )}

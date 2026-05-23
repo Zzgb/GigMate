@@ -9,7 +9,7 @@ const statusConfig: Record<string, { label: string; colors: string }> = {
   OPEN: { label: "招募中", colors: "text-[#30d158] bg-[#30d1581a]" },
   IN_PROGRESS: { label: "进行中", colors: "text-[#007aff] bg-[#007aff1a]" },
   COMPLETED: { label: "已完成", colors: "text-[#30d1581a] text-[#30d158]" },
-  CANCELLED: { label: "已取消", colors: "text-[#86868b] bg-[#f5f5f7]" },
+  CANCELLED: { label: "已取消", colors: "text-[#86868b] dark:text-[#98989d] bg-[#f5f5f7]" },
 };
 
 export default function MyTasksPage() {
@@ -31,7 +31,7 @@ export default function MyTasksPage() {
 
   return (
     <div>
-      <button onClick={() => router.push("/dashboard")} className="text-sm text-[#86868b] mb-4 hover:text-[#1d1d1f] cursor-pointer">← 返回控制台</button>
+      <button onClick={() => router.push("/dashboard")} className="text-sm text-[#86868b] dark:text-[#98989d] mb-4 hover:text-[#1d1d1f] dark:text-white cursor-pointer">← 返回控制台</button>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-semibold">我的任务</h2>
         <button
@@ -43,14 +43,14 @@ export default function MyTasksPage() {
       </div>
       <div className="flex flex-col gap-3">
         {tasks.length === 0 ? (
-          <div className="bg-white rounded-2xl p-8 text-center text-sm text-[#86868b]">暂无任务</div>
+          <div className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-8 text-center text-sm text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">暂无任务</div>
         ) : (
           tasks.map((t: any) => {
-            const cfg = statusConfig[t.status] || { label: t.status, colors: "text-[#86868b] bg-[#f5f5f7]" };
+            const cfg = statusConfig[t.status] || { label: t.status, colors: "text-[#86868b] dark:text-[#98989d] bg-[#f5f5f7]" };
             return (
               <div
                 key={t.id}
-                className="bg-white rounded-2xl p-5 border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
+                className="bg-white dark:bg-[#2c2c2e] rounded-2xl p-5 border border-[rgba(0,0,0,0.04)] dark:border-[rgba(255,255,255,0.06)] shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
               >
                 <div className="flex justify-between items-center">
                   <div className="flex-1 min-w-0">
@@ -58,14 +58,14 @@ export default function MyTasksPage() {
                       <span className="font-semibold text-sm">{t.title}</span>
                       <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${cfg.colors}`}>{cfg.label}</span>
                     </div>
-                    <div className="text-xs text-[#86868b]">
+                    <div className="text-xs text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">
                       {t.category || "未分类"} · {t._count?.applications || 0} 人申请 · {new Date(t.createdAt).toLocaleDateString("zh-CN")} 发布
                     </div>
                   </div>
                   {t.status === "OPEN" && (
                     <button
                       onClick={() => router.push(`/applications/${t.id}`)}
-                      className="bg-[#f5f5f7] text-[#1d1d1f] px-4 py-1.5 rounded-full text-xs font-medium hover:bg-[#e8e8ed] cursor-pointer"
+                      className="bg-[#f5f5f7] text-[#1d1d1f] dark:text-white px-4 py-1.5 rounded-full text-xs font-medium hover:bg-[#e8e8ed] cursor-pointer"
                     >
                       查看申请
                     </button>

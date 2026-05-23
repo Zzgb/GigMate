@@ -179,7 +179,7 @@ function MessagesContent() {
             time: c.time,
             preview: c.preview,
             unread: c.unread,
-            taskColor: c.task !== "无关联任务" ? "text-[#007aff]" : "text-[#86868b]",
+            taskColor: c.task !== "无关联任务" ? "text-[#007aff]" : "text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]",
             active: c.active,
           }))}
           onSelect={handleSelect}
@@ -193,7 +193,7 @@ function MessagesContent() {
             onSend={handleSend}
           />
         ) : (
-          <div className="flex-1 flex items-center justify-center text-sm text-[#86868b]">
+          <div className="flex-1 flex items-center justify-center text-sm text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">
             {loading ? "加载中..." : "暂无消息"}
           </div>
         )}
@@ -207,7 +207,7 @@ export default function MessagesPage() {
     <Suspense fallback={
       <div className="flex flex-col flex-1">
         <Nav variant="dashboard" />
-        <div className="flex-1 flex items-center justify-center text-sm text-[#86868b]">加载中...</div>
+        <div className="flex-1 flex items-center justify-center text-sm text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">加载中...</div>
       </div>
     }>
       <MessagesContent />

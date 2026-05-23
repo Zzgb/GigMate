@@ -83,7 +83,7 @@ export default function TasksPage() {
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             placeholder="搜索任务名称、关键词..."
-            className="flex-1 bg-white rounded-xl px-4 py-2.5 border border-[rgba(0,0,0,0.06)] text-sm text-[#1d1d1f] outline-none focus:border-[#007aff] placeholder:text-[#86868b]"
+            className="flex-1 bg-white rounded-xl px-4 py-2.5 border border-[rgba(0,0,0,0.06)] dark:border-[rgba(255,255,255,0.08)] text-sm text-[#1d1d1f] dark:text-white outline-none focus:border-[#007aff] placeholder:text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]"
           />
           <button
             onClick={handleSearch}
@@ -91,16 +91,16 @@ export default function TasksPage() {
           >
             搜索
           </button>
-          <div className="flex bg-white rounded-xl p-1 border border-[rgba(0,0,0,0.06)]">
+          <div className="flex bg-white rounded-xl p-1 border border-[rgba(0,0,0,0.06)] dark:border-[rgba(255,255,255,0.08)]">
             <button
               onClick={() => setViewMode("single")}
-              className={`px-2 py-1 rounded-lg text-xs cursor-pointer ${viewMode === "single" ? "bg-black text-white" : "text-[#86868b]"}`}
+              className={`px-2 py-1 rounded-lg text-xs cursor-pointer ${viewMode === "single" ? "bg-black text-white" : "text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]"}`}
             >
               ☰
             </button>
             <button
               onClick={() => setViewMode("double")}
-              className={`px-2 py-1 rounded-lg text-xs cursor-pointer ${viewMode === "double" ? "bg-black text-white" : "text-[#86868b]"}`}
+              className={`px-2 py-1 rounded-lg text-xs cursor-pointer ${viewMode === "double" ? "bg-black text-white" : "text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]"}`}
             >
               ▦
             </button>
@@ -128,7 +128,7 @@ export default function TasksPage() {
             />
           ))}
           {tasks.length === 0 && (
-            <div className="col-span-full text-center py-10 text-sm text-[#86868b]">没有找到匹配的任务</div>
+            <div className="col-span-full text-center py-10 text-sm text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">没有找到匹配的任务</div>
           )}
         </div>
       </main>

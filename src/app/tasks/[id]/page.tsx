@@ -49,7 +49,7 @@ function TaskDetailContent() {
       : task.status === "COMPLETED"
       ? "bg-[#30d1581a] text-[#30d158]"
       : task.status === "CANCELLED"
-      ? "bg-[#86868b1a] text-[#86868b]"
+      ? "bg-[#86868b1a] text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]"
       : "bg-[#30d1581a] text-[#30d158]";
   const statusLabel =
     task.status === "IN_PROGRESS"
@@ -64,13 +64,13 @@ function TaskDetailContent() {
     <div className="flex flex-col flex-1">
       <Nav variant="dashboard" />
       <main className="flex-1 p-8 max-w-5xl mx-auto w-full">
-        <a href={backUrl} className="text-sm text-[#86868b] hover:text-[#1d1d1f]">← {backLabel}</a>
+        <a href={backUrl} className="text-sm text-[#86868b] dark:text-[#98989d] hover:text-[#1d1d1f] dark:text-white dark:text-white">← {backLabel}</a>
         <div className="grid grid-cols-[2fr_1fr] gap-6 mt-4">
           <div>
             <div className="flex justify-between items-start mb-6">
               <div>
                 <h3 className="text-xl font-semibold mb-1">{task.title}</h3>
-                <div className="flex gap-3 text-xs text-[#86868b]">
+                <div className="flex gap-3 text-xs text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">
                   <span>{task.category || "未分类"}</span>
                   <span>·</span>
                   <span>{task.employer?.name || "未知雇主"}</span>
@@ -82,13 +82,13 @@ function TaskDetailContent() {
                 {statusLabel}
               </span>
             </div>
-            <div className="bg-white rounded-[20px] p-6 shadow-[0_2px_20px_rgba(0,0,0,0.04)] mb-4">
+            <div className="bg-white dark:bg-[#2c2c2e] rounded-[20px] p-6 shadow-[0_2px_20px_rgba(0,0,0,0.04)] mb-4">
               <h4 className="text-sm font-semibold mb-3">任务详情</h4>
-              <p className="text-xs text-[#86868b] leading-relaxed">{task.description}</p>
+              <p className="text-xs text-[#86868b] dark:text-[#98989d] leading-relaxed">{task.description}</p>
             </div>
             <div className="flex gap-1.5 flex-wrap mb-4">
               {(task.skills || []).map((s: string) => (
-                <span key={s} className="text-xs bg-white px-2.5 py-1.5 rounded-lg text-[#86868b] border border-[rgba(0,0,0,0.06)]">{s}</span>
+                <span key={s} className="text-xs bg-white px-2.5 py-1.5 rounded-lg text-[#86868b] dark:text-[#98989d] border border-[rgba(0,0,0,0.06)] dark:border-[rgba(255,255,255,0.08)]">{s}</span>
               ))}
             </div>
           </div>
@@ -109,7 +109,7 @@ export default function TaskDetailPage() {
     <Suspense fallback={
       <div className="flex flex-col flex-1">
         <Nav variant="dashboard" />
-        <div className="flex-1 flex items-center justify-center text-sm text-[#86868b]">加载中...</div>
+        <div className="flex-1 flex items-center justify-center text-sm text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">加载中...</div>
       </div>
     }>
       <TaskDetailContent />

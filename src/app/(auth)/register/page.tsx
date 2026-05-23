@@ -45,49 +45,49 @@ export default function RegisterPage() {
     <div className="flex flex-col flex-1">
       <Nav variant="landing" />
       <main className="flex-1 flex items-center justify-center">
-        <div className="bg-white rounded-[20px] p-8 w-[380px] shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-[20px] p-8 w-[380px] shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
           <h2 className="text-xl font-semibold mb-6 text-center">注册</h2>
-          <p className="text-xs text-[#86868b] text-center mb-4">注册后将同时拥有雇主和自由职业者身份，随时切换</p>
+          <p className="text-xs text-[#86868b] dark:text-[#98989d] text-center mb-4">注册后将同时拥有雇主和自由职业者身份，随时切换</p>
 
           <div className="mb-3">
-            <div className="text-xs font-medium mb-1.5 text-[#86868b]">昵称</div>
+            <div className="text-xs font-medium mb-1.5 text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">昵称</div>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="请输入昵称"
-              className="w-full bg-[#f5f5f7] rounded-xl px-4 py-2.5 text-sm outline-none"
+              className="w-full bg-[#f5f5f7] dark:bg-[#3a3a3c] rounded-xl px-4 py-2.5 text-sm outline-none"
             />
           </div>
           <div className="mb-3">
-            <div className="text-xs font-medium mb-1.5 text-[#86868b]">邮箱</div>
+            <div className="text-xs font-medium mb-1.5 text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">邮箱</div>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="请输入邮箱"
-              className="w-full bg-[#f5f5f7] rounded-xl px-4 py-2.5 text-sm outline-none"
+              className="w-full bg-[#f5f5f7] dark:bg-[#3a3a3c] rounded-xl px-4 py-2.5 text-sm outline-none"
             />
           </div>
           <div className="mb-4">
-            <div className="text-xs font-medium mb-1.5 text-[#86868b]">密码</div>
+            <div className="text-xs font-medium mb-1.5 text-[#86868b] dark:text-[#98989d] dark:text-[#98989d]">密码</div>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="请输入密码"
-              className="w-full bg-[#f5f5f7] rounded-xl px-4 py-2.5 text-sm outline-none"
+              className="w-full bg-[#f5f5f7] dark:bg-[#3a3a3c] rounded-xl px-4 py-2.5 text-sm outline-none"
             />
           </div>
 
-          <div className="text-xs text-[#86868b] mb-2">首次登录身份</div>
+          <div className="text-xs text-[#86868b] dark:text-[#98989d] mb-2">首次登录身份</div>
           <div className="flex flex-col gap-2 mb-4">
             <button
               onClick={() => setSelectedRole("employer")}
               className={`w-full text-center py-3 rounded-xl text-sm font-medium cursor-pointer ${
                 selectedRole === "employer"
                   ? "bg-black text-white"
-                  : "bg-[#f5f5f7] text-[#86868b] hover:bg-[#e8e8ed]"
+                  : "bg-[#f5f5f7] text-[#86868b] dark:text-[#98989d] hover:bg-[#e8e8ed]"
               }`}
             >
               注册为雇主
@@ -97,7 +97,7 @@ export default function RegisterPage() {
               className={`w-full text-center py-3 rounded-xl text-sm font-medium cursor-pointer ${
                 selectedRole === "freelancer"
                   ? "bg-black text-white"
-                  : "bg-[#f5f5f7] text-[#86868b] hover:bg-[#e8e8ed]"
+                  : "bg-[#f5f5f7] text-[#86868b] dark:text-[#98989d] hover:bg-[#e8e8ed]"
               }`}
             >
               注册为自由职业者
@@ -114,7 +114,7 @@ export default function RegisterPage() {
             {loading ? "注册中..." : "注册并进入平台"}
           </button>
 
-          <p className="text-xs text-[#86868b] text-center mt-4">
+          <p className="text-xs text-[#86868b] dark:text-[#98989d] text-center mt-4">
             已有账号？<a href="/login" className="text-[#007aff]">去登录</a>
           </p>
         </div>
