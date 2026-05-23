@@ -82,11 +82,13 @@ model Conversation {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
-  user1Id  String
-  user1    User      @relation("User1", fields: [user1Id], references: [id])
-  user2Id  String
-  user2    User      @relation("User2", fields: [user2Id], references: [id])
-  messages Message[]
+  user1Id     String
+  user1       User      @relation("User1", fields: [user1Id], references: [id])
+  user2Id     String
+  user2       User      @relation("User2", fields: [user2Id], references: [id])
+  user1ReadAt DateTime?
+  user2ReadAt DateTime?
+  messages    Message[]
 }
 
 model Message {

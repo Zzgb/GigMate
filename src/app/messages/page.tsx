@@ -6,7 +6,7 @@ import { useAuth } from "@/lib/auth-context";
 import Nav from "@/components/Nav";
 import ConversationList from "@/components/ConversationList";
 import ChatWindow from "@/components/ChatWindow";
-import { getConversations, getMessages, sendMessage } from "@/actions/message-actions";
+import { getConversations, getMessages, sendMessage, markAsRead } from "@/actions/message-actions";
 
 function formatTime(date: Date | string): string {
   const d = new Date(date);
@@ -92,6 +92,7 @@ function MessagesContent() {
   }, [mounted, isLoggedIn]);
 
   const loadMessages = useCallback(async (convoId: string) => {
+    markAsRead(convoId);
     const data = await getMessages(convoId);
     setMessages(data.map((m: any) => ({
       from: m.senderId === userId ? "me" : "other",

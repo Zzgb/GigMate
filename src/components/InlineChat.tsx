@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { getMessages, sendMessage, findOrCreateConversation } from "@/actions/message-actions";
+import { getMessages, sendMessage, findOrCreateConversation, markAsRead } from "@/actions/message-actions";
 import { useAuth } from "@/lib/auth-context";
 
 interface InlineChatProps {
@@ -50,6 +50,7 @@ export default function InlineChat({
   }, [open]);
 
   const loadMessages = async (convoId: string) => {
+    markAsRead(convoId);
     const data = await getMessages(convoId);
     setMessages(
       data.map((m: any) => ({

@@ -1,7 +1,9 @@
 "use client";
 
+import { useState, useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
+import { hasUnreadMessages } from "@/actions/message-actions";
 import AvatarMenu from "./AvatarMenu";
 
 interface NavProps {
@@ -13,6 +15,17 @@ export default function Nav({ variant = "landing" }: NavProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { isLoggedIn, role } = useAuth();
+  const [unread, setUnread] = useState(false);
+  const pollRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    hasUnreadMessages().then(setUnread);
+    pollRef.current = setInterval(() => {
+      hasUnreadMessages().then(setUnread);
+    }, 10000);
+    return () => { if (pollRef.current) clearInterval(pollRef.current); };
+  }, [isLoggedIn]);
 
   const linkClass = (path: string) => {
     const isActive = path === "/" ? pathname === "/" : pathname.startsWith(path);
@@ -48,7 +61,9 @@ export default function Nav({ variant = "landing" }: NavProps) {
                 <path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6V9.5C3.5 9.9 3.3 10.2 3.1 10.4L2 11.7C1.4 12.5 1 13.5 1 14.6C1 16 2.2 16.5 3.5 16.5H12.5C13.8 16.5 15 16 15 14.6C15 13.5 14.6 12.5 14 11.7L12.9 10.4C12.7 10.2 12.5 9.9 12.5 9.5V6C12.5 3.5 10.5 1.5 8 1.5Z" />
                 <path d="M10 16.5C10 17.1 9.5 17.5 9 17.5H7C6.5 17.5 6 17.1 6 16.5" strokeWidth="1.2" />
               </svg>
-              <span className="absolute top-1 right-1 w-[7px] h-[7px] bg-[#ff3b30] rounded-full" />
+              {unread && (
+                <span className="absolute top-1 right-1 w-[7px] h-[7px] bg-[#ff3b30] rounded-full" />
+              )}
             </a>
             <span className="text-xs text-[#86868b]">{role === "employer" ? "雇主" : "自由职业者"}</span>
             <AvatarMenu />
