@@ -107,17 +107,17 @@ export default function AvatarMenu() {
         </button>
        </div>
       </div>
+      <button onClick={() => { setOpen(false); router.push("/profile"); }} type="button"
+        className="w-full text-left px-4 py-2 text-sm text-[var(--g-text)] hover:bg-[var(--g-hover)] cursor-pointer">
+        个人资料
+      </button>
+      <div className="h-px bg-[var(--g-border)] mx-3 my-1" />
       <button
        onClick={handleLogout}
        type="button"
        className="w-full text-left px-4 py-2 text-sm hover:bg-[var(--g-input)] text-[#ff3b30] cursor-pointer"
       >
        退出账号
-      </button>
-      <div className="h-px bg-[var(--g-border)] mx-3 my-1" />
-      <button onClick={() => { setOpen(false); router.push("/profile"); }} type="button"
-        className="w-full text-left px-4 py-2 text-sm text-[var(--g-text)] hover:bg-[var(--g-hover)] cursor-pointer">
-        个人资料
       </button>
      </div>
     </>
