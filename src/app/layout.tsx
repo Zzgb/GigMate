@@ -1,3 +1,10 @@
+/**
+ * layout.tsx
+ * 根布局 - 包裹 ThemeProvider 和 AuthProvider，设置全局字体和深色模式背景
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";

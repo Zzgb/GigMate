@@ -1,3 +1,10 @@
+/**
+ * prisma.ts
+ * Prisma 客户端单例 - 使用 @prisma/adapter-neon 连接 Neon PostgreSQL，防止热重载重复创建
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 import { PrismaClient } from "@prisma/client";
 import { PrismaNeon } from "@prisma/adapter-neon";
 

@@ -1,3 +1,10 @@
+/**
+ * route.ts
+ * 注册 API 端点 - 创建用户（bcrypt 密码哈希）+ 重复邮箱检测
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";

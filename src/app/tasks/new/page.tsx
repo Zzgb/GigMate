@@ -1,3 +1,10 @@
+/**
+ * page.tsx
+ * 发布任务页 - 9 字段完整表单（名称/详情/要求/预算/分类/时长/方式/地点/日期）支持重新发布自动填表
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { useState, useEffect, Suspense } from "react";

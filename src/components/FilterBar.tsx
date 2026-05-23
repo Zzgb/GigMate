@@ -1,3 +1,10 @@
+/**
+ * FilterBar.tsx
+ * 筛选栏组件 - 下拉筛选（任务类型/专业领域/工作地点/预算范围/排序），点击外部自动关闭
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";

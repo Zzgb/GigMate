@@ -1,3 +1,10 @@
+/**
+ * page.tsx
+ * 注册页面 - 昵称/邮箱/密码/角色表单 → 调用注册 API → 自动登录
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { useState } from "react";

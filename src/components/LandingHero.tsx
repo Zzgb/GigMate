@@ -1,3 +1,10 @@
+/**
+ * LandingHero.tsx
+ * 首页 Hero 区域 - 「我要雇佣」「找工作」按钮，根据登录状态跳转登录页或控制台
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { useRouter } from "next/navigation";

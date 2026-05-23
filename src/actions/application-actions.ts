@@ -1,3 +1,10 @@
+/**
+ * application-actions.ts
+ * 申请 Server Actions - applyForTask、getApplicationsForTask、acceptApplication（通过+拒绝其余）、rejectApplication
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use server";
 
 import { prisma } from "@/lib/prisma";

@@ -1,3 +1,10 @@
+/**
+ * FeatureCards.tsx
+ * 首页功能介绍卡片 - 展示平台核心功能的 SVG 图标 + 说明
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 const features = [
  {
   title: "发布招聘",

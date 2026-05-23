@@ -1,3 +1,10 @@
+/**
+ * seed.ts
+ * 数据库种子脚本 - 创建 5 个测试用户、13 个任务、申请记录、评价记录、4 段对话
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 import { PrismaNeon } from "@prisma/adapter-neon";

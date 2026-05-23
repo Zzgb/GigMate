@@ -1,3 +1,10 @@
+/**
+ * TaskCard.tsx
+ * 任务卡片组件 - 显示任务标题/分类/地点/时间/描述/标签/价格，点击跳转详情
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 interface TaskCardProps {
  id: string;
  title: string;

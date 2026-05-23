@@ -1,3 +1,10 @@
+/**
+ * WorkerList.tsx
+ * 进行中任务列表组件 - 雇主端查看进行中的任务 + 内联聊天 + 完成/结束操作
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { useState } from "react";

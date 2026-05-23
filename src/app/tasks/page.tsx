@@ -1,3 +1,10 @@
+/**
+ * page.tsx
+ * 任务浏览页 - 搜索框 + 筛选栏（类型/领域/地点/预算/排序）+ 单双列视图切换
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { useState, useEffect } from "react";

@@ -1,3 +1,10 @@
+/**
+ * AvatarMenu.tsx
+ * 头像下拉菜单 - 账号信息显示、主题切换（浅色/深色/跟随系统 pill 按钮）、角色切换（雇主端/自由职业者端 pill 按钮）、退出登录
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { useState } from "react";

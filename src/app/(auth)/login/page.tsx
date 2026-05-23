@@ -1,3 +1,10 @@
+/**
+ * page.tsx
+ * 登录页面 - 邮箱密码登录 + 角色选择 + 测试账号快速填充按钮
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { useState, Suspense } from "react";

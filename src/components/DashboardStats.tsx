@@ -1,3 +1,10 @@
+/**
+ * DashboardStats.tsx
+ * 控制台统计卡片组件 - 可点击的三个统计卡片
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 const stats = [

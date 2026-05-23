@@ -1,3 +1,10 @@
+/**
+ * page.tsx
+ * 雇主我的任务列表 - 显示当前雇主的所有任务（招募中/进行中/已完成/已取消）
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { useState, useEffect } from "react";

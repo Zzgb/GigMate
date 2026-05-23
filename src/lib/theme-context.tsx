@@ -1,3 +1,10 @@
+/**
+ * theme-context.tsx
+ * 主题上下文 - 浅色/深色/跟随系统三模式切换，localStorage 持久化，系统主题跟随
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";

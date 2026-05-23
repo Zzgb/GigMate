@@ -1,3 +1,10 @@
+/**
+ * page.tsx
+ * 控制台主页 - 角色感知双视图（雇主/自由职业者），含统计卡片、任务列表、评价弹窗、结束任务确认
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { useState, useEffect } from "react";

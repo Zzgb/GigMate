@@ -1,3 +1,10 @@
+/**
+ * TaskDetailSidebar.tsx
+ * 任务详情侧边栏 - 预算显示、任务信息、状态感知按钮（立即申请/已申请/进行中/已完成/已取消/雇主不可申请）
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { useState } from "react";

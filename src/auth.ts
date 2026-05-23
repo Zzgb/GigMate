@@ -1,3 +1,10 @@
+/**
+ * auth.ts
+ * Auth.js v5 配置文件 - Credentials Provider（Prisma 查库验证）、JWT 回调（用户信息+角色切换）、Session 回调
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";

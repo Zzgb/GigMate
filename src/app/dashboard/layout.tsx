@@ -1,3 +1,10 @@
+/**
+ * layout.tsx
+ * 控制台布局 - 认证保护，未登录重定向到登录页
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { useEffect } from "react";

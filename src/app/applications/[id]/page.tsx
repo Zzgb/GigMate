@@ -1,3 +1,10 @@
+/**
+ * page.tsx
+ * 申请管理页 - 查看任务的所有申请、按状态筛选（全部/待审核/已通过）、通过/拒绝操作
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { useState, useEffect } from "react";

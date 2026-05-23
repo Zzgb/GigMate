@@ -1,3 +1,10 @@
+/**
+ * page.tsx
+ * 消息页 - 对话列表 + 聊天窗口 + 3 秒轮询实时更新 + ?with= 参数自动定位对话
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { useState, useEffect, useRef, useCallback, Suspense } from "react";

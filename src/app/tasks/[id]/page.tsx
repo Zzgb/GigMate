@@ -1,3 +1,10 @@
+/**
+ * page.tsx
+ * 任务详情页 - 动态数据加载、状态感知标记、智能返回（来源感知）、角色感知操作按钮
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { useState, useEffect, Suspense } from "react";

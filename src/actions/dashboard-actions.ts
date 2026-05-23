@@ -1,3 +1,10 @@
+/**
+ * dashboard-actions.ts
+ * 控制台 Server Actions - getDashboardData（角色感知双端数据）、completeTask、cancelTask、createReview
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use server";
 
 import { prisma } from "@/lib/prisma";

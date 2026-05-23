@@ -1,3 +1,10 @@
+/**
+ * auth-context.tsx
+ * 认证上下文 - 封装 Auth.js useSession()，提供 useAuth() hook（isLoggedIn/role/name/userId/roles/login/logout/switchRole）
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";

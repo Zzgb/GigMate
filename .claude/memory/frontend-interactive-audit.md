@@ -1,38 +1,30 @@
 ---
 name: frontend-interactive-audit
-description: 全页面控件审计结果 - 所有 input 为真实控件，button 皆有 onClick (2026-05-23)
+description: 全页面控件审计 + 后端功能集成状态 (2026-05-23 最终版)
 metadata:
   type: project
 ---
 
-## 全页面交互控件审计
+## 全页面功能状态
 
-已于 2026-05-23 完成所有 11 个页面的控件审计。
+已全部接入后端数据库，所有交互功能均可用。
 
-### 审计标准
-- 输入框: 必须为真实 `<input>` 或 `<textarea>`，非装饰性 div
-- 按钮: 必须有 `onClick` 处理器 (mock 允许)，不可为静态 span
-- 筛选/切换: 必须有功能行为
+| 页面 | 数据库接入 | 交互控件 | 状态 |
+|------|-----------|----------|------|
+| `/` | 静态 | 我要雇佣/找工作 → login+role | ✅ |
+| `/login` | Auth.js signIn | 邮箱密码登录 + 角色选择 + 测试账号快捷填充 | ✅ |
+| `/register` | API /register | 昵称/邮箱/密码 + 角色选择 → 自动登录 | ✅ |
+| `/dashboard` (雇主) | getDashboardData() | 统计卡片/进行中列表/完成任务/结束任务(取消)/重新发布/评价弹窗(星级) | ✅ |
+| `/dashboard` (自由职业者) | getDashboardData() | 统计卡片/进行中(联系雇主)/已完成(评价星级)/待处理申请 | ✅ |
+| `/dashboard/my-tasks` | getEmployerTasks() | 任务列表/查看申请/发布新任务 | ✅ |
+| `/tasks` | getTasks() | 搜索+实时筛选/单双列切换/任务卡片点击 | ✅ |
+| `/tasks/[id]` | getTaskById() | 智能返回(来源感知)/状态按钮(角色+状态感知) | ✅ |
+| `/tasks/new` | createTask() | 9 字段完整表单/重新发布自动填表 | ✅ |
+| `/messages` | getConversations/getMessages/sendMessage | 对话列表/聊天窗口/3s轮询/未读检测/自动创建对话 | ✅ |
+| `/applications/[id]` | getApplications/getTaskById | 筛选/通过/拒绝按钮 | ✅ |
 
-### 各页面状态
-
-| 页面 | 输入控件 | 按钮/交互 | 状态 |
-|------|----------|-----------|------|
-| `/` | 无 | 我要雇佣/找工作 → login+role | ✅ |
-| `/login` | 无 | 角色选择 + 进入平台 → /dashboard | ✅ |
-| `/register` | 无 | 角色选择 + 注册 → /dashboard | ✅ |
-| `/dashboard` (雇主) | 评价弹窗 input | 统计卡片可点击、Tab 可导航、搜索+筛选 | ✅ |
-| `/dashboard` (自由职业者) | 无 | 统计卡片可点击、联系雇主 → /messages?with= | ✅ |
-| `/dashboard/my-tasks` | 无 | 返回按钮、查看申请 → /applications/[id] | ✅ |
-| `/tasks` | 搜索 input (真实) | 搜索按钮、筛选栏下拉、单列/双列切换 | ✅ |
-| `/tasks/[id]` | 无 | 返回链接、立即申请 → /messages | ✅ |
-| `/tasks/new` | 9 个 input/textarea (全真实) | 发布按钮 | ✅ |
-| `/messages` | 聊天 input (真实) | 对话列表可切换、发送按钮、?with= 参数定位 | ✅ |
-| `/applications/[id]` | 无 | 筛选 全部/待审核/已通过、通过/拒绝按钮 | ✅ |
-
-### WorkerList 内联聊天
-
-雇主端「进行中任务」点击铃铛不跳转 `/messages`，而是在当前卡片下方展开内联聊天窗口：
-- 聊天头部显示: 通过时间 + 截止时间
-- 消息列表 + 输入框 + 发送按钮
-- 铃铛蓝色高亮表示聊天窗口已展开
+### 全局功能
+- ✅ 深色模式: CSS 变量方案, 浅色/深色/跟随系统
+- ✅ 角色切换: 双端 pill 按钮, 单端灰色禁用
+- ✅ 未读消息红点: Nav 铃铛 10s 轮询检测
+- ✅ 头像菜单: 悬停+点击外部关闭

@@ -1,3 +1,10 @@
+/**
+ * ChatWindow.tsx
+ * 聊天窗口组件 - 消息显示区域 + 输入框 + 发送按钮 + 自动滚动到底部 + 发送锁防止重复
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { useState, useEffect, useRef } from "react";

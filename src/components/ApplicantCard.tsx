@@ -1,3 +1,10 @@
+/**
+ * ApplicantCard.tsx
+ * 申请人卡片组件 - 显示申请人信息、经验、标签、评分
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 interface ApplicantCardProps {

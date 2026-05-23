@@ -1,3 +1,10 @@
+/**
+ * ConversationList.tsx
+ * 对话列表组件 - 消息页左侧显示所有对话（名称/关联任务/时间/预览/未读）
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 interface Conversation {

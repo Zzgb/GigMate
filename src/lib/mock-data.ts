@@ -1,3 +1,10 @@
+/**
+ * mock-data.ts
+ * Mock 数据（已废弃 - 原前端 mock 数据，现已全部迁移到数据库）
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 export interface MockTask {
   id: string;
   title: string;

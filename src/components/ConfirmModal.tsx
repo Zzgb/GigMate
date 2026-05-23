@@ -1,3 +1,10 @@
+/**
+ * ConfirmModal.tsx
+ * 确认弹窗组件 - 通用确认/取消对话框，支持自定义颜色标签
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { cn } from "@/lib/utils";

@@ -1,3 +1,10 @@
+/**
+ * InlineChat.tsx
+ * 内联聊天组件 - 控制台进行中任务铃铛展开的聊天窗口，实时收发消息 + 3 秒轮询 + 发送锁
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { useState, useEffect, useRef } from "react";

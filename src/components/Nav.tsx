@@ -1,3 +1,10 @@
+/**
+ * Nav.tsx
+ * 导航栏组件 - Logo、导航链接（任务列表/控制台）、铃铛（未读消息红点 10s 轮询）、用户名、头像菜单
+ * 修改日期: 2026-05-23
+ * 修改人: Claude Code + DeepSeek V4 Pro
+ */
+
 "use client";
 
 import { useState, useEffect, useRef } from "react";
