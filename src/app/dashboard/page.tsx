@@ -890,8 +890,8 @@ export default function DashboardPage() {
 
       <div className="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.04)] shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
         <h3 className="text-base font-semibold mb-4">最近任务</h3>
-        {[...data.activeTasks, ...data.completedTasks]
-          .slice(0, 5)
+        {[...(data.openTasks || []), ...data.activeTasks, ...data.completedTasks]
+          .slice(0, 8)
           .map((t: any) => (
             <div
               key={t.id}
@@ -902,14 +902,16 @@ export default function DashboardPage() {
                 className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${
                   t.status === "IN_PROGRESS"
                     ? "bg-[#007aff1a] text-[#007aff]"
-                    : "bg-[#30d1581a] text-[#30d158]"
+                    : t.status === "COMPLETED"
+                    ? "bg-[#30d1581a] text-[#30d158]"
+                    : "bg-[#f59e0b1a] text-[#f59e0b]"
                 }`}
               >
-                {t.status === "IN_PROGRESS" ? "进行中" : "已完成"}
+                {t.status === "IN_PROGRESS" ? "进行中" : t.status === "COMPLETED" ? "已完成" : "招募中"}
               </span>
             </div>
           ))}
-        {data.activeTasks.length + data.completedTasks.length === 0 && (
+        {(data.openTasks || []).length + data.activeTasks.length + data.completedTasks.length === 0 && (
           <p className="text-sm text-[#86868b] text-center py-4">
             暂无任务
           </p>

@@ -5,27 +5,27 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 
 export default function AvatarMenu() {
-  const { role, isLoggedIn, switchRole, logout } = useAuth();
+  const { role, isLoggedIn, switchRole, logout, mounted } = useAuth();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    function handleOutsideClick(e: MouseEvent) {
+    function handleClick(e: Event) {
       if (ref.current && !ref.current.contains(e.target as Node)) {
         setOpen(false);
       }
     }
-    document.addEventListener("mousedown", handleOutsideClick);
-    return () => document.removeEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
   }, []);
 
-  if (!isLoggedIn) return null;
+  if (!mounted || !isLoggedIn) return null;
 
   const switchLabel = role === "employer" ? "切换为自由职业者" : "切换为雇主";
 
-  const handleSwitch = () => {
-    switchRole();
+  const handleSwitch = async () => {
+    await switchRole();
     setOpen(false);
     router.push("/dashboard");
   };
@@ -37,9 +37,9 @@ export default function AvatarMenu() {
   };
 
   return (
-    <div ref={ref} className="relative" style={{ zIndex: 100 }}>
+    <div ref={ref} className="relative">
       <button
-        onClick={(e) => { e.stopPropagation(); setOpen((p) => !p); }}
+        onClick={() => setOpen((p) => !p)}
         type="button"
         className="w-8 h-8 rounded-full bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6] border-2 border-transparent hover:border-[#007aff] transition-colors cursor-pointer"
         aria-label="用户菜单"

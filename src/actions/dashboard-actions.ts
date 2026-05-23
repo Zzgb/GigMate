@@ -62,6 +62,10 @@ export async function getDashboardData() {
       },
     },
   });
+  const openTasks = await prisma.task.findMany({
+    where: { employerId: userId, status: "OPEN" },
+    include: { _count: { select: { applications: true } } },
+  });
   const pendingApps = await prisma.application.findMany({
     where: { task: { employerId: userId }, status: "PENDING" },
     include: {
@@ -74,6 +78,7 @@ export async function getDashboardData() {
     role: "employer",
     activeTasks,
     completedTasks,
+    openTasks,
     pendingApps,
     stats: {
       active: activeTasks.length,
