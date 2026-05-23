@@ -23,7 +23,10 @@ export async function getDashboardData() {
         status: "COMPLETED",
         applications: { some: { freelancerId: userId, status: "ACCEPTED" } },
       },
-      include: { employer: { select: { id: true, name: true } } },
+      include: {
+        employer: { select: { id: true, name: true } },
+        reviews: { select: { id: true, rating: true, comment: true, reviewerId: true, revieweeId: true } },
+      },
     });
     const pendingApps = await prisma.application.findMany({
       where: { freelancerId: userId, status: "PENDING" },

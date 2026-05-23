@@ -57,6 +57,7 @@ function EmployerActiveView({
   const [chatOpen, setChatOpen] = useState<string | null>(null);
   const [endStep1, setEndStep1] = useState(false);
   const [endStep2, setEndStep2] = useState(false);
+  const [endingTaskId, setEndingTaskId] = useState<string | null>(null);
 
   return (
     <div>
@@ -137,7 +138,7 @@ function EmployerActiveView({
                       完成任务
                     </button>
                     <button
-                      onClick={() => setEndStep1(true)}
+                      onClick={() => { setEndingTaskId(t.id); setEndStep1(true); }}
                       className="bg-[#ff3b30] text-white px-3.5 py-1.5 rounded-full text-xs font-medium cursor-pointer"
                     >
                       结束任务
@@ -164,7 +165,7 @@ function EmployerActiveView({
         confirmLabel="确定" onConfirm={() => { setEndStep1(false); setEndStep2(true); }} onCancel={() => setEndStep1(false)} />
       <ConfirmModal open={endStep2} title="是否重新发布此任务？" description="可将当前任务信息自动填入发布页面，方便快速重新发布。"
         confirmLabel="重新发布" confirmColor="blue" secondStep
-        onConfirm={() => { setEndStep2(false); router.push("/tasks/new"); }} onCancel={() => setEndStep2(false)} />
+        onConfirm={() => { setEndStep2(false); router.push(`/tasks/new?republish=${endingTaskId}`); }} onCancel={() => setEndStep2(false)} />
     </div>
   );
 }
@@ -492,6 +493,7 @@ function FreelancerCompletedTasks({
   onBack: () => void;
 }) {
   const router = useRouter();
+  const { userId } = useAuth();
   return (
     <div>
       <button
@@ -527,9 +529,21 @@ function FreelancerCompletedTasks({
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-sm font-bold">
-                    {formatPrice(t.budget)}
-                  </span>
+                  <div className="flex items-center gap-2 justify-end">
+                    <span className="text-sm font-bold">
+                      {formatPrice(t.budget)}
+                    </span>
+                    {(() => {
+                      const myReview = t.reviews?.find((r: any) => r.revieweeId === userId);
+                      return myReview ? (
+                        <span className="text-xs text-[#f59e0b]">
+                          {"★".repeat(myReview.rating)}{"☆".repeat(5 - myReview.rating)}
+                        </span>
+                      ) : (
+                        <span className="text-xs text-[#86868b]">待评价</span>
+                      );
+                    })()}
+                  </div>
                 </div>
               </div>
             </div>
