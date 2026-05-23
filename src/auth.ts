@@ -49,6 +49,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           name: user.name,
           role: user.roles.includes("EMPLOYER") ? "employer" : "freelancer",
           roles: user.roles,
+          avatarUrl: user.avatarUrl,
         };
       },
     }),
@@ -105,7 +106,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.name = token.name;
         (session.user as any).role = token.role;
         (session.user as any).roles = token.roles;
-        (session.user as any).avatarUrl = token.avatarUrl || null;
+        // 每次都从数据库读取最新的 avatarUrl（兼容旧 session）
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { avatarUrl: true },
+        });
+        (session.user as any).avatarUrl = token.avatarUrl || dbUser?.avatarUrl || null;
       }
       return session;
     },
