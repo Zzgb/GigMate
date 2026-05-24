@@ -43,10 +43,12 @@ function TaskDetailContent() {
 
  const backUrl =
   from === "dashboard" ? "/dashboard"
+  : from?.startsWith("dashboard-") ? `/dashboard?view=${from.slice(10)}`
   : from === "messages" ? "/messages"
   : "/tasks";
  const backLabel =
   from === "dashboard" ? "返回控制台"
+  : from?.startsWith("dashboard-") ? "返回控制台"
   : from === "messages" ? "返回消息"
   : "返回任务列表";
 

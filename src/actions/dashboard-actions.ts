@@ -23,7 +23,7 @@ export async function getDashboardData() {
         status: "IN_PROGRESS",
         applications: { some: { freelancerId: userId, status: "ACCEPTED" } },
       },
-      include: { employer: { select: { id: true, name: true } } },
+      include: { employer: { select: { id: true, name: true, avatarUrl: true } } },
     });
     const completedTasks = await prisma.task.findMany({
       where: {
@@ -59,7 +59,7 @@ export async function getDashboardData() {
     include: {
       applications: {
         where: { status: "ACCEPTED" },
-        include: { freelancer: { select: { id: true, name: true } } },
+        include: { freelancer: { select: { id: true, name: true, avatarUrl: true } } },
       },
     },
   });
@@ -68,7 +68,7 @@ export async function getDashboardData() {
     include: {
       applications: {
         where: { status: "ACCEPTED" },
-        include: { freelancer: { select: { id: true, name: true } } },
+        include: { freelancer: { select: { id: true, name: true, avatarUrl: true } } },
       },
       reviews: { select: { id: true, rating: true, comment: true, reviewerId: true, revieweeId: true } },
     },
@@ -81,7 +81,7 @@ export async function getDashboardData() {
     where: { task: { employerId: userId }, status: "PENDING" },
     include: {
       task: { select: { id: true, title: true } },
-      freelancer: { select: { id: true, name: true } },
+      freelancer: { select: { id: true, name: true, avatarUrl: true } },
     },
   });
 

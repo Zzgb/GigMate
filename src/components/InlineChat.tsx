@@ -18,6 +18,9 @@ interface InlineChatProps {
  taskId?: string;
  open: boolean;
  onClose: () => void;
+ from?: string;
+ otherAvatarUrl?: string | null;
+ myAvatarUrl?: string | null;
 }
 
 export default function InlineChat({
@@ -27,6 +30,9 @@ export default function InlineChat({
  taskId,
  open,
  onClose,
+ from = "messages",
+ otherAvatarUrl,
+ myAvatarUrl,
 }: InlineChatProps) {
  const { userId } = useAuth();
  const [conversationId, setConversationId] = useState<string | null>(null);
@@ -113,10 +119,10 @@ export default function InlineChat({
   <div className="border-t border-[var(--g-border2)] bg-[var(--g-input)]">
    <div className="px-5 py-2.5 bg-[var(--g-card)] border-b border-[var(--g-border)]">
     <div className="flex items-center gap-2">
-     <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6]" />
+     {otherAvatarUrl ? <img src={otherAvatarUrl} className="w-6 h-6 rounded-md object-cover flex-shrink-0" alt="" /> : <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6] flex-shrink-0" />}
      <span className="text-xs font-semibold">{otherUserName}</span>
      {taskId ? (
-      <a href={`/tasks/${taskId}?from=messages`} className="text-[10px] text-[#007aff] hover:underline">关于 · {taskTitle}</a>
+      <a href={`/tasks/${taskId}?from=${from}`} className="text-[10px] text-[#007aff] hover:underline">关于 · {taskTitle}</a>
      ) : (
       <span className="text-[10px] text-[#007aff]">关于 · {taskTitle}</span>
      )}
@@ -134,9 +140,11 @@ export default function InlineChat({
        key={i}
        className={`flex gap-2 mb-2 items-start ${m.from === "me" ? "flex-row-reverse" : ""}`}
       >
-       <div
-        className={`w-5 h-5 rounded-md flex-shrink-0 text-[9px] flex items-center justify-center ${m.from === "other" ? "bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6]" : "bg-[#1d1d1f] text-white"}`}
-       />
+       {m.from === "other" ? (
+        otherAvatarUrl ? <img src={otherAvatarUrl} className="w-5 h-5 rounded-md object-cover flex-shrink-0" alt="" /> : <div className="w-5 h-5 rounded-md bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6] flex-shrink-0" />
+       ) : (
+        myAvatarUrl ? <img src={myAvatarUrl} className="w-5 h-5 rounded-md object-cover flex-shrink-0" alt="" /> : <div className="w-5 h-5 rounded-md bg-[#1d1d1f] flex-shrink-0" />
+       )}
        <div>
         <div
          className={`rounded-xl px-3 py-1.5 max-w-[320px] ${m.from === "other" ? "bg-[var(--g-card)] rounded-bl-sm" : "bg-[#1d1d1f] text-white rounded-br-sm"}`}

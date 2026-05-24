@@ -55,10 +55,12 @@ function EmployerActiveView({
  tasks,
  onBack,
  refresh,
+ myAvatarUrl,
 }: {
  tasks: any[];
  onBack: () => void;
  refresh: () => void;
+ myAvatarUrl?: string | null;
 }) {
  const router = useRouter();
  const [chatOpen, setChatOpen] = useState<string | null>(null);
@@ -91,7 +93,7 @@ function EmployerActiveView({
         className="bg-[var(--g-card)] rounded-2xl border border-[var(--g-border)] shadow-[0_4px_24px_var(--g-shadow)] overflow-hidden"
        >
         <div className="p-5 flex items-center gap-4">
-         <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6] flex-shrink-0" />
+         {worker?.avatarUrl ? <img src={worker.avatarUrl} className="w-11 h-11 rounded-xl object-cover flex-shrink-0" alt="" /> : <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6] flex-shrink-0" />}
          <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
            <span className="font-semibold text-sm">{t.title}</span>
@@ -161,6 +163,9 @@ function EmployerActiveView({
          taskId={t.id}
          open={chatOpen === t.id}
          onClose={() => setChatOpen(null)}
+         from="dashboard-workers"
+         otherAvatarUrl={worker?.avatarUrl || undefined}
+         myAvatarUrl={myAvatarUrl}
         />
        </div>
       );
@@ -335,12 +340,15 @@ function EmployerApplicationsListView({
  apps,
  onBack,
  refresh,
+ myAvatarUrl,
 }: {
  apps: any[];
  onBack: () => void;
  refresh: () => void;
+ myAvatarUrl?: string | null;
 }) {
  const [loadingApp, setLoadingApp] = useState<string | null>(null);
+ const [chatOpen, setChatOpen] = useState<string | null>(null);
 
  const handleAccept = async (appId: string) => {
   setLoadingApp(appId);
@@ -376,10 +384,10 @@ function EmployerApplicationsListView({
      {apps.map((a: any) => (
       <div
        key={a.id}
-       className="bg-[var(--g-card)] rounded-2xl p-5 border border-[var(--g-border)] shadow-[0_4px_24px_var(--g-shadow)]"
+       className="bg-[var(--g-card)] rounded-2xl border border-[var(--g-border)] shadow-[0_4px_24px_var(--g-shadow)] overflow-hidden"
       >
-       <div className="flex items-center gap-4">
-        <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6] flex-shrink-0" />
+       <div className="p-5 flex items-center gap-4">
+        {a.freelancer?.avatarUrl ? <img src={a.freelancer.avatarUrl} className="w-11 h-11 rounded-xl object-cover flex-shrink-0" alt="" /> : <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#e8e8ed] to-[#d1d1d6] flex-shrink-0" />}
         <div className="flex-1 min-w-0">
          <div className="flex items-center gap-2 mb-0.5">
           <span className="font-semibold text-sm">
@@ -396,6 +404,28 @@ function EmployerApplicationsListView({
         <span className="text-xs bg-[#f59e0b1a] text-[#f59e0b] px-2.5 py-1 rounded-full font-medium">
          待审核
         </span>
+
+        {/* 铃铛 */}
+        <button
+         onClick={() => setChatOpen(chatOpen === a.id ? null : a.id)}
+         className="w-8 h-8 flex items-center justify-center relative cursor-pointer"
+         type="button"
+        >
+         <svg
+          width="16"
+          height="20"
+          viewBox="0 0 16 20"
+          fill="none"
+          stroke={chatOpen === a.id ? "#007aff" : "#86868b"}
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+         >
+          <path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6V9.5C3.5 9.9 3.3 10.2 3.1 10.4L2 11.7C1.4 12.5 1 13.5 1 14.6C1 16 2.2 16.5 3.5 16.5H12.5C13.8 16.5 15 16 15 14.6C15 13.5 14.6 12.5 14 11.7L12.9 10.4C12.7 10.2 12.5 9.9 12.5 9.5V6C12.5 3.5 10.5 1.5 8 1.5Z" />
+          <path d="M10 16.5C10 17.1 9.5 17.5 9 17.5H7C6.5 17.5 6 17.1 6 16.5" strokeWidth="1.2" />
+         </svg>
+        </button>
+
         <div className="flex gap-2">
          <button
           onClick={() => handleAccept(a.id)}
@@ -413,6 +443,19 @@ function EmployerApplicationsListView({
          </button>
         </div>
        </div>
+
+       {/* 内联聊天 */}
+       <InlineChat
+        otherUserId={a.freelancer?.id || ""}
+        otherUserName={a.freelancer?.name || ""}
+        taskTitle={a.task?.title || ""}
+        taskId={a.task?.id}
+        open={chatOpen === a.id}
+        onClose={() => setChatOpen(null)}
+        from="dashboard-applications"
+        otherAvatarUrl={a.freelancer?.avatarUrl || undefined}
+        myAvatarUrl={myAvatarUrl}
+       />
       </div>
      ))}
     </div>
@@ -457,7 +500,7 @@ function FreelancerActiveTasks({
        <div className="flex justify-between items-center">
         <div>
          <button
-          onClick={() => router.push(`/tasks/${t.id}?from=dashboard`)}
+          onClick={() => router.push(`/tasks/${t.id}?from=dashboard-active`)}
           className="font-semibold text-sm hover:text-[#007aff] cursor-pointer text-left"
          >
           {t.title}
@@ -526,7 +569,7 @@ function FreelancerCompletedTasks({
        <div className="flex justify-between items-center">
         <div>
          <button
-          onClick={() => router.push(`/tasks/${t.id}?from=dashboard`)}
+          onClick={() => router.push(`/tasks/${t.id}?from=dashboard-completed`)}
           className="font-semibold text-sm hover:text-[#007aff] cursor-pointer text-left"
          >
           {t.title}
@@ -623,10 +666,16 @@ function FreelancerPendingApps({
 
 export default function DashboardPage() {
  const router = useRouter();
- const { name, role } = useAuth();
+ const { name, role, avatarUrl: myAvatarUrl } = useAuth();
  const [data, setData] = useState<any>(null);
  const [view, setView] = useState<string>("overview");
  const [refreshKey, setRefreshKey] = useState(0);
+
+ useEffect(() => {
+  const p = new URLSearchParams(window.location.search);
+  const v = p.get("view");
+  if (v) setView(v);
+ }, []);
 
  useEffect(() => {
   getDashboardData().then(setData);
@@ -678,6 +727,7 @@ export default function DashboardPage() {
      tasks={data.activeTasks}
      onBack={() => setView("overview")}
      refresh={() => setRefreshKey((k) => k + 1)}
+     myAvatarUrl={myAvatarUrl}
     />
    </div>
   );
@@ -702,6 +752,7 @@ export default function DashboardPage() {
      apps={data.pendingApps}
      onBack={() => setView("overview")}
      refresh={() => setRefreshKey((k) => k + 1)}
+     myAvatarUrl={myAvatarUrl}
     />
    </div>
   );
