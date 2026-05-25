@@ -52,7 +52,7 @@ export default function RootLayout({
      }}
     />
    </head>
-   <body className="min-h-full flex flex-col bg-[var(--g-bg)]">
+   <body className="min-h-full flex flex-col bg-[var(--g-bg)] pt-14">
     <ThemeProvider>
      <AuthProvider>{children}</AuthProvider>
     </ThemeProvider>
