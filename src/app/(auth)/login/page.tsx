@@ -77,6 +77,10 @@ function LoginForm() {
       <button onClick={handleLogin} disabled={loading}
         className="w-full bg-black text-white text-center py-3 rounded-xl text-sm font-semibold cursor-pointer disabled:opacity-50">{loading ? "登录中..." : "登录"}</button>
 
+      <p className="text-xs text-center mt-3">
+        <a href="/reset-password" className="text-[var(--g-text2)] hover:text-[#007aff]">忘记密码？</a>
+      </p>
+
       <div className="mt-4 pt-3 border-t border-[var(--g-border2)]">
         <p className="text-[10px] text-[var(--g-text2)] mb-2 text-center">测试账号（密码: password123）</p>
         <div className="flex flex-wrap gap-1.5 justify-center">

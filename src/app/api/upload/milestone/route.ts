@@ -1,13 +1,15 @@
 /**
  * route.ts
- * 文件上传 API - 支持头像和聊天文件上传，存储到 public/uploads/
+ * 里程碑附件上传 API - UUID 重命名、类型/大小校验、权限检查
  * 修改日期: 2026-05-25
  * 修改人: Claude Code + DeepSeek V4 Pro
  */
 
 import { NextResponse } from "next/server";
+import { auth } from "@/auth";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
+import { v4 as uuidv4 } from "uuid";
 
 const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 const ALLOWED_TYPES = [
@@ -22,6 +24,11 @@ const ALLOWED_TYPES = [
 
 export async function POST(req: Request) {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "请先登录" }, { status: 401 });
+    }
+
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
     if (!file) return NextResponse.json({ error: "未选择文件" }, { status: 400 });
@@ -35,24 +42,25 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "不支持的文件类型" }, { status: 400 });
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    const isImage = file.type.startsWith("image/");
-    const subDir = isImage ? "avatars" : "files";
-    const uploadDir = path.join(process.cwd(), "public", "uploads", subDir);
+    const ext = file.name.split(".").pop() || "bin";
+    const uuidName = `${uuidv4()}.${ext}`;
+    const uploadDir = path.join(process.cwd(), "public", "uploads", "milestone-attachments");
     await mkdir(uploadDir, { recursive: true });
 
-    const ext = file.name.split(".").pop() || "bin";
-    const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    const filepath = path.join(uploadDir, filename);
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    await writeFile(path.join(uploadDir, uuidName), buffer);
 
-    await writeFile(filepath, buffer);
-
-    const url = `/uploads/${subDir}/${filename}`;
-    return NextResponse.json({ url, filename });
+    const url = `/uploads/milestone-attachments/${uuidName}`;
+    return NextResponse.json({
+      url,
+      filename: uuidName,
+      originalName: file.name,
+      fileSize: file.size,
+      mimeType: file.type,
+    });
   } catch (error) {
-    console.error("Upload error:", error);
+    console.error("Milestone upload error:", error);
     return NextResponse.json({ error: "上传失败" }, { status: 500 });
   }
 }

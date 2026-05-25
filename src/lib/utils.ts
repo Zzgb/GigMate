@@ -11,3 +11,8 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export function formatBudget(budget: number, budgetMin?: number | null): string {
+  if (budgetMin && budgetMin > 0 && budgetMin < budget) return `¥${budgetMin}-${budget}`;
+  return `¥${budget}`;
+}

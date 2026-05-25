@@ -21,33 +21,9 @@ import {
 } from "@/actions/application-actions";
 import ConfirmModal from "@/components/ConfirmModal";
 import InlineChat from "@/components/InlineChat";
-
-function formatPrice(budget: number): string {
- return `¥${budget}`;
-}
-
-function StarsInput({
- value,
- onChange,
-}: {
- value: number;
- onChange: (v: number) => void;
-}) {
- return (
-  <div className="flex gap-2 justify-center mb-4 text-2xl text-[#f59e0b]">
-   {[1, 2, 3, 4, 5].map((n) => (
-    <button
-     key={n}
-     type="button"
-     onClick={() => onChange(n)}
-     className="cursor-pointer transition-transform hover:scale-110"
-    >
-     {n <= value ? "★" : "☆"}
-    </button>
-   ))}
-  </div>
- );
-}
+import MilestoneProgressBar from "@/components/MilestoneProgressBar";
+import { formatBudget } from "@/lib/utils";
+import { ReviewPair, ReviewModal } from "@/components/ReviewSection";
 
 // ========== 雇主端子视图 ==========
 
@@ -108,7 +84,7 @@ function EmployerActiveView({
             进行中
            </span>
            <span className="text-xs text-[var(--g-text2)] dark:text-[#98989d]">
-            预算: {formatPrice(t.budget)}
+            预算: {formatBudget(t.budget, t.budgetMin)}
            </span>
           </div>
          </div>
@@ -194,21 +170,19 @@ function EmployerCompletedView({
  const [reviewing, setReviewing] = useState<{
   taskId: string;
   revieweeId: string;
+  revieweeName: string;
  } | null>(null);
- const [reviewText, setReviewText] = useState("");
- const [reviewRating, setReviewRating] = useState(5);
+ const { userId } = useAuth();
 
- const handleSubmitReview = async () => {
+ const handleSubmitReview = async (rating: number, comment: string) => {
   if (!reviewing) return;
   await createReview({
    taskId: reviewing.taskId,
    revieweeId: reviewing.revieweeId,
-   rating: reviewRating,
-   comment: reviewText.trim() || null,
+   rating,
+   comment: comment || null,
   });
   setReviewing(null);
-  setReviewText("");
-  setReviewRating(5);
   refresh();
  };
 
@@ -231,7 +205,6 @@ function EmployerCompletedView({
     <div className="flex flex-col gap-3">
      {tasks.map((t: any) => {
       const worker = t.applications?.[0]?.freelancer;
-      const review = t.reviews?.[0];
       return (
        <div
         key={t.id}
@@ -246,39 +219,29 @@ function EmployerCompletedView({
            </div>
           )}
           <div className="text-xs text-[var(--g-text2)] mt-0.5">
-           {formatPrice(t.budget)}
+           {formatBudget(t.budget, t.budgetMin)}
           </div>
-          {review && (
-           <div className="mt-2 pt-2 border-t border-[var(--g-border)]">
-            <div className="text-xs text-[#f59e0b]">
-             {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
-            </div>
-            {review.comment && (
-             <div className="text-[10px] text-[var(--g-text2)] mt-0.5">{review.comment}</div>
-            )}
+          {worker && userId && (
+           <ReviewPair
+            employerName={t.employer?.name || '雇主'}
+            freelancerName={worker.name || '自由职业者'}
+            employerId={t.employerId}
+            freelancerId={worker.id}
+            reviews={t.reviews || []}
+            currentUserId={userId}
+            isEmployer
+            taskId={t.id}
+            onCreateReview={(revieweeId) => setReviewing({ taskId: t.id, revieweeId, revieweeName: revieweeId === worker.id ? worker.name : (t.employer?.name || '雇主') })}
+           />
+          )}
+          {t.milestones?.length > 0 && (
+           <div className="mt-2">
+            <MilestoneProgressBar milestones={t.milestones} taskStatus="COMPLETED" />
            </div>
           )}
          </div>
          <div className="text-right">
-          <span className="text-xs text-[#30d158] font-medium">
-           已完成
-          </span>
-          {worker && !review && (
-           <button
-            onClick={() =>
-             setReviewing({
-              taskId: t.id,
-              revieweeId: worker.id,
-             })
-            }
-            className="block ml-auto mt-1 bg-[#007aff] text-white px-3 py-1 rounded-full text-xs font-medium cursor-pointer"
-           >
-            评价
-           </button>
-          )}
-          {review && (
-           <div className="text-xs text-[#30d158] mt-1">已评价</div>
-          )}
+          <span className="text-xs text-[#30d158] font-medium">已完成</span>
          </div>
         </div>
        </div>
@@ -287,50 +250,13 @@ function EmployerCompletedView({
     </div>
    )}
 
-   {reviewing && (
-    <div
-     className="fixed inset-0 bg-black/35 backdrop-blur-sm flex items-center justify-center z-50"
-     onClick={() => setReviewing(null)}
-    >
-     <div
-      className="bg-[var(--g-card)] rounded-[20px] p-6 w-[360px] shadow-[0_8px_40px_var(--g-shadow-lg)]"
-      onClick={(e) => e.stopPropagation()}
-     >
-      <h3 className="text-base font-semibold mb-4">评价完成者</h3>
-      <div className="text-xs text-[var(--g-text2)] mb-3 text-center">
-       为完成者{ " " }
-       {tasks
-        .find((t: any) => t.id === reviewing.taskId)
-        ?.applications?.[0]?.freelancer?.name || ""}
-       {" "}的工作表现打分
-      </div>
-      <StarsInput
-       value={reviewRating}
-       onChange={setReviewRating}
-      />
-      <input
-       type="text"
-       value={reviewText}
-       onChange={(e) => setReviewText(e.target.value)}
-       placeholder="请填写评价内容..."
-       className="w-full bg-[var(--g-input)] dark:bg-[#3a3a3c] rounded-xl px-4 py-2.5 text-sm outline-none mb-4"
-      />
-      <div className="flex gap-2">
-       <button
-        onClick={() => setReviewing(null)}
-        className="flex-1 bg-[var(--g-input)] text-[var(--g-text)] py-2.5 rounded-xl text-sm font-medium cursor-pointer"
-       >
-        取消
-       </button>
-       <button
-        onClick={handleSubmitReview}
-        className="flex-1 bg-black text-white py-2.5 rounded-xl text-sm font-semibold cursor-pointer"
-       >
-        提交评价
-       </button>
-      </div>
-     </div>
-    </div>
+{reviewing && (
+    <ReviewModal
+     open={!!reviewing}
+     revieweeName={reviewing.revieweeName}
+     onClose={() => setReviewing(null)}
+     onSubmit={handleSubmitReview}
+    />
    )}
   </div>
  );
@@ -511,7 +437,7 @@ function FreelancerActiveTasks({
         </div>
         <div className="text-right flex items-center gap-3">
          <span className="text-sm font-bold">
-          {formatPrice(t.budget)}
+          {formatBudget(t.budget, t.budgetMin)}
          </span>
          <button
           onClick={() =>
@@ -538,72 +464,71 @@ function FreelancerActiveTasks({
 function FreelancerCompletedTasks({
  tasks,
  onBack,
+ refresh,
 }: {
  tasks: any[];
  onBack: () => void;
+ refresh: () => void;
 }) {
  const router = useRouter();
  const { userId } = useAuth();
+ const [reviewing, setReviewing] = useState<{ taskId: string; revieweeId: string; revieweeName: string } | null>(null);
+
+ const handleSubmitReview = async (rating: number, comment: string) => {
+  if (!reviewing) return;
+  await createReview({ taskId: reviewing.taskId, revieweeId: reviewing.revieweeId, rating, comment: comment || null });
+  setReviewing(null);
+  refresh();
+ };
+
  return (
   <div>
-   <button
-    onClick={onBack}
-    className="text-sm text-[var(--g-text2)] mb-4 hover:text-[var(--g-text)] cursor-pointer"
-   >
-    ← 返回概览
-   </button>
-   <h2 className="text-lg font-semibold mb-4">
-    已完成的任务（{tasks.length}）
-   </h2>
+   <button onClick={onBack} className="text-sm text-[var(--g-text2)] mb-4 hover:text-[var(--g-text)] cursor-pointer">← 返回概览</button>
+   <h2 className="text-lg font-semibold mb-4">已完成的任务（{tasks.length}）</h2>
    {tasks.length === 0 ? (
-    <div className="bg-[var(--g-card)] rounded-2xl p-8 text-center text-sm text-[var(--g-text2)] dark:text-[#98989d]">
-     暂无已完成的任务
-    </div>
+    <div className="bg-[var(--g-card)] rounded-2xl p-8 text-center text-sm text-[var(--g-text2)] dark:text-[#98989d]">暂无已完成的任务</div>
    ) : (
     <div className="flex flex-col gap-3">
-     {tasks.map((t: any) => (
-      <div
-       key={t.id}
-       className="bg-[var(--g-card)] rounded-2xl p-5 border border-[var(--g-border)] shadow-[0_4px_24px_var(--g-shadow)]"
-      >
-       <div className="flex justify-between items-center">
+     {tasks.map((t: any) => {
+      const worker = t.applications?.[0]?.freelancer;
+      return (
+       <div key={t.id} className="bg-[var(--g-card)] rounded-2xl p-5 border border-[var(--g-border)] shadow-[0_4px_24px_var(--g-shadow)]">
         <div>
-         <button
-          onClick={() => router.push(`/tasks/${t.id}?from=dashboard-completed`)}
-          className="font-semibold text-sm hover:text-[#007aff] cursor-pointer text-left"
-         >
-          {t.title}
-         </button>
-         <div className="text-xs text-[var(--g-text2)] mt-1">
-          {t.employer?.name}
-         </div>
+         <button onClick={() => router.push(`/tasks/${t.id}?from=dashboard-completed`)}
+          className="font-semibold text-sm hover:text-[#007aff] cursor-pointer text-left">{t.title}</button>
+         <div className="text-xs text-[var(--g-text2)] mt-1">{t.employer?.name}</div>
         </div>
-        <div className="text-right">
-         <div className="flex items-center gap-2 justify-end">
-          <span className="text-sm font-bold">
-           {formatPrice(t.budget)}
-          </span>
-          {(() => {
-           const myReview = t.reviews?.find((r: any) => r.revieweeId === userId);
-           return myReview ? (
-            <span className="text-xs text-[#f59e0b]">
-             {"★".repeat(myReview.rating)}{"☆".repeat(5 - myReview.rating)}
-            </span>
-           ) : (
-            <span className="text-xs text-[var(--g-text2)] dark:text-[#98989d]">待评价</span>
-           );
-          })()}
-         </div>
+        <div className="flex items-center justify-between mt-1">
+         <span className="text-sm font-bold">{formatBudget(t.budget, t.budgetMin)}</span>
         </div>
+        {worker && userId && (
+         <ReviewPair
+          employerName={t.employer?.name || '雇主'}
+          freelancerName={worker.name || '自由职业者'}
+          employerId={t.employerId}
+          freelancerId={worker.id}
+          reviews={t.reviews || []}
+          currentUserId={userId}
+          isEmployer={false}
+          taskId={t.id}
+          onCreateReview={(revieweeId) => setReviewing({ taskId: t.id, revieweeId, revieweeName: t.employer?.name || '雇主' })}
+         />
+        )}
+        {t.milestones?.length > 0 && (
+         <div className="mt-2"><MilestoneProgressBar milestones={t.milestones} taskStatus="COMPLETED" /></div>
+        )}
        </div>
-      </div>
-     ))}
+      );
+     })}
     </div>
+   )}
+   {reviewing && (
+    <ReviewModal open={!!reviewing} revieweeName={reviewing.revieweeName}
+     onClose={() => setReviewing(null)} onSubmit={handleSubmitReview} />
    )}
   </div>
  );
 }
-
 function FreelancerPendingApps({
  apps,
  onBack,
@@ -643,7 +568,7 @@ function FreelancerPendingApps({
         <div className="flex items-center gap-3">
          {a.task?.budget && (
           <span className="text-sm font-bold">
-           {formatPrice(a.task.budget)}
+           {formatBudget(a.task.budget, a.task.budgetMin)}
           </span>
          )}
          <span
@@ -702,6 +627,7 @@ export default function DashboardPage() {
     <FreelancerCompletedTasks
      tasks={data.completedTasks}
      onBack={() => setView("overview")}
+     refresh={() => setRefreshKey((k) => k + 1)}
     />
    </div>
   );
@@ -837,7 +763,7 @@ export default function DashboardPage() {
         </div>
         <div className="flex items-center gap-3">
          <span className="text-sm font-bold">
-          {formatPrice(t.budget)}
+          {formatBudget(t.budget, t.budgetMin)}
          </span>
          <button
           onClick={() =>
@@ -875,7 +801,7 @@ export default function DashboardPage() {
         <div className="flex items-center gap-3">
          {a.task?.budget && (
           <span className="text-sm font-bold">
-           {formatPrice(a.task.budget)}
+           {formatBudget(a.task.budget, a.task.budgetMin)}
           </span>
          )}
          <span

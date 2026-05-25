@@ -15,9 +15,7 @@ import TaskCard from "@/components/TaskCard";
 import { useAuth } from "@/lib/auth-context";
 import { getTasks } from "@/actions/task-actions";
 
-function formatPrice(budget: number): string {
- return `¥${budget}`;
-}
+import { formatBudget } from "@/lib/utils";
 
 function formatTime(date: Date): string {
  const diff = Date.now() - new Date(date).getTime();
@@ -126,7 +124,8 @@ export default function TasksPage() {
        time={formatTime(t.createdAt)}
        description={t.description}
        tags={t.skills || []}
-       price={formatPrice(t.budget)}
+       price={formatBudget(t.budget, t.budgetMin)}
+       appStatus={t.appStatus}
       />
      ))}
      {tasks.length === 0 && (

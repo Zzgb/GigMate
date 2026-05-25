@@ -55,8 +55,8 @@ function AuthInner({ children }: { children: ReactNode }) {
   [update],
  );
 
- const logout = useCallback(() => {
-  signOut({ redirect: false });
+ const logout = useCallback(async () => {
+  await signOut({ redirect: false });
  }, []);
 
  const refreshSession = useCallback(async (data?: Record<string, any>) => {

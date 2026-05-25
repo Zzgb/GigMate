@@ -56,17 +56,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     async signIn({ user, account }) {
-      // Auto-create user for OAuth providers
+      // OAuth 新用户 → 跳转注册页选择角色
       if (account?.provider !== "credentials" && user.email) {
         const existing = await prisma.user.findUnique({ where: { email: user.email } });
         if (!existing) {
-          await prisma.user.create({
-            data: {
-              email: user.email,
-              name: user.name || user.email.split("@")[0],
-              roles: ["FREELANCER"],
-            },
+          const params = new URLSearchParams({
+            email: user.email,
+            name: user.name || "",
+            provider: account!.provider,
           });
+          return `/register?${params.toString()}`;
         }
       }
       return true;
@@ -99,9 +98,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         // 刷新 session 时重新读取数据库中的用户信息
         const dbUser = await prisma.user.findUnique({ where: { id: token.id as string } });
         if (dbUser) {
-          token.name = dbUser.name || token.name;
+          token.name = dbUser.name || token.name || (token.email as string)?.split("@")[0] || null;
           token.avatarUrl = dbUser.avatarUrl || token.avatarUrl;
-          if (session?.role) token.role = session.role;
+          token.roles = dbUser.roles;
+          if (session?.role) {
+            const requestedRole = session.role === "employer" ? "EMPLOYER" : "FREELANCER";
+            if (dbUser.roles.includes(requestedRole)) {
+              token.role = session.role;
+            }
+          }
         }
       }
       return token;
@@ -112,13 +117,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.name = token.name;
         (session.user as any).role = token.role;
         (session.user as any).roles = token.roles;
-        // 每次都从数据库读取最新的 name 和 avatarUrl（兼容旧 session）
-        const dbUser = await prisma.user.findUnique({
-          where: { id: token.id as string },
-          select: { name: true, avatarUrl: true },
-        });
-        session.user.name = dbUser?.name || token.name;
-        (session.user as any).avatarUrl = token.avatarUrl || dbUser?.avatarUrl || null;
+        // 每次都从数据库读取最新的 name、avatarUrl、roles（兼容旧 session）
+        if (token.id) {
+          const dbUser = await prisma.user.findUnique({
+            where: { id: token.id as string },
+            select: { name: true, avatarUrl: true, roles: true },
+          });
+          session.user.name = dbUser?.name || token.name || (token.email as string)?.split("@")[0] || null;
+          (session.user as any).avatarUrl = token.avatarUrl || dbUser?.avatarUrl || null;
+          (session.user as any).roles = dbUser?.roles || token.roles || ["FREELANCER"];
+        }
       }
       return session;
     },

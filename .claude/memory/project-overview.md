@@ -27,13 +27,23 @@ metadata:
 - ✅ **实时筛选**: 任务列表搜索框点击搜索, 下拉筛选即时生效
 - ✅ **文件上传**: 头像上传 + 聊天附件上传 (public/uploads/)
 - ✅ **用户资料页**: 昵称修改 + 头像上传
+- ✅ **GitHub OAuth 登录**: 已配置密钥可用
+- ✅ **申请状态感知**: 任务列表/详情按钮根据 PENDING/REJECTED 状态变化
 
-#### 今天修过的 Bug (2026-05-23)
-- ✅ 聊天页面滚动条: ConversationList + ChatWindow 添加 min-h-0 + overflow-y-auto, 消息页用 h-screen 限制高度
-- ✅ 文件名附件: 移除 📎 emoji
-- ✅ 名字回退为"用户": auth.ts JWT `trigger === "update"` 中 `dbUser.name || token.name` 防止 null 覆盖
-- ✅ 自动滚动: 改为消息数量变化时滚动, 不再每次轮询都滚到底部
-- ✅ 切换对话慢: 添加客户端消息缓存 (cacheRef), 切回看过的对话瞬间显示
+#### 今天修过的 Bug (2026-05-24)
+- ✅ OAuth 注册流程: GitHub/Google 新用户 → 注册页预填邮箱昵称 → 设密码选角色 → 关联账号
+- ✅ 注册单角色: 选择雇主/自由职业者即注册为该端，非双角色
+- ✅ JWT 角色校验: trigger=update 时从 DB 同步 roles，单角色用户无法切换到未拥有的角色
+- ✅ 名字回退加固: DB名 → token名 → 邮箱前缀 → null 四级兜底，profile 页 useEffect 同步真名
+- ✅ 深色模式闪白: layout.tsx <head> inline script 提前设置 dark class
+- ✅ 控制台头像: 所有子视图 (进行中/已完成/待申请) + InlineChat 双方头像
+- ✅ 精确返回导航: from=dashboard-workers/applications/active/completed/pending
+- ✅ 联系雇主关联任务: URL 传 taskId，对话按 (user1, user2, taskId) 唯一
+- ✅ 重复申请拦截: applyForTask 校验已有 PENDING 申请，任务列表+详情页按钮灰掉
+- ✅ 申请人数修复: 任务详情页补充 applicantCount 传参
+- ✅ 对话列表未读计数: getConversations 统计所有未读消息量
+- ✅ 消息页空态: 从铃铛进入不自动打开对话，显示"请选择对话开始聊天"
+- ✅ 自由职业者待审批加 InlineChat
 
 ### 路由表
 

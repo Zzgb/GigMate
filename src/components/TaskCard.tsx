@@ -14,9 +14,13 @@ interface TaskCardProps {
  description: string;
  tags: string[];
  price: string;
+ appStatus?: string | null;
 }
 
-export default function TaskCard({ id, title, category, location, time, description, tags, price }: TaskCardProps) {
+export default function TaskCard({ id, title, category, location, time, description, tags, price, appStatus }: TaskCardProps) {
+ const applyLabel = appStatus === "PENDING" ? "待审核" : appStatus === "ACCEPTED" ? "已通过" : "立即申请";
+ const applyDisabled = appStatus === "PENDING" || appStatus === "ACCEPTED";
+
  return (
   <a href={`/tasks/${id}`} className="block bg-[var(--g-card)] rounded-[20px] p-6 shadow-[0_2px_20px_var(--g-shadow)]">
    <div className="flex justify-between items-start mb-3">
@@ -34,7 +38,7 @@ export default function TaskCard({ id, title, category, location, time, descript
    </div>
    <div className="flex justify-between items-center pt-3 border-t border-[var(--g-border2)]">
     <span className="text-lg font-bold">{price}</span>
-    <span className="bg-black text-white px-4 py-1.5 rounded-full text-xs font-medium">立即申请</span>
+    <span className={`px-4 py-1.5 rounded-full text-xs font-medium ${applyDisabled ? "bg-[var(--g-input)] text-[var(--g-text2)]" : "bg-black text-white"}`}>{applyLabel}</span>
    </div>
   </a>
  );

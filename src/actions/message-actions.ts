@@ -16,7 +16,7 @@ export async function getConversations() {
 
   const userId = session.user.id;
 
-  return prisma.conversation.findMany({
+  const conversations = await prisma.conversation.findMany({
     where: {
       OR: [{ user1Id: userId }, { user2Id: userId }],
     },
@@ -28,6 +28,29 @@ export async function getConversations() {
     },
     orderBy: { updatedAt: "desc" },
   });
+
+  // 计算每个对话的未读消息数
+  const unreadCounts = await Promise.all(
+    conversations.map(async (c) => {
+      const isUser1 = c.user1Id === userId;
+      const readAt = isUser1 ? c.user1ReadAt : c.user2ReadAt;
+      if (!readAt) {
+        // 从未读过 → 统计所有对方发的消息
+        return prisma.message.count({
+          where: { conversationId: c.id, senderId: { not: userId } },
+        });
+      }
+      return prisma.message.count({
+        where: {
+          conversationId: c.id,
+          senderId: { not: userId },
+          createdAt: { gt: readAt },
+        },
+      });
+    })
+  );
+
+  return conversations.map((c, i) => ({ ...c, unread: unreadCounts[i] }));
 }
 
 export async function getMessages(conversationId: string) {
@@ -109,7 +132,7 @@ export async function markAsRead(conversationId: string) {
   });
 }
 
-export async function createConversationByName(otherName: string) {
+export async function createConversationByName(otherName: string, taskId?: string) {
   const session = await auth();
   if (!session?.user?.id) return null;
   const userId = session.user.id;
@@ -117,18 +140,24 @@ export async function createConversationByName(otherName: string) {
   const other = await prisma.user.findFirst({ where: { name: otherName } });
   if (!other || other.id === userId) return null;
 
+  // 有关联任务时查唯一对话，无关联任务时查任意对话
   const existing = await prisma.conversation.findFirst({
     where: {
       OR: [
         { user1Id: userId, user2Id: other.id },
         { user1Id: other.id, user2Id: userId },
       ],
+      ...(taskId ? { taskId } : {}),
     },
   });
   if (existing) return existing;
 
   return prisma.conversation.create({
-    data: { user1Id: userId, user2Id: other.id },
+    data: {
+      user1Id: userId,
+      user2Id: other.id,
+      taskId: taskId || null,
+    },
   });
 }
 

@@ -25,6 +25,10 @@ export default function ProfilePage() {
     if (mounted && !isLoggedIn) router.replace("/login");
   }, [mounted, isLoggedIn, router]);
 
+  useEffect(() => {
+    if (name && name !== "用户") setNickname(name);
+  }, [name]);
+
   if (!mounted || !isLoggedIn) return null;
 
   const handleSave = async () => {

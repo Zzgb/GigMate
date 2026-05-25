@@ -12,16 +12,20 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Nav from "@/components/Nav";
 import TaskDetailSidebar from "@/components/TaskDetailSidebar";
 import { useAuth } from "@/lib/auth-context";
-import { getTaskById } from "@/actions/task-actions";
+import { getTaskById, getEmployerCompletedReviews } from "@/actions/task-actions";
+import { formatBudget } from "@/lib/utils";
+import { ReviewPair } from "@/components/ReviewSection";
 
 function TaskDetailContent() {
  const router = useRouter();
  const params = useParams();
  const searchParams = useSearchParams();
  const from = searchParams.get("from");
+ const ref = searchParams.get("ref");
  const { isLoggedIn, mounted } = useAuth();
  const [task, setTask] = useState<any>(null);
  const [loading, setLoading] = useState(true);
+ const [history, setHistory] = useState<any[]>([]);
 
  useEffect(() => {
   if (mounted && !isLoggedIn) {
@@ -33,7 +37,12 @@ function TaskDetailContent() {
   getTaskById(params.id as string)
    .then((data) => {
     if (!data) router.replace("/tasks");
-    else setTask(data);
+    else {
+     setTask(data);
+     if (data.employerId) {
+      getEmployerCompletedReviews(data.employerId).then(setHistory).catch(() => {});
+     }
+    }
    })
    .finally(() => setLoading(false));
  }, [mounted, isLoggedIn, params.id, router]);
@@ -45,11 +54,15 @@ function TaskDetailContent() {
   from === "dashboard" ? "/dashboard"
   : from?.startsWith("dashboard-") ? `/dashboard?view=${from.slice(10)}`
   : from === "messages" ? "/messages"
+  : from === "admin" ? "/admin/salary"
+  : from === "task-detail" && ref ? `/tasks/${ref}`
   : "/tasks";
  const backLabel =
   from === "dashboard" ? "返回控制台"
   : from?.startsWith("dashboard-") ? "返回控制台"
   : from === "messages" ? "返回消息"
+  : from === "admin" ? "返回任务管理"
+  : from === "task-detail" ? "返回任务详情"
   : "返回任务列表";
 
  const statusBadge =
@@ -104,11 +117,53 @@ function TaskDetailContent() {
      <TaskDetailSidebar
       taskId={task.id}
       status={task.status}
-      price={`¥${task.budget}`}
+      price={formatBudget(task.budget, task.budgetMin)}
       employerName={task.employer?.name || ""}
       employerAvatarUrl={task.employer?.avatarUrl}
+      applicantCount={task._count?.applications ?? 0}
+      deadline={task.deadline ? new Date(task.deadline).toLocaleDateString("zh-CN") : undefined}
+      appStatus={task.appStatus}
      />
     </div>
+
+    {/* 历史评价 */}
+    {history.length > 0 && (
+     <div className="mt-8 max-w-5xl mx-auto w-full">
+      <h3 className="text-base font-semibold mb-4">历史评价</h3>
+      <div className="flex flex-col gap-3">
+       {history.map((ht: any) => {
+        const worker = ht.applications?.[0]?.freelancer;
+        return (
+         <div key={ht.id} className="bg-[var(--g-card)] rounded-2xl p-5 border border-[var(--g-border)] shadow-[0_4px_24px_var(--g-shadow)]">
+          <button
+           onClick={() => router.push(`/tasks/${ht.id}?from=task-detail&ref=${task.id}`)}
+           className="text-sm font-medium text-[#007aff] hover:underline text-left"
+          >
+           {ht.title}
+          </button>
+          <div className="text-xs text-[var(--g-text2)] mt-0.5 mb-2">
+           {formatBudget(ht.budget, ht.budgetMin)}
+          </div>
+          {worker && (
+           <ReviewPair
+            employerName={ht.employer?.name || '雇主'}
+            freelancerName={worker.name || '自由职业者'}
+            employerId={ht.employerId}
+            freelancerId={worker.id}
+            reviews={ht.reviews || []}
+            currentUserId=""
+            isEmployer={false}
+            taskId={ht.id}
+            onCreateReview={() => {}}
+            compact
+           />
+          )}
+         </div>
+        );
+       })}
+      </div>
+     </div>
+    )}
    </main>
   </div>
  );

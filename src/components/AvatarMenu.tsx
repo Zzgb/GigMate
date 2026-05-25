@@ -30,10 +30,10 @@ export default function AvatarMenu() {
   router.push("/dashboard");
  };
 
- const handleLogout = () => {
+ const handleLogout = async () => {
   setOpen(false);
-  logout();
-  router.push("/");
+  await logout();
+  window.location.href = "/";
  };
 
  const themeLabels: Record<string, string> = { light: "浅色", dark: "深色", system: "跟随系统" };

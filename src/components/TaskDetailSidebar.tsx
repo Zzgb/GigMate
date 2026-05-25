@@ -20,6 +20,7 @@ interface TaskDetailSidebarProps {
   deadline?: string;
   applicantCount?: number;
   employerAvatarUrl?: string | null;
+  appStatus?: string | null;
 }
 
 export default function TaskDetailSidebar({
@@ -30,20 +31,24 @@ export default function TaskDetailSidebar({
   deadline,
   applicantCount,
   employerAvatarUrl,
+  appStatus,
 }: TaskDetailSidebarProps) {
  const router = useRouter();
  const { role } = useAuth();
  const isEmployer = role === "employer";
  const [applying, setApplying] = useState(false);
- const [applied, setApplied] = useState(false);
+ const [applied, setApplied] = useState(appStatus === "PENDING");
+ const [applyError, setApplyError] = useState("");
 
  const handleApply = async () => {
   if (!taskId || applying) return;
+  setApplyError("");
   setApplying(true);
   try {
    await applyForTask(taskId, "我对这个任务很感兴趣，希望可以合作！");
    setApplied(true);
-  } catch {
+  } catch (e: any) {
+   setApplyError(e.message || "申请失败");
    setApplying(false);
   }
  };
@@ -81,7 +86,7 @@ export default function TaskDetailSidebar({
     <div className="text-center">
      <div className="w-full bg-[#007aff] text-white text-center py-3 rounded-xl text-sm font-semibold">进行中</div>
      <button
-      onClick={() => router.push("/messages")}
+      onClick={() => router.push(`/messages?with=${encodeURIComponent(employerName)}&taskId=${taskId}`)}
       className="mt-2 w-full bg-black text-white text-center py-3 rounded-xl text-sm font-semibold cursor-pointer"
      >
       联系雇主
@@ -93,7 +98,7 @@ export default function TaskDetailSidebar({
     <div className="text-center">
      <div className="w-full bg-[#30d158] text-white text-center py-3 rounded-xl text-sm font-semibold">已申请</div>
      <button
-      onClick={() => router.push("/messages")}
+      onClick={() => router.push(`/messages?with=${encodeURIComponent(employerName)}&taskId=${taskId}`)}
       className="mt-2 w-full bg-black text-white text-center py-3 rounded-xl text-sm font-semibold cursor-pointer"
      >
       联系雇主
@@ -108,8 +113,9 @@ export default function TaskDetailSidebar({
      {applying ? "申请中..." : "立即申请"}
     </button>
    )}
+   {applyError && <div className="text-center mt-2 text-[10px] text-[#ff3b30]">{applyError}</div>}
    <div className="text-center mt-2 text-[10px] text-[var(--g-text2)] dark:text-[#98989d]">
-    {applied ? "申请已提交，等待雇主审核" : "申请后等待雇主审核"}
+    {applied ? "申请已提交，等待雇主审核" : applyError ? "" : "申请后等待雇主审核"}
    </div>
   </div>
  );
