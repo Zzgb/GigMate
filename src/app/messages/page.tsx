@@ -14,7 +14,7 @@ import Nav from "@/components/Nav";
 import ConversationList from "@/components/ConversationList";
 import ChatWindow from "@/components/ChatWindow";
 import { getConversations, getMessages, sendMessage, markAsRead, createConversationByName } from "@/actions/message-actions";
-import { getPendingApproval, getMilestonesByTask, submitMilestoneForApproval, approveMilestone, rejectMilestone } from "@/actions/milestone-actions";
+import { getMilestonesByTask, submitMilestoneForApproval, approveMilestone, rejectMilestone } from "@/actions/milestone-actions";
 import FileDropZone, { type UploadedFile } from "@/components/FileDropZone";
 
 function formatTime(date: Date | string): string {

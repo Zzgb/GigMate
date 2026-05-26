@@ -8,7 +8,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { getMessages, sendMessage, findOrCreateConversation, markAsRead } from "@/actions/message-actions";
-import { getPendingApproval, getMilestonesByTask, submitMilestoneForApproval, approveMilestone, rejectMilestone } from "@/actions/milestone-actions";
+import { getMilestonesByTask, submitMilestoneForApproval, approveMilestone, rejectMilestone } from "@/actions/milestone-actions";
 import { useAuth } from "@/lib/auth-context";
 import MilestoneApprovalCard from "@/components/MilestoneApprovalCard";
 import FileDropZone, { type UploadedFile } from "@/components/FileDropZone";

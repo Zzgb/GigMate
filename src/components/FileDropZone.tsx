@@ -8,6 +8,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
+import { formatSize } from "@/lib/utils";
 import { Upload, X, FileText } from "lucide-react";
 
 export interface UploadedFile {
@@ -24,12 +25,6 @@ interface FileDropZoneProps {
   accept?: string;
   maxSize?: number;
   maxFiles?: number;
-}
-
-function formatSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 export default function FileDropZone({

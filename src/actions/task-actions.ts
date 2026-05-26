@@ -318,78 +318,6 @@ export async function republishTask(params: {
   });
 }
 
-export async function endTaskWithBalanceHandling(taskId: string, action: "refund" | "transfer") {
-  const session = await auth();
-  if (!session?.user?.id) throw new Error("Unauthorized");
-  const userId = session.user.id;
-
-  return prisma.$transaction(async (tx) => {
-    const rows = await tx.$queryRawUnsafe<{ id: string; escrow: number; employerId: string; status: string; budget: number }[]>(
-      `SELECT id, escrow, "employerId", status, budget FROM "Task" WHERE id = $1 FOR UPDATE`,
-      taskId
-    );
-    if (rows.length === 0) throw new Error("任务不存在");
-    const task = rows[0];
-    if (task.employerId !== userId) throw new Error("只有雇主才能结束任务");
-    if (task.status !== "IN_PROGRESS") throw new Error("只能结束进行中的任务");
-
-    // 检查是否有待审批的里程碑
-    const pendingApproval = await tx.milestoneApproval.findFirst({
-      where: { milestone: { taskId }, status: "PENDING" },
-    });
-    if (pendingApproval) throw new Error("存在待审批的里程碑，请先处理审批后再结束任务");
-
-    if (action === "refund" && task.escrow > 0) {
-      await tx.user.update({
-        where: { id: userId },
-        data: { balance: { increment: task.escrow } },
-      });
-      await tx.task.update({
-        where: { id: taskId },
-        data: { status: "COMPLETED", escrow: 0 },
-      });
-      await tx.taskStatusLog.create({
-        data: {
-          taskId,
-          fromStatus: task.status,
-          toStatus: "COMPLETED",
-          event: "雇主结束任务并退款",
-          operatorId: userId,
-        },
-      });
-      await tx.transaction.create({
-        data: {
-          taskId,
-          type: "REFUND",
-          amount: task.escrow,
-          payeeId: userId,
-          operatorId: userId,
-          escrowBefore: task.escrow,
-          escrowAfter: 0,
-          description: `任务结束，剩余托管金退还给雇主`,
-        },
-      });
-    } else {
-      // 转移模式：不在此处完成，返回剩余金额供重新发布使用
-      await tx.task.update({
-        where: { id: taskId },
-        data: { status: "COMPLETED" },
-      });
-      await tx.taskStatusLog.create({
-        data: {
-          taskId,
-          fromStatus: task.status,
-          toStatus: "COMPLETED",
-          event: "雇主结束任务（待转移）",
-          operatorId: userId,
-        },
-      });
-    }
-
-    return { success: true, remainingEscrow: task.escrow, parentTaskId: taskId };
-  });
-}
-
 export async function getEmployerTasks() {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
@@ -436,19 +364,3 @@ export async function getEmployerCompletedReviews(employerId: string) {
   });
 }
 
-export async function recordDeposit(taskId: string, method: string, amount: number) {
-  const session = await auth();
-  if (!session?.user?.id) throw new Error("Unauthorized");
-
-  return prisma.transaction.create({
-    data: {
-      taskId,
-      type: "DEPOSIT",
-      amount,
-      payerId: session.user.id,
-      escrowAfter: amount,
-      operatorId: session.user.id,
-      description: `雇主通过 ${method} 付款 ¥${amount}，托管至平台`,
-    },
-  });
-}

@@ -8,6 +8,7 @@
 "use client";
 
 import { useState } from "react";
+import { formatSize } from "@/lib/utils";
 import { Check, X, Download, FileText, Clock, User } from "lucide-react";
 
 interface Attachment {
@@ -47,12 +48,6 @@ interface MilestoneApprovalCardProps {
   isEmployer: boolean;
   onApprove?: (approvalId: string) => Promise<void>;
   onReject?: (approvalId: string, reason: string) => Promise<void>;
-}
-
-function formatSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 function formatTime(dateStr: string): string {

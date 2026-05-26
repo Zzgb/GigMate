@@ -1,6 +1,6 @@
-# GigMate - 兼职就该这么简单
+# GigMate — 兼职就该这么简单
 
-**连接雇主与自由职业者的短期兼职平台**，支持双角色切换、里程碑验收、薪酬托管、实时聊天、深色模式。
+连接雇主与自由职业者的短期兼职平台，支持双角色切换、里程碑验收、薪酬托管、实时聊天、深色模式。
 
 ## 技术栈
 
@@ -15,15 +15,99 @@
 | 密码 | bcryptjs |
 | 包管理 | pnpm |
 
+## 功能模块
+
+- **用户系统**: 两步注册（邮箱密码 → 昵称）+ 角色追加 + 密码重置
+- **双角色**: 雇主/自由职业者一键切换 + 管理员 (gigmateadmin)
+- **任务**: CRUD + 固定/范围双预算 + 搜索筛选排序 + 状态流转
+- **里程碑**: 拖拽排序 + 比例校验 + 提交验收 + 审批通过/驳回
+- **薪酬**: 付款托管 + 按比例打款 + 5% 平台手续费 + 交易事务 + 行级锁
+- **聊天**: 对话列表 + 实时聊天 (3s 轮询) + 审批卡片融入消息流 + 文件上传
+- **评价**: 双向评价（雇主 ↔ 自由职业者）+ 历史评价展示
+- **管理员**: 任务管理 + 搜索分页排序 + 状态日志/交易日志
+- **UI**: 满屏轮播首页 + 半透明固定导航栏 + 深色模式 + 响应式
+
+---
+
+## 前置要求
+
+- **Node.js** >= 20
+- **pnpm** >= 9（`npm i -g pnpm`）
+- **PostgreSQL 数据库**（推荐 [Neon](https://neon.tech) 免费版）
+
+---
+
 ## 快速开始
+
+### 1. 克隆项目
+
+```bash
+git clone https://github.com/Zzgb/gigmate.git
+cd gigmate
+```
+
+### 2. 安装依赖
 
 ```bash
 pnpm install
-pnpm prisma db push
-pnpm prisma generate
-pnpm prisma db seed
-pnpm dev               # → http://localhost:3000
 ```
+
+### 3. 配置环境变量
+
+复制 `.env.example` 为 `.env`，填入你的配置：
+
+```bash
+cp .env.example .env
+```
+
+必填项：
+
+| 变量 | 说明 | 获取方式 |
+|------|------|----------|
+| `DATABASE_URL` | PostgreSQL 连接串 | [Neon](https://neon.tech) 创建免费数据库后获取 |
+| `AUTH_SECRET` | Auth.js 加密密钥 | 运行 `npx auth secret` 或 `openssl rand -base64 32` |
+| `AUTH_URL` | 应用地址 | 本地开发填 `http://localhost:3000` |
+
+可选（OAuth 登录）：
+
+| 变量 | 说明 |
+|------|------|
+| `AUTH_GITHUB_ID` / `AUTH_GITHUB_SECRET` | GitHub OAuth App 凭据 |
+| `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` | Google OAuth 凭据 |
+
+### 4. 初始化数据库
+
+```bash
+npx prisma db push    # 同步 schema 到数据库
+npx prisma generate   # 生成 Prisma 客户端
+npx prisma db seed    # 填充测试数据
+```
+
+### 5. 启动
+
+```bash
+pnpm dev              # → http://localhost:3000
+```
+
+---
+
+## OAuth 登录配置
+
+### GitHub
+
+1. 前往 [GitHub Developer Settings](https://github.com/settings/developers) → OAuth Apps → New OAuth App
+2. 回调地址填：`http://localhost:3000/api/auth/callback/github`
+3. 将生成的 Client ID 和 Client Secret 填入 `.env`
+
+### Google
+
+1. 前往 [Google Cloud Console](https://console.cloud.google.com/apis/credentials) → 创建凭据 → OAuth 客户端 ID
+2. 回调地址填：`http://localhost:3000/api/auth/callback/google`
+3. 将 Client ID 和 Client Secret 填入 `.env`
+
+不配置 OAuth 也能通过邮箱密码正常登录使用。
+
+---
 
 ## 测试账号
 
@@ -39,6 +123,176 @@ pnpm dev               # → http://localhost:3000
 
 ---
 
+## 生产部署
+
+### Vercel（推荐）
+
+1. 将项目推送到 GitHub
+2. 在 [Vercel](https://vercel.com) 导入仓库
+3. 在 Vercel 项目设置中配置所有环境变量
+4. **注意**: Vercel 无本地文件系统，需将文件上传迁移到对象存储（S3/Cloudflare R2 等），修改 `src/app/api/upload/` 下的路由
+
+### 自建服务器
+
+```bash
+# 构建
+pnpm build
+
+# 启动 (端口 3000)
+pnpm start
+```
+
+推荐使用 PM2 管理进程：
+
+```bash
+npm i -g pm2
+pm2 start node_modules/.bin/next --name gigmate -- start -p 3000
+```
+
+### Docker Compose
+
+```yaml
+version: "3.8"
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: gigmate
+      POSTGRES_PASSWORD: your-password
+      POSTGRES_DB: gigmate
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://gigmate:your-password@db:5432/gigmate
+      AUTH_SECRET: your-secret
+      AUTH_URL: http://localhost:3000
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
+```
+
+```dockerfile
+# Dockerfile
+FROM node:20-alpine AS builder
+WORKDIR /app
+RUN corepack enable && corepack prepare pnpm@latest --activate
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+COPY . .
+RUN pnpm build
+
+FROM node:20-alpine AS runner
+WORKDIR /app
+RUN corepack enable && corepack prepare pnpm@latest --activate
+COPY --from=builder /app/package.json /app/pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --prod
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+EXPOSE 3000
+CMD ["pnpm", "start"]
+```
+
+---
+
+## 项目结构
+
+### 页面路由 (`src/app/`)
+
+| 路由 | 功能 |
+|------|------|
+| `/` | 首页（满屏轮播 Hero） |
+| `/login` | 邮箱密码 + OAuth 登录 |
+| `/register` | 两步注册 + 角色追加 |
+| `/reset-password` | 重置密码 |
+| `/dashboard` | 角色感知控制台（雇主/自由职业者双视图） |
+| `/dashboard/my-tasks` | 雇主我的任务列表 |
+| `/tasks` | 任务搜索 + 筛选 + 排序 |
+| `/tasks/[id]` | 任务详情 + 历史评价 |
+| `/tasks/new` | 发布任务（里程碑编辑器 + 付款） |
+| `/messages` | 聊天页（对话列表 + 聊天窗口） |
+| `/profile` | 个人资料编辑 |
+| `/admin/salary` | 管理员任务管理（搜索/分页/日志） |
+| `/api/auth/[...nextauth]` | Auth.js API |
+| `/api/register` | 注册 API |
+| `/api/reset-password` | 重置密码 API |
+| `/api/upload` | 文件上传 API |
+| `/api/upload/milestone` | 里程碑附件上传 |
+| `/api/download/milestone` | 附件下载（权限校验） |
+
+### Server Actions (`src/actions/`)
+
+| 文件 | 功能 |
+|------|------|
+| `task-actions.ts` | 任务 CRUD + 重新发布 + 薪酬转移 |
+| `application-actions.ts` | 申请管理（通过/拒绝+防重复） |
+| `dashboard-actions.ts` | 控制台数据（角色感知）+ 完成/取消/评价 |
+| `message-actions.ts` | 对话/消息 CRUD + 未读/已读 |
+| `milestone-actions.ts` | 里程碑验收 + 审批（事务+行级锁） |
+| `admin-actions.ts` | 管理员查询（分页/搜索）+ 日志 |
+
+### UI 组件 (`src/components/`)
+
+| 文件 | 功能 |
+|------|------|
+| `Nav.tsx` | 固定导航栏（半透明/主题切换/未读铃铛） |
+| `AvatarMenu.tsx` | 头像下拉菜单 |
+| `ChatWindow.tsx` | 聊天窗口 |
+| `ConversationList.tsx` | 对话列表 |
+| `InlineChat.tsx` | 内联聊天（控制台使用） |
+| `TaskCard.tsx` | 任务卡片 |
+| `TaskDetailSidebar.tsx` | 任务详情侧边栏 |
+| `MilestoneEditor.tsx` | 里程碑编辑器（拖拽排序） |
+| `MilestoneProgressBar.tsx` | 里程碑进度条 |
+| `MilestoneApprovalCard.tsx` | 审批卡片 |
+| `FileDropZone.tsx` | 拖拽文件上传 |
+| `PaymentModal.tsx` | 付款方式选择 |
+| `ReviewSection.tsx` | 双向评价 |
+| `SalaryLogModal.tsx` | 日志侧边栏 |
+| `ConfirmModal.tsx` | 确认弹窗 |
+| `FilterBar.tsx` | 筛选栏 |
+
+---
+
+## 核心业务规则
+
+### 任务生命周期
+
+```
+雇主发布(付款托管) → OPEN → 自由职业者申请 → PENDING
+  → 雇主通过 → IN_PROGRESS → 里程碑验收 → COMPLETED → 双向评价
+  → 取消 → CANCELLED → 可重新发布(薪酬转移)
+```
+
+### 里程碑薪酬流程
+
+```
+创建任务(付款到平台托管) → 自由职业者完成节点 → 提交验收
+  → 雇主审批通过 → 按比例打款(扣 5% 手续费) → 最后一个节点通过 → 任务完成
+  → 雇主驳回 → 自由职业者重新提交
+```
+
+### 其他规则
+
+- 只有 OPEN 状态任务可申请；一个任务只接受一个申请
+- 雇主不能申请任何任务（包括自己发布的）
+- 同邮箱可注册不同端（不可重复注册已有端）
+- 创建任务后里程碑不可修改
+- 同一任务同时只允许一个待审批里程碑
+- 资金操作使用数据库事务 + `SELECT ... FOR UPDATE` 行级锁
+
+---
+
 ## 数据库表结构
 
 ### 1. User — 用户
@@ -51,20 +305,10 @@ pnpm dev               # → http://localhost:3000
 | passwordHash | String? | bcrypt 密码哈希（OAuth 用户为空） |
 | avatarUrl | String? | 头像 URL |
 | roles | String[] | 角色数组: `["EMPLOYER"]` / `["FREELANCER"]` / 双端 / `["gigmateadmin"]` |
-| balance | Float | 钱包余额（自由职业者收入 / 雇主退款） |
+| balance | Float | 钱包余额 |
 | createdAt / updatedAt | DateTime | 时间戳 |
 
-**关联**：
-- `tasks` → 作为雇主发布的任务
-- `applications` → 作为自由职业者的申请
-- `reviewsReceived` / `reviewsGiven` → 收到/给出的评价
-- `conversationsAs1` / `conversationsAs2` → 参与的对话
-- `messages` → 发送的消息
-- `submittedApprovals` / `reviewedApprovals` → 提交/审批的里程碑
-- `paidTransactions` / `receivedTransactions` / `operatedTransactions` → 付款/收款/操作的交易
-- `statusLogs` → 操作的任务状态日志
-
----
+**关联**: applications, reviewsReceived/Given, conversations, messages, milestone approvals, transactions, statusLogs
 
 ### 2. Task — 任务
 
@@ -72,28 +316,18 @@ pnpm dev               # → http://localhost:3000
 |------|------|------|
 | id | String (cuid) | 主键 |
 | title | String | 任务名称 |
-| description | String | 任务描述（含任职要求等） |
+| description | String | 任务描述 |
 | budget | Float | 预算金额（固定模式=固定值，范围模式=最大值） |
 | budgetMin | Float? | 预算范围最小值（固定模式为 null） |
 | deadline | DateTime? | 截止日期 |
 | status | String | OPEN → IN_PROGRESS → COMPLETED / CANCELLED |
 | category | String? | 分类 |
 | skills | String[] | 技能标签 |
-| escrow | Float | 平台托管金额（创建任务时入账，审批时扣减） |
+| escrow | Float | 平台托管金额 |
 | parentTaskId | String? | 来源任务 ID（重新发布链路） |
 | createdAt / updatedAt | DateTime | 时间戳 |
 
-**关联**：
-- `employer` (User) — 发布者
-- `applications` — 收到的申请
-- `reviews` — 关联的评价
-- `conversations` — 关联的对话
-- `milestones` — 验收里程碑节点
-- `transactions` — 交易记录
-- `statusLogs` — 状态变更日志
-- `parentTask` / `childTasks` — 任务重新发布链路（自关联）
-
----
+**关联**: employer, applications, reviews, conversations, milestones, transactions, statusLogs, parentTask/childTasks
 
 ### 3. Application — 申请
 
@@ -103,11 +337,9 @@ pnpm dev               # → http://localhost:3000
 | message | String | 申请留言 |
 | status | String | PENDING → ACCEPTED / REJECTED |
 | taskId | String | → Task.id |
-| freelancerId | String | → User.id（申请人） |
+| freelancerId | String | → User.id |
 
-**规则**：同一 (task, freelancer) 只能有一个 PENDING 申请；通过一个后自动拒绝其余。
-
----
+**规则**: 同一 (task, freelancer) 只能有一个 PENDING 申请；通过后自动拒绝其余。
 
 ### 4. Review — 评价
 
@@ -116,39 +348,36 @@ pnpm dev               # → http://localhost:3000
 | id | String (cuid) | 主键 |
 | rating | Int | 评分 1-5 |
 | comment | String? | 评价内容 |
-| taskId | String | → Task.id（关联任务） |
+| taskId | String | → Task.id |
 | reviewerId | String | → User.id（评价人） |
 | revieweeId | String | → User.id（被评价人） |
 
-**规则**：双向评价（雇主 ↔ 自由职业者），每人每任务限评一次，仅已完成任务可评价。
-
----
+**规则**: 双向评价（雇主 ↔ 自由职业者），每人每任务限评一次，仅已完成任务可评价。
 
 ### 5. Conversation — 对话
 
 | 字段 | 类型 | 说明 |
 |------|------|------|
 | id | String (cuid) | 主键 |
-| taskId | String? | → Task.id（可选，关联任务） |
+| taskId | String? | → Task.id（可选） |
 | user1Id | String | → User.id |
 | user2Id | String | → User.id |
 | user1ReadAt | DateTime? | user1 已读时间 |
 | user2ReadAt | DateTime? | user2 已读时间 |
 
-**规则**：同一 (user1, user2, taskId) 组合唯一，关联任务的对话不会与无关对话混淆。
-
----
+**规则**: 同一 (user1, user2, taskId) 组合唯一。
 
 ### 6. Message — 消息
 
 | 字段 | 类型 | 说明 |
 |------|------|------|
 | id | String (cuid) | 主键 |
-| content | String | 消息内容（文件消息格式 `[文件] name\nurl`；里程碑标记 `[里程碑审批:id]`） |
+| content | String | 消息内容 |
 | senderId | String | → User.id |
 | conversationId | String | → Conversation.id |
 
----
+- 文件消息格式: `[文件] name\nurl`
+- 里程碑标记: `[里程碑审批:id]`
 
 ### 7. Milestone — 里程碑节点
 
@@ -156,50 +385,42 @@ pnpm dev               # → http://localhost:3000
 |------|------|------|
 | id | String (cuid) | 主键 |
 | taskId | String | → Task.id |
-| order | Int | 排序序号（唯一约束 taskId+order） |
+| order | Int | 排序序号 |
 | name | String | 节点名称 |
 | criteria | String | 验收条件 |
 | ratio | Float | 付款比例 0-100 |
 | amount | Float | ratio/100 × task.budget |
 | status | String | PENDING → SUBMITTED → APPROVED / REJECTED |
 | version | Int | 乐观锁版本号 |
-| createdAt / updatedAt | DateTime | 时间戳 |
 
-**规则**：创建任务时锁定不可修改；所有节点 ratio 总和必须 = 100%。
+**规则**: 创建后锁定不可修改; 所有节点 ratio 总和 = 100%; taskId+order 唯一。
 
----
-
-### 8. MilestoneApproval — 里程碑审批记录
+### 8. MilestoneApproval — 审批记录
 
 | 字段 | 类型 | 说明 |
 |------|------|------|
 | id | String (cuid) | 主键 |
 | milestoneId | String | → Milestone.id |
-| submittedById | String | → User.id（提交人，自由职业者） |
-| description | String? | 验收材料文字描述 |
+| submittedById | String | → User.id（提交人） |
+| description | String? | 验收材料描述 |
 | status | String | PENDING → APPROVED / REJECTED |
-| reviewedById | String? | → User.id（审批人，雇主） |
+| reviewedById | String? | → User.id（审批人） |
 | reviewedAt | DateTime? | 审批时间 |
 | rejectionReason | String? | 驳回原因 |
-| createdAt / updatedAt | DateTime | 时间戳 |
 
-**规则**：同一任务同时只允许一个 PENDING 审批；通过后触发付款；驳回后允许重新提交。
+**规则**: 同一任务同时只允许一个 PENDING 审批；通过后触发付款；驳回后可重新提交。
 
----
-
-### 9. MilestoneAttachment — 里程碑附件
+### 9. MilestoneAttachment — 附件
 
 | 字段 | 类型 | 说明 |
 |------|------|------|
 | id | String (cuid) | 主键 |
 | approvalId | String | → MilestoneApproval.id |
 | filename | String | UUID 重命名的磁盘文件名 |
-| originalName | String | 用户上传的原始文件名 |
+| originalName | String | 原始文件名 |
 | fileSize | Int | 字节数 |
 | mimeType | String | 文件类型 |
 | url | String | 访问路径 |
-
----
 
 ### 10. Transaction — 交易记录
 
@@ -210,38 +431,26 @@ pnpm dev               # → http://localhost:3000
 | milestoneId | String? | → Milestone.id |
 | type | String | DEPOSIT / PLATFORM_FEE / FREELANCER_PAYMENT / REFUND / TRANSFER_OUT / TRANSFER_IN |
 | amount | Float | 金额 |
-| payerId | String? | → User.id（付款方） |
-| payeeId | String? | → User.id（收款方） |
+| payerId | String? | 付款方 |
+| payeeId | String? | 收款方 |
 | escrowBefore | Float? | 变化前托管金 |
 | escrowAfter | Float? | 变化后托管金 |
-| operatorId | String? | → User.id（操作人） |
+| operatorId | String? | 操作人 |
 | description | String? | 备注 |
-| createdAt | DateTime | 时间戳 |
 
-**交易类型**：
-- `DEPOSIT` — 雇主创建任务时付款托管
-- `PLATFORM_FEE` — 平台 5% 手续费
-- `FREELANCER_PAYMENT` — 打款给自由职业者
-- `REFUND` — 退款给雇主
-- `TRANSFER_OUT` / `TRANSFER_IN` — 重新发布时薪酬转移
-
----
-
-### 11. TaskStatusLog — 任务状态日志
+### 11. TaskStatusLog — 状态日志
 
 | 字段 | 类型 | 说明 |
 |------|------|------|
 | id | String (cuid) | 主键 |
 | taskId | String | → Task.id |
-| fromStatus | String? | 旧状态（创建时为 null） |
+| fromStatus | String? | 旧状态 |
 | toStatus | String | 新状态 |
-| event | String | 事件描述（"任务创建"/"通过申请"/"里程碑全部验收完成" 等） |
-| operatorId | String? | → User.id（操作人） |
+| event | String | 事件描述 |
+| operatorId | String? | → User.id |
 | createdAt | DateTime | 时间戳 |
 
----
-
-## 表关系总览
+### 表关系总览
 
 ```
 User (1) ──< Task (N)             雇主发布任务
@@ -251,118 +460,29 @@ Task (1) ──< Review (N)           任务关联的评价
 Task (1) ──< Milestone (N)        任务的里程碑节点
 Task (1) ──< Transaction (N)      任务的交易记录
 Task (1) ──< TaskStatusLog (N)    任务的状态日志
-Task (1) ──< Task (N)             parentTask → childTasks 重新发布链路
+Task (1) ──< Task (N)             parentTask → childTasks
 
-Milestone (1) ──< MilestoneApproval (N)  节点的审批记录
-MilestoneApproval (1) ──< MilestoneAttachment (N)  审批的附件
+Milestone (1) ──< MilestoneApproval (N)
+MilestoneApproval (1) ──< MilestoneAttachment (N)
+Conversation (1) ──< Message (N)
+Conversation (N) ── Task (1)?     对话可选关联任务
 
-Conversation (N) ── Task (1)?    对话可选关联任务
-Conversation (1) ──< Message (N) 对话的消息
-User (1) ──< Message (N)         用户发送的消息
-
-User --< Review (reviewer)        用户给出的评价
-User --< Review (reviewee)       用户收到的评价
-```
-
-### User 的多角色关系
-
-```
-User ── Transaction (payer)      付款方
-User ── Transaction (payee)      收款方
-User ── Transaction (operator)   操作人
-User ── TaskStatusLog (operator) 状态变更操作人
-User ── MilestoneApproval (submitter)  提交人
-User ── MilestoneApproval (reviewer)   审批人
+User ── Transaction (payer/payee/operator)
+User ── TaskStatusLog (operator)
+User ── MilestoneApproval (submitter/reviewer)
 ```
 
 ---
 
-## 项目结构
+## 开源协议
 
-### 页面路由 (`src/app/`)
+MIT
 
-| 路由 | 功能 |
-|------|------|
-| `/` | 首页落地页 |
-| `/login` | 邮箱密码 + OAuth 登录 + 测试账号 |
-| `/register` | 两步注册（邮箱密码角色 → 昵称头像）+ 角色追加 |
-| `/reset-password` | 重置密码 |
-| `/dashboard` | 角色感知控制台（雇主/自由职业者双视图） |
-| `/dashboard/my-tasks` | 雇主我的任务列表 |
-| `/tasks` | 任务搜索 + 筛选 + 排序 |
-| `/tasks/[id]` | 任务详情 + 历史评价 |
-| `/tasks/new` | 发布任务（含里程碑编辑器 + 付款弹窗） |
-| `/messages` | 聊天页（对话列表 + 聊天窗口 + 3s 轮询） |
-| `/profile` | 个人资料编辑 |
-| `/admin/salary` | 管理员任务管理（搜索/分页/排序/日志） |
-| `/api/auth/[...nextauth]` | Auth.js API |
-| `/api/register` | 注册 API |
-| `/api/reset-password` | 重置密码 API |
-| `/api/upload` | 文件上传 |
-| `/api/upload/milestone` | 里程碑附件上传 |
-| `/api/download/milestone` | 里程碑附件下载（权限校验） |
+## 💡 关于这个项目
 
-### Server Actions (`src/actions/`)
+GigMate 诞生于一次“全栈实战”的挑战——用 AI 辅助编码，从零搭建一个真实、完整、可用的兼职平台。虽然因政策门槛暂时无法商业化运营，但我选择将其开源，希望能帮助到每一位正在学习全栈开发、或想要搭建类似平台的独立开发者。(不完整!有些功能预留了接口但前端仍保持为测试逻辑,最好先让AI看一遍代码解释)
 
-| 文件 | 功能 |
-|------|------|
-| `task-actions.ts` | 任务 CRUD + 重新发布 + 薪酬转移 + 历史评价查询 |
-| `application-actions.ts` | 申请管理（通过/拒绝+防重复+级联修复） |
-| `dashboard-actions.ts` | 控制台数据（角色感知）+ 完成任务/取消/评价 |
-| `message-actions.ts` | 对话/消息 CRUD + 未读/已读 |
-| `milestone-actions.ts` | 里程碑提交验收 + 审批通过/驳回（事务+行级锁） |
-| `admin-actions.ts` | 管理员任务查询（分页/搜索/排序）+ 完整日志 |
+## 作者
 
-### UI 组件 (`src/components/`)
-
-| 文件 | 功能 |
-|------|------|
-| `Nav.tsx` | 导航栏（任务列表/控制台/铃铛/任务管理(管理员)/头像菜单） |
-| `AvatarMenu.tsx` | 头像下拉（主题/角色切换/退出） |
-| `ChatWindow.tsx` | 聊天窗口（消息+审批卡片融入消息流） |
-| `ConversationList.tsx` | 对话列表 |
-| `InlineChat.tsx` | 内联聊天（验收提交+审批卡片+文件上传） |
-| `TaskCard.tsx` | 任务卡片 |
-| `TaskDetailSidebar.tsx` | 任务详情侧边栏（角色+状态感知按钮） |
-| `MilestoneEditor.tsx` | 里程碑编辑器（增删行+拖拽排序+比例校验） |
-| `MilestoneProgressBar.tsx` | 里程碑进度条（圆点+tooltip） |
-| `MilestoneApprovalCard.tsx` | 审批卡片（通过/驳回/附件） |
-| `FileDropZone.tsx` | 拖拽文件上传组件 |
-| `PaymentModal.tsx` | 付款方式选择弹窗（微信/支付宝/Visa/PayPal/Monster） |
-| `ReviewSection.tsx` | 双向评价展示+评价弹窗 |
-| `SalaryLogModal.tsx` | 日志侧边栏（状态日志/交易日志） |
-| `ConfirmModal.tsx` | 通用确认弹窗 |
-| `FilterBar.tsx` | 任务筛选栏 |
-
----
-
-## 核心业务规则
-
-### 任务生命周期
-```
-雇主发布(付款托管) → OPEN → 自由职业者申请 → PENDING
-  → 雇主通过 → IN_PROGRESS → 里程碑验收 → COMPLETED → 双向评价
-  → 取消 → CANCELLED → 可重新发布(薪酬转移)
-```
-
-### 里程碑薪酬流程
-```
-创建任务(付款到平台托管) → 自由职业者完成节点 → 提交验收
-  → 雇主审批通过 → 按比例打款(扣5%手续费) → 最后一个节点通过 → 任务完成
-  → 雇主驳回 → 自由职业者重新提交
-```
-
-### 其他规则
-- 只有 OPEN 状态任务可申请；一个任务只接受一个申请
-- 雇主不能申请任何任务（包括自己发布的）
-- 同邮箱可注册不同端（不可重复注册已有端）
-- 创建任务后里程碑不可修改
-- 同一任务同时只允许一个待审批里程碑
-- 资金操作使用数据库事务 + 行级锁
-
----
-
-## 项目作者
-
-- **开发**: Claude Code + DeepSeek V4 Pro
-- **最后更新**: 2026-05-25
+- **开发**: Claude Code CLI 接入 DeepSeek V4 Pro
+- **最后更新**: 2026-05-26
