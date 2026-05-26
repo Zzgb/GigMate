@@ -78,9 +78,10 @@ cp .env.example .env
 ### 4. 初始化数据库
 
 ```bash
-npx prisma db push    # 同步 schema 到数据库
-npx prisma generate   # 生成 Prisma 客户端
-npx prisma db seed    # 填充测试数据
+npx prisma db push    # 同步 schema
+npx prisma generate   # 生成客户端
+npx prisma db seed    # 测试数据
+npx prisma db studio  # 可视化浏览（可选）
 ```
 
 ### 5. 启动
@@ -207,60 +208,71 @@ CMD ["pnpm", "start"]
 
 ## 项目结构
 
-### 页面路由 (`src/app/`)
-
-| 路由 | 功能 |
-|------|------|
-| `/` | 首页（满屏轮播 Hero） |
-| `/login` | 邮箱密码 + OAuth 登录 |
-| `/register` | 两步注册 + 角色追加 |
-| `/reset-password` | 重置密码 |
-| `/dashboard` | 角色感知控制台（雇主/自由职业者双视图） |
-| `/dashboard/my-tasks` | 雇主我的任务列表 |
-| `/tasks` | 任务搜索 + 筛选 + 排序 |
-| `/tasks/[id]` | 任务详情 + 历史评价 |
-| `/tasks/new` | 发布任务（里程碑编辑器 + 付款） |
-| `/messages` | 聊天页（对话列表 + 聊天窗口） |
-| `/profile` | 个人资料编辑 |
-| `/admin/salary` | 管理员任务管理（搜索/分页/日志） |
-| `/api/auth/[...nextauth]` | Auth.js API |
-| `/api/register` | 注册 API |
-| `/api/reset-password` | 重置密码 API |
-| `/api/upload` | 文件上传 API |
-| `/api/upload/milestone` | 里程碑附件上传 |
-| `/api/download/milestone` | 附件下载（权限校验） |
-
-### Server Actions (`src/actions/`)
-
-| 文件 | 功能 |
-|------|------|
-| `task-actions.ts` | 任务 CRUD + 重新发布 + 薪酬转移 |
-| `application-actions.ts` | 申请管理（通过/拒绝+防重复） |
-| `dashboard-actions.ts` | 控制台数据（角色感知）+ 完成/取消/评价 |
-| `message-actions.ts` | 对话/消息 CRUD + 未读/已读 |
-| `milestone-actions.ts` | 里程碑验收 + 审批（事务+行级锁） |
-| `admin-actions.ts` | 管理员查询（分页/搜索）+ 日志 |
-
-### UI 组件 (`src/components/`)
-
-| 文件 | 功能 |
-|------|------|
-| `Nav.tsx` | 固定导航栏（半透明/主题切换/未读铃铛） |
-| `AvatarMenu.tsx` | 头像下拉菜单 |
-| `ChatWindow.tsx` | 聊天窗口 |
-| `ConversationList.tsx` | 对话列表 |
-| `InlineChat.tsx` | 内联聊天（控制台使用） |
-| `TaskCard.tsx` | 任务卡片 |
-| `TaskDetailSidebar.tsx` | 任务详情侧边栏 |
-| `MilestoneEditor.tsx` | 里程碑编辑器（拖拽排序） |
-| `MilestoneProgressBar.tsx` | 里程碑进度条 |
-| `MilestoneApprovalCard.tsx` | 审批卡片 |
-| `FileDropZone.tsx` | 拖拽文件上传 |
-| `PaymentModal.tsx` | 付款方式选择 |
-| `ReviewSection.tsx` | 双向评价 |
-| `SalaryLogModal.tsx` | 日志侧边栏 |
-| `ConfirmModal.tsx` | 确认弹窗 |
-| `FilterBar.tsx` | 筛选栏 |
+```
+src/
+├── auth.ts                     # Auth.js v5 配置
+├── middleware.ts                # 路由鉴权
+├── app/
+│   ├── layout.tsx              # 根布局
+│   ├── page.tsx                # 首页
+│   ├── globals.css             # 主题变量 + Tailwind
+│   ├── (auth)/
+│   │   ├── login/              # 邮箱密码 + OAuth 登录
+│   │   ├── register/           # 两步注册
+│   │   └── reset-password/     # 密码重置
+│   ├── dashboard/
+│   │   ├── layout.tsx          # 控制台布局
+│   │   ├── page.tsx            # 雇主/自由职业者双视图
+│   │   └── my-tasks/           # 雇主我的任务
+│   ├── tasks/
+│   │   ├── page.tsx            # 搜索 + 筛选 + 排序
+│   │   ├── new/                # 发布任务
+│   │   └── [id]/               # 任务详情 + 历史评价
+│   ├── messages/               # 对话列表 + 聊天窗口
+│   ├── applications/[id]/      # 申请详情
+│   ├── profile/                # 个人资料
+│   ├── admin/salary/           # 管理员任务管理
+│   └── api/
+│       ├── auth/[...nextauth]/ # Auth.js 路由
+│       ├── register/           # 注册 API
+│       ├── reset-password/     # 密码重置 API
+│       ├── upload/             # 文件上传 API
+│       ├── upload/milestone/   # 里程碑附件上传
+│       └── download/milestone/ # 附件下载（权限校验）
+├── components/
+│   ├── Nav.tsx                 # 固定导航栏
+│   ├── AvatarMenu.tsx          # 头像下拉（主题/角色切换）
+│   ├── LandingHero.tsx         # 首页轮播 Hero
+│   ├── FooterSection.tsx       # 页脚
+│   ├── ChatWindow.tsx          # 聊天窗口
+│   ├── ConversationList.tsx    # 对话列表
+│   ├── InlineChat.tsx          # 内联聊天
+│   ├── TaskCard.tsx            # 任务卡片
+│   ├── TaskDetailSidebar.tsx   # 任务详情侧边栏
+│   ├── FilterBar.tsx           # 筛选栏
+│   ├── ConfirmModal.tsx        # 通用确认弹窗
+│   ├── MilestoneEditor.tsx     # 里程碑编辑器
+│   ├── MilestoneProgressBar.tsx
+│   ├── MilestoneApprovalCard.tsx
+│   ├── FileDropZone.tsx        # 拖拽文件上传
+│   ├── PaymentModal.tsx        # 付款弹窗
+│   ├── ReviewSection.tsx       # 双向评价
+│   └── SalaryLogModal.tsx      # 状态/交易日志
+├── actions/
+│   ├── task-actions.ts         # 任务 CRUD + 薪酬转移
+│   ├── application-actions.ts  # 申请管理
+│   ├── dashboard-actions.ts    # 控制台数据 + 评价
+│   ├── message-actions.ts      # 对话 / 消息
+│   ├── milestone-actions.ts    # 验收 + 审批（事务 + 行级锁）
+│   └── admin-actions.ts        # 管理员查询 + 日志
+├── lib/
+│   ├── auth-context.tsx        # useAuth() hook
+│   ├── theme-context.tsx       # 深色模式 hook
+│   ├── prisma.ts               # Prisma 客户端单例
+│   └── utils.ts                # cn / formatBudget / formatSize
+└── types/
+    └── next-auth.d.ts          # Auth.js 类型扩展
+```
 
 ---
 
@@ -480,7 +492,7 @@ MIT
 
 ## 💡 关于这个项目
 
-GigMate 诞生于一次“全栈实战”的挑战——用 AI 辅助编码，从零搭建一个真实、完整、可用的兼职平台。虽然因政策门槛暂时无法商业化运营，但我选择将其开源，希望能帮助到每一位正在学习全栈开发、或想要搭建类似平台的独立开发者。(不完整!有些功能预留了接口但前端仍保持为测试逻辑,最好先让AI看一遍代码解释)
+GigMate 诞生于一次”全栈实战”的挑战——用 AI 辅助编码，从零搭建一个真实、完整、可用的兼职平台。因政策门槛无法商业化运营，我选择将其开源，希望能帮助到正在学习全栈开发或想要搭建类似平台的独立开发者。
 
 ## 作者
 
